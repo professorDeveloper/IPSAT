@@ -1,0 +1,12 @@
+<!-- res/drawable/gradient_button_background.xml -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#95a1e9"
+                android:endColor="#df8da5"
+                android:angle="45" />
+            <corners android:radius="@dimen/_6sdp"/>
+        </shape>
+    </item>
+</layer-list>

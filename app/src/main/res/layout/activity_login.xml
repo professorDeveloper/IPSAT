@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login_bg"
+    tools:context=".presentation.activities.LoginActivity">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:layout_width="@dimen/_100sdp"
+        android:id="@+id/login_logo"
+        android:layout_height="@dimen/_100sdp"
+        android:layout_marginTop="@dimen/_42sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/login_logo" />
+
+    <TextView
+        android:id="@+id/entercodetxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_32sdp"
+        android:text="Enter subscription code "
+        android:textSize="@dimen/_15ssp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/login_logo" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_24sdp"
+        app:cardCornerRadius="@dimen/_8sdp"
+        app:cardElevation="0dp"
+        android:layout_marginTop="@dimen/_12sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/entercodetxt">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <EditText
+                android:id="@+id/subscriptionCodeTxt"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_45sdp"
+                android:layout_marginStart="@dimen/_4sdp"
+                android:fontFamily="@font/nunito_bold"
+                android:background="@android:color/transparent"
+                android:hint="Subscription Code"
+                android:imeOptions="actionDone"
+                android:inputType="phone"
+                android:paddingHorizontal="@dimen/_8sdp"
+                android:textSize="@dimen/_12sdp" />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/divider_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:alpha=".5"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/button_edit_phone_number"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_35sdp"
+                android:fontFamily="@font/nunito_bold"
+                android:layout_marginStart="@dimen/_4sdp"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="@dimen/_8sdp"
+                android:textAllCaps="false"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/_12sdp"
+                android:visibility="gone" />
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+    <LinearLayout
+        android:id="@+id/footerSection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_18sdp"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_11ssp"
+            android:fontFamily="@font/nunito_italic"
+            android:text="Powered by IPSAT" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:layout_width="@dimen/_24sdp"
+            android:layout_height="@dimen/_24sdp"
+            android:layout_marginHorizontal="@dimen/_4sdp"
+            app:srcCompat="@drawable/app_logo" />
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

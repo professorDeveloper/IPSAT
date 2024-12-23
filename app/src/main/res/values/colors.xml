@@ -1,5 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="colorPrimary">#EADCDC</color>
+    <color name="colorAccent">#F1E1E1</color>
+    <color name="colorSecondary">#FF9500</color>
+    <color name="whiteMain">#FFFFFF</color>
+    <color name="colorGray">#8E8E93</color>
+    <color name="goldColor">#ffd700</color>
+    <color name= "toolbarBg">@color/white</color>
+    <color name="silverColor">#c0c0c0</color>
+    <color name="bronzeColor">#cd7f32</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="blue">#0000FF</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#1B1919</color>
+    <color name="red">#FF0000</color>
+    <color name="inactive_input">#949494</color>
+    <color name="whiteGray">#BFBFBF</color>
+    <color name="place_holder">#C2C2C2</color>
+    <color name="uncheckedColor">#757575</color>
+    <color name="stroke_color">#EFEFEF</color>
+    <color name="bottomBg">#C8CDDAEA</color>
+    <color name="violet_400">#91A6FF</color>
+    <color name="violet_700">#3358FF</color>
+    <color name="shadow">#3358FF</color>
+    <color name="bg_black_50" alpha="128">#80000000</color>
+    <color name="gradiant_bg_start">#ACACAC</color>
+    <color name="gradiant_bg_end">#00BFAEAE</color>
+    <color name="fav">#ad5edd</color>
+    <color name="incognito">#291B65</color>
+    <color name="filler">#54FF8400</color>
+    <color name="map_yellow">#FED709</color>
+    <color name="map_red">#FF453A</color>
+    <color name="map_blue">#0B84FF</color>
+    <color name="map_green">#31D158</color>
+
+    <color name="card_background">#F2F2F7</color>
+    <color name="prem_bg">#E4E4E6</color>
+    <color name="settings_card_background">#FFFFFF</color>
+    <color name="white_and_black">#000000</color>
+    <color name="white_and_black_hint">#99000000</color>
+    <color name="settings_background">#F2F2F7</color>
+    <color name="button_stations">#ffe9cc</color>
+    <color name="button_leaderboard">#C8A6C7EC</color>
+    <color name="button_contribute">#efdcf8</color>
+    <color name="card_intro_color">#EAEAF1</color>
+    <color name="card_search_color">#C0C0C6</color>
+    <color name="main_background">#FFFFFF</color>
+
+    <color name="airplane_color">#007AFF</color>
+
+    <color name="search_top_toolbar">#FAFAF8</color>
+    <color name="search_edittext">#F3F3F8</color>
 </resources>
