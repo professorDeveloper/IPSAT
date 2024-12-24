@@ -23,6 +23,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_32sdp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/nunito_bold"
         android:text="Enter subscription code "
         android:textSize="@dimen/_15ssp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -35,6 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_24sdp"
         app:cardCornerRadius="@dimen/_8sdp"
+        app:cardBackgroundColor="@color/whiteMain"
         app:cardElevation="0dp"
         android:layout_marginTop="@dimen/_12sdp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -50,7 +53,9 @@
             <EditText
                 android:id="@+id/subscriptionCodeTxt"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_45sdp"
+                android:layout_height="@dimen/_40sdp"
+                android:textColorHint="@color/textLightColor"
+                android:textColor="@color/textLightColor"
                 android:layout_marginStart="@dimen/_4sdp"
                 android:fontFamily="@font/nunito_bold"
                 android:background="@android:color/transparent"
@@ -84,6 +89,63 @@
     </androidx.cardview.widget.CardView>
 
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:fontFamily="@font/nunito_medium_italic"
+        android:text="Please enter the code provided in your subscription"
+        android:textColor="@color/grayText"
+        android:textSize="@dimen/_12ssp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView5" />
+
+    <LinearLayout
+        android:id="@+id/invalidCodeContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_8sdp"
+        tools:visibility="visible"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/textView" >
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:layout_width="@dimen/_14sdp"
+            app:srcCompat="@drawable/ic_wrong"
+            android:layout_marginEnd="@dimen/_2sdp"
+            android:layout_height="@dimen/_14sdp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_4sdp"
+            android:text="Invalid code. Please try again"
+            android:textColor="@color/invalid_color"/>
+
+    </LinearLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:layout_width="@dimen/_200sdp"
+        android:layout_marginTop="@dimen/_16sdp"
+        android:layout_height="wrap_content"
+        android:insetBottom="0dp"
+        android:insetLeft="0dp"
+        android:text="Activate"
+        android:fontFamily="@font/nunito_bold"
+        app:cornerRadius="@dimen/_16sdp"
+        android:insetRight="0dp"
+        android:insetTop="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:backgroundTint="@color/map_green"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/invalidCodeContainer" />
+    
     <LinearLayout
         android:id="@+id/footerSection"
         android:layout_width="match_parent"
@@ -98,6 +160,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/_11ssp"
+            android:textColor="@color/textLightColor"
+
             android:fontFamily="@font/nunito_italic"
             android:text="Powered by IPSAT" />
 

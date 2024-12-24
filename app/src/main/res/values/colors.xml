@@ -33,18 +33,21 @@
     <color name="filler">#54FF8400</color>
     <color name="map_yellow">#FED709</color>
     <color name="map_red">#FF453A</color>
+    <color name="invalid_color">#F70B0B</color>
     <color name="map_blue">#0B84FF</color>
-    <color name="map_green">#31D158</color>
+    <color name="map_green">#8AE280</color>
 
     <color name="card_background">#F2F2F7</color>
     <color name="prem_bg">#E4E4E6</color>
     <color name="settings_card_background">#FFFFFF</color>
     <color name="white_and_black">#000000</color>
+    <color name="textLightColor">#99000000</color>
     <color name="white_and_black_hint">#99000000</color>
     <color name="settings_background">#F2F2F7</color>
     <color name="button_stations">#ffe9cc</color>
     <color name="button_leaderboard">#C8A6C7EC</color>
     <color name="button_contribute">#efdcf8</color>
+    <color name="grayText">#96969A</color>
     <color name="card_intro_color">#EAEAF1</color>
     <color name="card_search_color">#C0C0C6</color>
     <color name="main_background">#FFFFFF</color>
