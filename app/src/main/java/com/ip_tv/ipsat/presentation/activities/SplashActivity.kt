@@ -1,5 +1,6 @@
 package com.ip_tv.ipsat.presentation.activities
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -28,13 +29,12 @@ class SplashActivity : AppCompatActivity() {
         lifecycleScope.launch {
             binding.appLogo.visible()
             binding.appLogo.alphaAnim()
-            delay(1000)
+            delay(2000)
                 openLogin()
         }
     }
    private fun openLogin(){
-        val intent = intent
-        intent.setClass(this, LoginActivity::class.java)
+        val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
         finish()
     }
