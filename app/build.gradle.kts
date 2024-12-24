@@ -70,4 +70,24 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.48")
     kapt("com.google.dagger:hilt-compiler:2.48")
 
+
+    // preference
+    implementation("androidx.preference:preference-ktx:1.2.1")
+
+    //REST - APIService
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
+    implementation("com.google.code.gson:gson:2.10.1")
+
+    // secure
+    implementation("androidx.security:security-crypto-ktx:1.1.0-alpha06")
+
+
+    // exo player
+    implementation("androidx.media3:media3-exoplayer:1.4.1")
+    implementation("androidx.media3:media3-exoplayer-dash:1.4.1")
+    implementation("de.hdodenhof:circleimageview:3.1.0")
+    implementation("androidx.media3:media3-ui:1.4.1")
+
 }
