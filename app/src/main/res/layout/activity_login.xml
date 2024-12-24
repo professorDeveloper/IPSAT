@@ -9,8 +9,8 @@
     tools:context=".presentation.activities.LoginActivity">
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:layout_width="@dimen/_100sdp"
         android:id="@+id/login_logo"
+        android:layout_width="@dimen/_100sdp"
         android:layout_height="@dimen/_100sdp"
         android:layout_marginTop="@dimen/_42sdp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,9 +23,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_32sdp"
-        android:textColor="@color/black"
         android:fontFamily="@font/nunito_bold"
         android:text="Enter subscription code "
+        android:textColor="@color/black"
         android:textSize="@dimen/_15ssp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,10 +36,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_24sdp"
-        app:cardCornerRadius="@dimen/_8sdp"
-        app:cardBackgroundColor="@color/whiteMain"
-        app:cardElevation="0dp"
         android:layout_marginTop="@dimen/_12sdp"
+        app:cardBackgroundColor="@color/whiteMain"
+        app:cardCornerRadius="@dimen/_8sdp"
+        app:cardElevation="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/entercodetxt">
@@ -54,36 +54,18 @@
                 android:id="@+id/subscriptionCodeTxt"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_40sdp"
-                android:textColorHint="@color/colorGray"
-                android:textColor="@color/textLightColor"
                 android:layout_marginStart="@dimen/_4sdp"
-                android:fontFamily="@font/nunito_bold"
                 android:background="@android:color/transparent"
+                android:fontFamily="@font/nunito_bold"
                 android:hint="Subscription Code"
                 android:imeOptions="actionDone"
                 android:inputType="phone"
                 android:paddingHorizontal="@dimen/_8sdp"
+                android:textColor="@color/textLightColor"
+                android:textColorHint="@color/colorGray"
                 android:textSize="@dimen/_12sdp" />
 
-            <com.google.android.material.divider.MaterialDivider
-                android:id="@+id/divider_edit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:alpha=".5"
-                android:visibility="gone" />
 
-            <TextView
-                android:id="@+id/button_edit_phone_number"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_35sdp"
-                android:fontFamily="@font/nunito_bold"
-                android:layout_marginStart="@dimen/_4sdp"
-                android:gravity="center_vertical"
-                android:paddingHorizontal="@dimen/_8sdp"
-                android:textAllCaps="false"
-                android:textColor="@color/colorAccent"
-                android:textSize="@dimen/_12sdp"
-                android:visibility="gone" />
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
@@ -107,46 +89,61 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_8sdp"
-        tools:visibility="visible"
+        android:gravity="center"
+        android:orientation="horizontal"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:orientation="horizontal"
-        android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@+id/textView" >
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        tools:visibility="visible">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:layout_width="@dimen/_14sdp"
-            app:srcCompat="@drawable/ic_wrong"
+            android:layout_height="@dimen/_14sdp"
             android:layout_marginEnd="@dimen/_2sdp"
-            android:layout_height="@dimen/_14sdp"/>
+            app:srcCompat="@drawable/ic_wrong" />
 
         <TextView
+            android:id="@+id/errorTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_4sdp"
             android:text="Invalid code. Please try again"
-            android:textColor="@color/invalid_color"/>
+            android:textColor="@color/invalid_color" />
 
     </LinearLayout>
 
-    <com.google.android.material.button.MaterialButton
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/activateBtn"
         android:layout_width="@dimen/_200sdp"
-        android:layout_marginTop="@dimen/_16sdp"
         android:layout_height="wrap_content"
-        android:insetBottom="0dp"
-        android:insetLeft="0dp"
-        android:text="Activate"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:background="@drawable/button_bg"
+        android:clickable="true"
+        android:enabled="false"
         android:fontFamily="@font/nunito_bold"
-        android:textColor="@color/textLightColor"
-        app:cornerRadius="@dimen/_16sdp"
-        android:insetRight="0dp"
+        android:insetLeft="0dp"
         android:insetTop="0dp"
+        android:insetRight="0dp"
+
+        android:textAllCaps="false"
+        android:insetBottom="0dp"
+        android:text="Activate"
         app:layout_constraintEnd_toEndOf="parent"
-        android:backgroundTint="@color/map_green"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/invalidCodeContainer" />
-    
+
+    <ProgressBar
+        android:id="@+id/authProgress"
+        android:layout_width="wrap_content"
+        android:visibility="gone"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/footerSection"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView5" />
+
     <LinearLayout
         android:id="@+id/footerSection"
         android:layout_width="match_parent"
@@ -160,11 +157,11 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/_11ssp"
-            android:textColor="@color/textLightColor"
-
             android:fontFamily="@font/nunito_italic"
-            android:text="Powered by IPSAT" />
+            android:text="Powered by IPSAT"
+
+            android:textColor="@color/textLightColor"
+            android:textSize="@dimen/_11ssp" />
 
         <com.google.android.material.imageview.ShapeableImageView
             android:layout_width="@dimen/_24sdp"

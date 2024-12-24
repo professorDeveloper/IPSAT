@@ -1,6 +1,7 @@
 package com.ip_tv.ipsat.di
 
 import android.content.Context
+import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.ip_tv.ipsat.data.remote.AuthService
 import com.ip_tv.ipsat.domain.preference.UserPreferenceManager
 import dagger.Module
@@ -29,6 +30,7 @@ object NetworkModule {
         return OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
             .connectTimeout(60, TimeUnit.SECONDS)
+            .addInterceptor(ChuckerInterceptor.Builder(context).build())
             .build()
     }
 

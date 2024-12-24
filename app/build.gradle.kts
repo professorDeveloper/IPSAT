@@ -90,4 +90,9 @@ dependencies {
     implementation("de.hdodenhof:circleimageview:3.1.0")
     implementation("androidx.media3:media3-ui:1.4.1")
 
+    //Chucker
+    debugImplementation( "com.github.chuckerteam.chucker:library:4.0.0")
+    releaseImplementation( "com.github.chuckerteam.chucker:library-no-op:4.0.0")
+
+
 }

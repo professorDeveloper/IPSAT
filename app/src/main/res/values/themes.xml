@@ -18,10 +18,12 @@
     </style>
 
     <style name="Theme.Main" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="colorSecondary">?attr/colorPrimary</item>
-        <item name="colorAccent">?attr/colorPrimary</item>
+        <item name="colorSecondary">@color/button_contribute</item>
+        <item name="colorAccent">@color/violet_400</item>
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorSecondaryContainer">@color/colorPrimary</item>
+
         <item name="android:statusBarColor">@color/main_background</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:navigationBarColor">?attr/colorSurfaceContainer</item>
