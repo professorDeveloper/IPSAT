@@ -2,6 +2,9 @@ package com.zbekz.tashkentmetro.utils
 
 import android.app.Activity
 import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
+import android.net.wifi.WifiManager
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AlphaAnimation
@@ -14,6 +17,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
 import com.ip_tv.ipsat.R
+import com.ip_tv.ipsat.app.App
 
 fun hideKeyboard(view: View) {
     val imm = view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -100,4 +104,18 @@ fun setSlideUp() = AnimationSet(false).apply {
     animation.duration = (750 * 1f).toLong()
     animation.interpolator = OvershootInterpolator(1.1f)
     addAnimation(animation)
+}
+
+
+fun hasConnection(): Boolean {
+    val connectivityManager =
+        App.currentContext()!!.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    val activeNetwork: NetworkInfo? = connectivityManager.activeNetworkInfo
+    return activeNetwork?.isConnectedOrConnecting == true
+}
+
+fun getPhoneMacAddress(): String {
+    val wifiManager = App.currentContext()!!.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+    val info = wifiManager.connectionInfo
+    return info.macAddress
 }
