@@ -1,10 +1,12 @@
 package com.zbekz.tashkentmetro.utils
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.net.wifi.WifiManager
+import android.util.Log
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AlphaAnimation
@@ -14,16 +16,19 @@ import android.view.animation.OvershootInterpolator
 import android.view.animation.ScaleAnimation
 import android.view.animation.TranslateAnimation
 import android.view.inputmethod.InputMethodManager
-import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
 import com.ip_tv.ipsat.R
 import com.ip_tv.ipsat.app.App
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.net.NetworkInterface
+import java.util.Collections
+
 
 fun hideKeyboard(view: View) {
     val imm = view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     imm.hideSoftInputFromWindow(view.windowToken, 0)
 }
-
 
 
 @Suppress("DEPRECATION")
@@ -36,6 +41,7 @@ fun Activity.hideSystemBars() {
                     or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
             )
 }
+
 @Suppress("DEPRECATION")
 fun Fragment.hideSystemBars() {
     requireActivity().window.decorView.systemUiVisibility = (
@@ -46,6 +52,7 @@ fun Fragment.hideSystemBars() {
                     or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
             )
 }
+
 fun setAnimation(
     context: Context,
     viewToAnimate: View,
@@ -114,8 +121,74 @@ fun hasConnection(): Boolean {
     return activeNetwork?.isConnectedOrConnecting == true
 }
 
-fun getPhoneMacAddress(): String {
-    val wifiManager = App.currentContext()!!.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
-    val info = wifiManager.connectionInfo
-    return info.macAddress
+
+
+private val PERMISSIONS_REQUEST_CODE = 100
+
+fun requestPermissionsIfNecessary(context: Context) {
+    val permissions = arrayOf(
+        android.Manifest.permission.ACCESS_FINE_LOCATION,
+        android.Manifest.permission.ACCESS_WIFI_STATE
+    )
+
+    if (permissions.any { context.checkSelfPermission(it) != android.content.pm.PackageManager.PERMISSION_GRANTED }) {
+        (context as Activity).requestPermissions(permissions, PERMISSIONS_REQUEST_CODE)
+    }
 }
+
+@SuppressLint("HardwareIds")
+private fun getMacAddressWithWifiManager(context: Context): String? {
+    val wifiManager = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+    return try {
+        val macAddress = wifiManager.connectionInfo.macAddress
+        if (macAddress == "02:00:00:00:00:00") {
+            null
+        } else {
+            macAddress
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
+        null
+    }
+}
+
+private fun getMacAddressWithNetworkInterface(): String? {
+    return try {
+        val interfaces = NetworkInterface.getNetworkInterfaces()
+        for (networkInterface in interfaces) {
+            if (networkInterface.name.equals("wlan0", ignoreCase = true)) {
+                val macBytes = networkInterface.hardwareAddress ?: return null
+                return macBytes.joinToString(separator = ":") { byte ->
+                    String.format("%02X", byte)
+                }
+            }
+        }
+        null
+    } catch (e: Exception) {
+        e.printStackTrace()
+        null
+    }
+}
+fun getMacAddressFromSystem(): String? {
+    return try {
+        val process = Runtime.getRuntime().exec("cat /sys/class/net/wlan0/address")
+        val reader = BufferedReader(InputStreamReader(process.inputStream))
+        reader.readLine()?.trim()
+    } catch (e: Exception) {
+        e.printStackTrace()
+        null
+    }
+}
+fun getMacAddress(context: Context): String? {
+    requestPermissionsIfNecessary(context)
+
+    val wifiMac = getMacAddressWithWifiManager(context)
+    if (wifiMac != null) {
+        return wifiMac
+    }
+
+    Log.d("TAGGG", "getMacAddress: ${wifiMac}")
+    Log.d("TAGGG", "getMacAddressSystem:${getMacAddressFromSystem() } ")
+    return ""
+}
+

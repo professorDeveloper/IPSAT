@@ -1,5 +1,6 @@
 package com.ip_tv.ipsat.presentation.activities
 
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -19,7 +20,7 @@ import com.ip_tv.ipsat.utils.AuthState
 import com.ip_tv.ipsat.utils.gone
 import com.ip_tv.ipsat.utils.snackString
 import com.ip_tv.ipsat.utils.visible
-import com.zbekz.tashkentmetro.utils.getPhoneMacAddress
+import com.zbekz.tashkentmetro.utils.getMacAddress
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -29,6 +30,7 @@ class LoginActivity : AppCompatActivity() {
 
     private val loginModel by viewModels<LoginViewModel>()
     private lateinit var binding: ActivityLoginBinding
+    private val PERMISSIONS_REQUEST_CODE = 100
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,7 +83,9 @@ class LoginActivity : AppCompatActivity() {
             binding.activateBtn.isEnabled = it.toString().isNotEmpty()
         }
         binding.activateBtn.setOnClickListener {
-            loginModel.activateLogin(code = binding.subscriptionCodeTxt.text.toString(), macAddress = getPhoneMacAddress())
+            val macAddress = getMacAddress(this)
+            println("MAC Address: $macAddress")
+            loginModel.activateLogin(code = binding.subscriptionCodeTxt.text.toString(), macAddress = macAddress?:"")
         }
     }
     private fun  setupPhoneDisplay(){
@@ -91,5 +95,21 @@ class LoginActivity : AppCompatActivity() {
             insets
         }
     }
-}
 
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == PERMISSIONS_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
+                // Permissions granted, you can fetch MAC address here
+                val macAddress = getMacAddress(this)
+                println("MAC Address: $macAddress")
+            } else {
+                println("Permissions denied. Cannot fetch MAC address.")
+            }
+        }
+    }
+}
