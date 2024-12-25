@@ -1,5 +1,6 @@
 package com.ip_tv.ipsat.presentation.activities
 
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
@@ -30,7 +31,6 @@ class LoginActivity : AppCompatActivity() {
 
     private val loginModel by viewModels<LoginViewModel>()
     private lateinit var binding: ActivityLoginBinding
-    private val PERMISSIONS_REQUEST_CODE = 100
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,7 +68,7 @@ class LoginActivity : AppCompatActivity() {
                 binding.authProgress.visible()
             }
             is AuthState.Verified -> {
-
+                openHome()
                 binding.invalidCodeContainer.gone()
                 binding.authProgress.gone()
                 binding.activateBtn.visible()
@@ -89,6 +89,12 @@ class LoginActivity : AppCompatActivity() {
             loginModel.activateLogin(code = binding.subscriptionCodeTxt.text.toString(), macAddress = macAddress?:"")
         }
     }
+    private fun openHome(){
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
     private fun  setupPhoneDisplay(){
         ViewCompat.setOnApplyWindowInsetsListener(this@LoginActivity.findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
