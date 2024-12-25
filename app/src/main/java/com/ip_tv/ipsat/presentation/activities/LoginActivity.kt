@@ -20,7 +20,7 @@ import com.ip_tv.ipsat.utils.AuthState
 import com.ip_tv.ipsat.utils.gone
 import com.ip_tv.ipsat.utils.snackString
 import com.ip_tv.ipsat.utils.visible
-import com.zbekz.tashkentmetro.utils.getMacAddress
+import com.zbekz.tashkentmetro.utils.getAndroidId
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -57,6 +57,7 @@ class LoginActivity : AppCompatActivity() {
                 binding.authProgress.gone()
                 binding.invalidCodeContainer.visible()
                 binding.errorTxt.text= state.message
+                snackString("${state.message}")
                 binding.activateBtn.visible()
             }
 
@@ -67,7 +68,7 @@ class LoginActivity : AppCompatActivity() {
                 binding.authProgress.visible()
             }
             is AuthState.Verified -> {
-                Log.d("GG", "handleAuthState:VERIFED ")
+
                 binding.invalidCodeContainer.gone()
                 binding.authProgress.gone()
                 binding.activateBtn.visible()
@@ -83,8 +84,8 @@ class LoginActivity : AppCompatActivity() {
             binding.activateBtn.isEnabled = it.toString().isNotEmpty()
         }
         binding.activateBtn.setOnClickListener {
-            val macAddress = getMacAddress(this)
-            println("MAC Address: $macAddress")
+            val macAddress = getAndroidId(this)
+            println("ANDROID Address: $macAddress")
             loginModel.activateLogin(code = binding.subscriptionCodeTxt.text.toString(), macAddress = macAddress?:"")
         }
     }
@@ -96,20 +97,5 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == PERMISSIONS_REQUEST_CODE) {
-            if (grantResults.isNotEmpty() && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
-                // Permissions granted, you can fetch MAC address here
-                val macAddress = getMacAddress(this)
-                println("MAC Address: $macAddress")
-            } else {
-                println("Permissions denied. Cannot fetch MAC address.")
-            }
-        }
-    }
+
 }

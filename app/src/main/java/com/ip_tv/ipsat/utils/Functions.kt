@@ -6,6 +6,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.net.wifi.WifiManager
+import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
@@ -17,6 +18,7 @@ import android.view.animation.ScaleAnimation
 import android.view.animation.TranslateAnimation
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
+import com.google.gson.Gson
 import com.ip_tv.ipsat.R
 import com.ip_tv.ipsat.app.App
 import java.io.BufferedReader
@@ -179,16 +181,14 @@ fun getMacAddressFromSystem(): String? {
         null
     }
 }
-fun getMacAddress(context: Context): String? {
-    requestPermissionsIfNecessary(context)
 
-    val wifiMac = getMacAddressWithWifiManager(context)
-    if (wifiMac != null) {
-        return wifiMac
-    }
-
-    Log.d("TAGGG", "getMacAddress: ${wifiMac}")
-    Log.d("TAGGG", "getMacAddressSystem:${getMacAddressFromSystem() } ")
-    return ""
+fun getAndroidId(context: Context): String {
+    return Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
 }
+
+inline fun <reified T> String.toDataClass(): T {
+    val gson = Gson()
+    return gson.fromJson(this, T::class.java)
+}
+
 

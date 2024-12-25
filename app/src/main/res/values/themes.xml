@@ -11,6 +11,7 @@
         <item name="android:statusBarColor">#00656464</item>
         <item name="android:windowLightStatusBar">true</item>
     </style>
+
     <style name="Divider">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
@@ -28,6 +29,7 @@
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:navigationBarColor">?attr/colorSurfaceContainer</item>
     </style>
+
     <style name="MyBottomNavigationView.TextAppearance" parent="TextAppearance.MaterialComponents.Caption">
         <item name="android:textSize">12sp</item>
     </style>
@@ -53,6 +55,22 @@
 
     <style name="App.Custom.Indicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
         <item name="android:color">?attr/colorSurfaceContainer</item>
+    </style>
+
+    <style name="roundedImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">10dp</item>
+    </style>
+
+    <style name="PreferenceTheme" parent="PreferenceThemeOverlay.v14.Material">
+        <item name="android:fontFamily">@font/nunito_bold</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="CustomTitle" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/nunito_bold</item>
+        <item name="android:textSize">18sp</item>
     </style>
 
 </resources>

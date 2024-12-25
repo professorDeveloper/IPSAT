@@ -59,9 +59,9 @@
                 android:fontFamily="@font/nunito_bold"
                 android:hint="Subscription Code"
                 android:imeOptions="actionDone"
-                android:inputType="textEmailAddress"
+                android:inputType="phone"
                 android:paddingHorizontal="@dimen/_8sdp"
-                android:textColor="@color/white_and_black"
+                android:textColor="@color/textLightColor"
                 android:textColorHint="@color/bg_black_50"
                 android:textSize="@dimen/_12sdp" />
 
@@ -137,8 +137,9 @@
         android:id="@+id/authProgress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/_60sdp"
+        app:layout_constraintVertical_bias="0.2"
         android:visibility="gone"
+        tools:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/footerSection"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
