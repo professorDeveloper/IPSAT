@@ -28,4 +28,31 @@
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:navigationBarColor">?attr/colorSurfaceContainer</item>
     </style>
+    <style name="MyBottomNavigationView.TextAppearance" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="DialogTheme" parent="Theme.IPSAT">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:navigationBarColor">#00CF9090</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+    </style>
+
+    <style name="BottomNavigationView" parent="@style/TextAppearance.AppCompat.Caption">
+        <item name="android:textFontWeight" tools:targetApi="p">500</item>
+        <item name="titleEnabled">true</item>
+        <!--        <item name="iconTintActive">@color/basic_color</item>-->
+        <!--        <item name="iconTintActive">@color/basic_color</item>-->
+        <item name="contentInsetStartWithNavigation">0dp</item>
+        <item name="labelVisibilityMode">selected</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+
+    <style name="App.Custom.Indicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">?attr/colorSurfaceContainer</item>
+    </style>
+
 </resources>
