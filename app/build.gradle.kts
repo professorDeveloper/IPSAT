@@ -94,6 +94,17 @@ dependencies {
     debugImplementation( "com.github.chuckerteam.chucker:library:4.0.0")
     releaseImplementation( "com.github.chuckerteam.chucker:library-no-op:4.0.0")
 
+    /**
+     * Glide
+     * */
+    implementation("com.github.bumptech.glide:glide:4.15.1")
+    kapt("com.github.bumptech.glide:compiler:4.15.1")
+    //
+    implementation("com.github.bumptech.glide:okhttp3-integration:4.15.1")
+    implementation("jp.wasabeef:glide-transformations:4.3.0")
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+    implementation("com.flaviofaria:kenburnsview:1.0.7")
+
     // LinearProgress
     //
 

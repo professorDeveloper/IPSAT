@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <ImageView
+        android:id="@+id/itemCompactBannerNoKen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        tools:ignore="ContentDescription,ImageContrastCheck"
+        tools:srcCompat="@tools:sample/backgrounds/scenic[1]" />
+
+
+    <com.flaviofaria.kenburnsview.KenBurnsView
+        android:id="@+id/itemCompactBanner"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription"
+        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:visibility="visible"
+        app:srcCompat="@drawable/linear_gradient_bg"
+        tools:ignore="ContentDescription,ImageContrastCheck" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_4sdp"
+            android:translationZ="8dp"
+            app:cardCornerRadius="16dp"
+            android:layout_marginStart="4dp"
+            app:cardElevation="4dp"
+            app:layout_constraintBottom_toTopOf="@+id/frameLayout4"
+            app:layout_constraintEnd_toEndOf="@+id/frameLayout4"
+            app:layout_constraintStart_toStartOf="@+id/frameLayout4">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/itemCompactImage"
+                android:layout_width="@dimen/_115sdp"
+                android:layout_height="@dimen/_160sdp"
+                android:scaleType="centerCrop"
+
+                android:transitionName="mediaCover"
+                app:shapeAppearanceOverlay="@style/roundedImageView"
+                tools:ignore="ContentDescription,ImageContrastCheck"
+                tools:srcCompat="@drawable/joker_banner" />
+            <LinearLayout
+                android:id="@+id/itemCompactScoreBG"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:background="@drawable/item_number"
+                android:backgroundTint="#BFFFFFFF"
+                android:backgroundTintMode="multiply"
+                android:orientation="horizontal"
+                android:paddingStart="@dimen/_8sdp"
+                android:paddingEnd="@dimen/_6sdp"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/itemCompactScore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_2sdp"
+                    android:fontFamily="@font/inter_bold"
+                    android:paddingTop="@dimen/_2sdp"
+                    android:layout_marginHorizontal="@dimen/_2sdp"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="13dp"
+                    tools:ignore="TextContrastCheck"
+                    tools:text="0.0" />
+
+                <com.google.android.material.imageview.ShapeableImageView
+
+                    android:id="@+id/imageView2"
+                    android:layout_width="15dp"
+                    android:layout_height="14dp"
+                    android:layout_gravity="center"
+                    app:tint="@color/map_yellow"
+                    android:layout_marginStart="2dp"
+                    android:scaleType="centerCrop"
+                    android:transitionName="mediaCover"
+                    app:srcCompat="@drawable/ic_star"
+                    tools:ignore="ContentDescription" />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+
+        <FrameLayout
+            android:id="@+id/frameLayout4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="@dimen/_4sdp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="2dp"
+
+                    android:ellipsize="end"
+                    android:fontFamily="@font/inter_bold"
+                    android:gravity="center"
+                    android:includeFontPadding="false"
+                    android:maxLength="20"
+                    android:maxLines="2"
+                    android:textColor="@color/whiteMain"
+                    android:text="Venom Last Dance"
+
+                    android:textSize="@dimen/_16ssp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/itemDescription"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginVertical="@dimen/_2sdp"
+                    android:ellipsize="end"
+                    android:gravity="center"
+                    android:includeFontPadding="false"
+                    android:maxLines="2"
+                    android:text="Demon Slayer "
+                    android:textColor="#B1AEAE"
+                    android:textSize="@dimen/_12ssp" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="horizontal"/>
+
+
+            </LinearLayout>
+
+
+        </FrameLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

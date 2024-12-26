@@ -36,6 +36,8 @@
     <color name="invalid_color">#F70B0B</color>
     <color name="map_blue">#0B84FF</color>
     <color name="map_green">#8AE280</color>
+    <color name="black_overlay">#66000000</color>
+    <color name="nav_bg_inv">#00FFFFFF</color>
 
     <color name="card_background">#F2F2F7</color>
     <color name="prem_bg">#E4E4E6</color>

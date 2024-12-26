@@ -3,16 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/app_graph"
-    app:startDestination="@id/homeScreen">
+    app:startDestination="@id/homeScreen2">
 
     <fragment
-        android:id="@+id/homeScreen"
+        android:id="@+id/homeScreen2"
         android:name="com.ip_tv.ipsat.presentation.screens.HomeScreen"
         android:label="home_screen"
         tools:layout="@layout/home_screen" />
     <fragment
-        android:id="@+id/movie_vod"
-        android:name="com.ip_tv.ipsat.presentation.screens.MovieVodScreen"
+        android:id="@+id/liveTvScreen"
+        android:name="com.ip_tv.ipsat.presentation.screens.LiveTvScreen"
         android:label="live_tv_screen"
+        tools:layout="@layout/live_tv_screen" />
+    <fragment
+        android:id="@+id/movieVodScreen"
+        android:name="com.ip_tv.ipsat.presentation.screens.MovieVodScreen"
+        android:label="movie_vod_screen"
         tools:layout="@layout/movie_vod_screen" />
 </navigation>
