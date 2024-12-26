@@ -21,13 +21,13 @@
                 android:layout_height="200dp" />
 
             <!-- Dots Indicator for Banner -->
-            <com.google.android.material.tabs.TabLayout
+            <com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator
                 android:id="@+id/bannerIndicator"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                app:dotsColor="@color/map_yellow"
+                app:dotsSize="@dimen/_10sdp"
+                android:layout_height="@dimen/_14sdp"
                 android:layout_gravity="center_horizontal"
-                app:tabIndicatorColor="?attr/colorPrimary"
-                app:tabSelectedTextColor="?attr/colorPrimary"
                 app:tabTextColor="@color/textLightColor" />
         </LinearLayout>
 

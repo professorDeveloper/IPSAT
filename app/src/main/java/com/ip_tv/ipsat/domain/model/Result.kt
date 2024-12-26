@@ -12,3 +12,5 @@ data class Result(
     val rating: Double,
     val release_year: String
 )
+
+

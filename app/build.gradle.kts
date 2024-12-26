@@ -93,7 +93,7 @@ dependencies {
     //Chucker
     debugImplementation( "com.github.chuckerteam.chucker:library:4.0.0")
     releaseImplementation( "com.github.chuckerteam.chucker:library-no-op:4.0.0")
-
+//
     /**
      * Glide
      * */
@@ -107,6 +107,8 @@ dependencies {
 
     // LinearProgress
     //
+
+    implementation("com.tbuonomo:dotsindicator:5.1.0")
 
 
 
