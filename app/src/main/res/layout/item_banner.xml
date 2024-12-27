@@ -31,7 +31,7 @@
         android:layout_height="match_parent"
         android:scaleType="fitXY"
         android:visibility="visible"
-        app:srcCompat="@drawable/linear_gradient_bg"
+        app:srcCompat="@drawable/banner_gradient_overlay"
         tools:ignore="ContentDescription,ImageContrastCheck" />
 
     <androidx.constraintlayout.widget.ConstraintLayout

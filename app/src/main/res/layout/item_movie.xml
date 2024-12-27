@@ -20,8 +20,8 @@
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/item_img"
-                android:layout_width="@dimen/_100sdp"
-                android:layout_height="@dimen/_150sdp"
+                android:layout_width="@dimen/_80sdp"
+                android:layout_height="@dimen/_120sdp"
                 android:scaleType="centerCrop"
                 android:transitionName="mediaCover"
                 app:shapeAppearanceOverlay="@style/roundedImageView"
@@ -49,20 +49,15 @@
                     android:paddingTop="@dimen/_2sdp"
                     android:layout_marginHorizontal="@dimen/_2sdp"
                     android:textColor="@color/colorAccent"
-                    android:textSize="13dp"
+                    android:textSize="@dimen/_10ssp"
                     tools:ignore="TextContrastCheck"
                     tools:text="0.0" />
 
                 <com.google.android.material.imageview.ShapeableImageView
-
                     android:id="@+id/imageView2"
                     android:layout_width="15dp"
                     android:layout_height="14dp"
                     android:layout_gravity="center"
-                    app:tint="@color/map_yellow"
-                    android:layout_marginStart="2dp"
-                    android:scaleType="centerCrop"
-                    android:transitionName="mediaCover"
                     app:srcCompat="@drawable/ic_star"
                     tools:ignore="ContentDescription" />
 
@@ -85,7 +80,7 @@
             android:fontFamily="@font/inter_bold"
             android:includeFontPadding="false"
             android:maxLines="1"
-            android:textSize="@dimen/_13ssp"
+            android:textSize="@dimen/_12ssp"
             android:transitionName="mediaTitle"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/cardView2"

@@ -6,8 +6,12 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.net.wifi.WifiManager
+import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
 import android.util.Log
+import android.view.GestureDetector
+import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AlphaAnimation
@@ -30,6 +34,8 @@ import com.ip_tv.ipsat.app.App
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.NetworkInterface
+import java.util.Timer
+import java.util.TimerTask
 
 
 fun hideKeyboard(view: View) {
@@ -229,6 +235,63 @@ fun initActivity(a: Activity) {
 
 }
 
+abstract class GesturesListener : GestureDetector.SimpleOnGestureListener() {
+    private var timer: Timer? = null //at class level;
+    private val delay: Long = 200
+
+    override fun onSingleTapUp(e: MotionEvent): Boolean {
+        processSingleClickEvent(e)
+        return super.onSingleTapUp(e)
+    }
+
+    override fun onLongPress(e: MotionEvent) {
+        processLongClickEvent(e)
+        super.onLongPress(e)
+    }
+
+    override fun onDoubleTap(e: MotionEvent): Boolean {
+        processDoubleClickEvent(e)
+        return super.onDoubleTap(e)
+    }
+
+
+
+    private fun processSingleClickEvent(e: MotionEvent) {
+        val handler = Handler(Looper.getMainLooper())
+        val mRunnable = Runnable {
+            onSingleClick(e)
+        }
+        timer = Timer().apply {
+            schedule(object : TimerTask() {
+                override fun run() {
+                    handler.post(mRunnable)
+                }
+            }, delay)
+        }
+    }
+
+    private fun processDoubleClickEvent(e: MotionEvent) {
+        timer?.apply {
+            cancel()
+            purge()
+        }
+        onDoubleClick(e)
+    }
+
+    private fun processLongClickEvent(e: MotionEvent) {
+        timer?.apply {
+            cancel()
+            purge()
+        }
+        onLongClick(e)
+    }
+
+    open fun onSingleClick(event: MotionEvent) {}
+    open fun onDoubleClick(event: MotionEvent) {}
+    open fun onScrollYClick(y: Float) {}
+    open fun onScrollXClick(y: Float) {}
+    open fun onLongClick(event: MotionEvent) {}
+}
 
 
 fun getAndroidId(context: Context): String {

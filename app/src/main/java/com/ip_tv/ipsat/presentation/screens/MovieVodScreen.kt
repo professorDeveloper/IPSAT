@@ -6,16 +6,22 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.animation.LayoutAnimationController
+import androidx.appcompat.widget.TooltipCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayoutMediator
 import com.ip_tv.ipsat.databinding.MovieVodScreenBinding
 import com.ip_tv.ipsat.domain.model.Movie
 import com.ip_tv.ipsat.presentation.adapters.BannerAdapter
+import com.ip_tv.ipsat.presentation.adapters.MovieAdapter
+import com.ip_tv.ipsat.presentation.adapters.TabAdapter
 import com.ip_tv.ipsat.presentation.viewmodel.MovieViewModel
 import com.ip_tv.ipsat.utils.BaseFragment
 import com.ip_tv.ipsat.utils.MediaPageTransformer
@@ -33,16 +39,45 @@ class MovieVodScreen:BaseFragment<MovieVodScreenBinding>(MovieVodScreenBinding::
     private var isBannerLoaded = false
     private var trendHandler: Handler? = null
     private lateinit var trendRun: Runnable
+    private lateinit var movieAdapter: MovieAdapter
+    var list = arrayListOf("Movies","Series","Kids","Documentary")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         if (!isBannerLoaded) {
             model.loadBanner()
-        }    }
+        }
+    }
     override fun onViewCreate(savedInstanceState: Bundle?) {
         observeModel()
         requireActivity().window.statusBarColor = Color.parseColor("#25B8B8B8")
+//        manageTabLayout()
 
+    }
+    private fun manageTabLayout(){
+        val adapter = TabAdapter(list, requireActivity())
+        binding.movieRv.adapter = adapter
+
+        TabLayoutMediator(binding.tabLayout, binding.movieRv) { _, _ ->
+        }.attach()
+        setTab()
+
+        for (i in 0 until binding.tabLayout.tabCount) {
+            binding.tabLayout.getTabAt(i)?.let { TooltipCompat.setTooltipText(it.view, null) }
+        }
+
+
+    }
+
+    private fun setTab() {
+        binding.apply {
+            val tabCount = binding.tabLayout.tabCount
+            for (i in 0 until tabCount) {
+                val tab = binding.tabLayout.getTabAt(i)
+                tab!!.text = list[i]
+            }
+
+        }
     }
 
    private fun observeModel(){
@@ -52,6 +87,13 @@ class MovieVodScreen:BaseFragment<MovieVodScreenBinding>(MovieVodScreenBinding::
                 .collect { handleBannerState(it) }
         }
     }
+
+
+
+//    private fun loadMovieRv () {
+//
+//    }
+
     private fun handleBannerState(state:Resource<ArrayList<Movie>>) {
         when(state){
             is Resource.Error -> {

@@ -71,15 +71,16 @@ class BannerAdapter(
         b.root.setOnClickListener {
                 clickListener.invoke(media!!)
         }
+        val banner =b.itemCompactBanner
         if (media != null) {
-                b.itemCompactBanner.setTransitionGenerator(
+            banner.setTransitionGenerator(
                     RandomTransitionGenerator(
                         (10000 + 15000 * 700).toLong(),
                         AccelerateDecelerateInterpolator()
                     )
                 )
-            val banner =b.itemCompactBanner
-            val context = b.itemCompactBanner.context
+            banner.resume()
+            val context = banner.context
             if (!(activity).isDestroyed)
                 Glide.with(context as Context)
                     .load(GlideUrl(media.image ))

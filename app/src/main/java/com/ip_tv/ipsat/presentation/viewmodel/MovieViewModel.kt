@@ -1,23 +1,57 @@
 package com.ip_tv.ipsat.presentation.viewmodel
 
 import Resource
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.ip_tv.ipsat.domain.model.Movie
-import com.ip_tv.ipsat.domain.usecase.MovieScreenUse
+import com.ip_tv.ipsat.domain.usecase.MovieScreenUseCase
 import com.ip_tv.ipsat.utils.hasConnection
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MovieViewModel @Inject constructor(private val movieScreenUse: MovieScreenUse) : ViewModel() {
+class MovieViewModel @Inject constructor(private val movieScreenUse: MovieScreenUseCase) : ViewModel() {
 
     private val _initBanner = MutableStateFlow<Resource<ArrayList<Movie>>>(Resource.Idle)
     val initBanner get() = _initBanner
+    private var page =1
     private var isDataLoaded = false
+
+    private val _movies = MutableLiveData<Resource<ArrayList<Movie>>>(Resource.Idle)
+    val movies: LiveData<Resource<ArrayList<Movie>>> get() = _movies
+
+    fun loadNextPage()
+    {
+      if (hasConnection()) {
+          _movies.postValue(Resource.Loading)
+        viewModelScope.launch {
+            movieScreenUse.getMovies(page)
+                .onEach { result ->
+                    result.onSuccess { data ->
+                        page+=1
+                        _movies.value = Resource.Success(data)
+                    }
+                    result.onFailure { exception ->
+                        _movies.value = Resource.Error(Exception(exception.message))
+                    }
+                }
+                .launchIn(viewModelScope)
+        }
+      }else {
+          _movies.postValue(Resource.Error(Exception("No internet connection !")))
+      }
+    }
+
+
 
     fun loadBanner() {
         if (isDataLoaded) return

@@ -13,4 +13,5 @@ interface MovieService {
         @Query("page") page: Int,
         @Query("page_size") pageSize: Int,
     ): Response<MovieResponse>
+
 }
