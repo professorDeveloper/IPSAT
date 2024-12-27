@@ -51,7 +51,7 @@ class MovieVodScreen:BaseFragment<MovieVodScreenBinding>(MovieVodScreenBinding::
     override fun onViewCreate(savedInstanceState: Bundle?) {
         observeModel()
         requireActivity().window.statusBarColor = Color.parseColor("#25B8B8B8")
-//        manageTabLayout()
+        manageTabLayout()
 
     }
     private fun manageTabLayout(){
