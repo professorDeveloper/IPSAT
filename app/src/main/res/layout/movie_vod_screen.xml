@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:theme="@style/ThemeOverlay.Material3.Dark.ActionBar">
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -18,18 +18,16 @@
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/bannerViewPager"
                 android:layout_width="match_parent"
-                android:layout_height="200dp" />
+                android:layout_height="@dimen/_270sdp" />
 
-            <!-- Dots Indicator for Banner -->
-            <com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator
-                android:id="@+id/bannerIndicator"
+            <ProgressBar
+                android:id="@+id/progressBanner"
+                android:visibility="gone"
                 android:layout_width="match_parent"
-                app:dotsColor="@color/map_yellow"
-                app:dotsSize="@dimen/_10sdp"
-                android:layout_height="@dimen/_14sdp"
-                android:layout_gravity="center_horizontal"
-                app:tabTextColor="@color/textLightColor" />
-        </LinearLayout>
+                android:layout_gravity="center"
+                android:layout_height="wrap_content"/>
+
+        </FrameLayout>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"

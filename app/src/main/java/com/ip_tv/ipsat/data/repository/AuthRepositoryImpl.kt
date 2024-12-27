@@ -1,17 +1,15 @@
 package com.ip_tv.ipsat.data.repository
 
-import com.google.gson.Gson
 import com.ip_tv.ipsat.data.remote.AuthService
 import com.ip_tv.ipsat.domain.model.ErrorResponse
 import com.ip_tv.ipsat.domain.model.LoginResponse
 import com.ip_tv.ipsat.domain.model.SubscriptionResponse
 import com.ip_tv.ipsat.domain.preference.UserPreferenceManager
 import com.ip_tv.ipsat.domain.repository.AuthRepository
-import com.zbekz.tashkentmetro.utils.toDataClass
+import com.ip_tv.ipsat.utils.toDataClass
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import org.json.JSONObject
 import javax.inject.Inject
 
 

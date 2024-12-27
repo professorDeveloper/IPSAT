@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ip_tv.ipsat.domain.usecase.LoginUseCase
 import com.ip_tv.ipsat.utils.AuthState
-import com.zbekz.tashkentmetro.utils.hasConnection
+import com.ip_tv.ipsat.utils.hasConnection
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn

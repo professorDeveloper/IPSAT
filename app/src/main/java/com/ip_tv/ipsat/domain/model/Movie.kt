@@ -1,6 +1,6 @@
 package com.ip_tv.ipsat.domain.model
 
-data class Result(
+data class Movie(
     val categoryProperty: String,
     val categoryid: String,
     val country: String,

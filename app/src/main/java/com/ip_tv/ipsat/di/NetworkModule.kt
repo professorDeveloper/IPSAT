@@ -3,6 +3,7 @@ package com.ip_tv.ipsat.di
 import android.content.Context
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.ip_tv.ipsat.data.remote.AuthService
+import com.ip_tv.ipsat.data.remote.MovieService
 import com.ip_tv.ipsat.domain.preference.UserPreferenceManager
 import dagger.Module
 import dagger.Provides
@@ -44,6 +45,9 @@ object NetworkModule {
     @[Provides Singleton]
     fun provideAuthApi(retrofit: Retrofit): AuthService =
         retrofit.create(AuthService::class.java)
+    @[Provides Singleton]
+    fun provideHomeApi(retrofit: Retrofit): MovieService =
+        retrofit.create(MovieService::class.java)
 
 
 }

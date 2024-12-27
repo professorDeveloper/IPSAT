@@ -3,11 +3,11 @@
 
 
     <item
-        android:id="@+id/homeScreen"
+        android:id="@+id/liveTvScreen"
         android:icon="@drawable/live_tv_icon"
         android:title="LIVE" />
     <item
-        android:id="@+id/movie_vod"
+        android:id="@+id/movieVodScreen"
         android:icon="@drawable/tv_page_icon"
         android:title="VOD" />
     <item

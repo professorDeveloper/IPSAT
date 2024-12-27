@@ -3,6 +3,6 @@
     <gradient
         android:angle="90"
         android:endColor="@color/nav_bg_inv"
-        android:startColor="?attr/themeContentColor"
+        android:startColor="?attr/colorOnBackground"
         android:type="linear" />
 </shape>

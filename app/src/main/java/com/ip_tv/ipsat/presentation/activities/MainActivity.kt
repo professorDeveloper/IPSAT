@@ -10,6 +10,7 @@ import com.ip_tv.ipsat.R
 import com.ip_tv.ipsat.databinding.ActivityMainBinding
 import com.ip_tv.ipsat.domain.preference.UserPreferenceManager
 import com.ip_tv.ipsat.utils.hideWithoutAnimation
+import com.ip_tv.ipsat.utils.initActivity
 import com.ip_tv.ipsat.utils.showWithAnimation
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -27,10 +28,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
 //        ViewUtils.setLanguageForService(this, userPreferenceManager)
         viewBinding = ActivityMainBinding.inflate(layoutInflater)
+        initActivity(this)
         setContentView(viewBinding.root)
         viewBinding.homeNavigation.setupWithNavController(navController)
         managePages()
@@ -39,9 +40,9 @@ class MainActivity : AppCompatActivity() {
   private  fun managePages(){
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.movie_vod -> {
-//                    viewBinding.homeNavigation.hideWithoutAnimation(viewBinding.navHost)
-                }
+//                R.id.movie_vod -> {
+////                    viewBinding.homeNavigation.hideWithoutAnimation(viewBinding.navHost)
+//                }
 //
 //                R.id.popularSeeAllScreen -> {
 //                    binding.bottomNavigation.hideWithoutAnimation(binding.fragmentContainerView)

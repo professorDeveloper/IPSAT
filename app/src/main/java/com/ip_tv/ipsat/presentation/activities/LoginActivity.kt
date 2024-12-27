@@ -1,10 +1,8 @@
 package com.ip_tv.ipsat.presentation.activities
 
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -21,7 +19,7 @@ import com.ip_tv.ipsat.utils.AuthState
 import com.ip_tv.ipsat.utils.gone
 import com.ip_tv.ipsat.utils.snackString
 import com.ip_tv.ipsat.utils.visible
-import com.zbekz.tashkentmetro.utils.getAndroidId
+import com.ip_tv.ipsat.utils.getAndroidId
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
