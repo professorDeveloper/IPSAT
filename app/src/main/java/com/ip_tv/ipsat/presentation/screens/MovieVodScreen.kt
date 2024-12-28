@@ -68,8 +68,7 @@ class MovieVodScreen : BaseFragment<MovieVodScreenBinding>(MovieVodScreenBinding
         )
         animePageAdapter = MovieVodPageAdapter(this, animePageBinding)
         movieCompatAdapter = MovieCompatAdapter(arrayListOf())
-        val progressAdaptor = ProgressAdapter(searched = false)
-        binding.animePageRecyclerView.adapter = ConcatAdapter(animePageAdapter, movieCompatAdapter,progressAdaptor)
+        binding.animePageRecyclerView.adapter = ConcatAdapter(animePageAdapter, movieCompatAdapter)
         val layout = LinearLayoutManager(requireContext())
         binding.animePageRecyclerView.layoutManager = layout
 
@@ -100,14 +99,6 @@ class MovieVodScreen : BaseFragment<MovieVodScreenBinding>(MovieVodScreenBinding
         binding.animePageRecyclerView.addOnScrollListener(object :
             RecyclerView.OnScrollListener() {
             override fun onScrolled(v: RecyclerView, dx: Int, dy: Int) {
-                if (!v.canScrollVertically(1)) {
-                    if (!loading) {
-                        lifecycleScope.launch(Dispatchers.IO) {
-                            loading = true
-                            model.loadNextPage()
-                        }
-                    }
-                }
                 if (layout.findFirstVisibleItemPosition() > 1 && !visible) {
                     binding.animePageScrollTop.visibility = View.VISIBLE
                     visible = true
