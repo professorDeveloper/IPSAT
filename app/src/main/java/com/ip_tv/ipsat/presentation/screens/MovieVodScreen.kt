@@ -11,9 +11,11 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.animestudios.animeapp.others.ProgressAdapter
 import com.ip_tv.ipsat.databinding.ItemMoviePageBinding
 import com.ip_tv.ipsat.databinding.MovieVodScreenBinding
 import com.ip_tv.ipsat.presentation.adapters.MovieAdapter
+import com.ip_tv.ipsat.presentation.adapters.MovieCompatAdapter
 import com.ip_tv.ipsat.presentation.adapters.MovieVodPageAdapter
 import com.ip_tv.ipsat.presentation.viewmodel.MovieViewModel
 import com.ip_tv.ipsat.utils.BaseFragment
@@ -28,6 +30,7 @@ class MovieVodScreen : BaseFragment<MovieVodScreenBinding>(MovieVodScreenBinding
     private val model by activityViewModels<MovieViewModel>()
     private var isBannerLoaded = false
     private lateinit var animePageAdapter: MovieVodPageAdapter
+    private lateinit var movieCompatAdapter: MovieCompatAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -35,6 +38,7 @@ class MovieVodScreen : BaseFragment<MovieVodScreenBinding>(MovieVodScreenBinding
             model.loadBanner()
             model.loadNextPage()
             model.loadSeries()
+            model.loadDocumentary()
         }
     }
 
@@ -42,13 +46,18 @@ class MovieVodScreen : BaseFragment<MovieVodScreenBinding>(MovieVodScreenBinding
         observeModel()
         observeModelSeries()
         observeModelMovies()
+        observeModelDocumentary()
         requireActivity().window.statusBarColor = Color.parseColor("#25B8B8B8")
 
 
-        val animePageBinding = ItemMoviePageBinding.inflate(LayoutInflater.from(requireActivity()), binding.root, false)
-        animePageAdapter = MovieVodPageAdapter(this,animePageBinding)
-
-        binding.animePageRecyclerView.adapter = animePageAdapter
+        val animePageBinding = ItemMoviePageBinding.inflate(
+            LayoutInflater.from(requireActivity()),
+            binding.root,
+            false
+        )
+        animePageAdapter = MovieVodPageAdapter(this, animePageBinding)
+        movieCompatAdapter = MovieCompatAdapter(arrayListOf())
+        binding.animePageRecyclerView.adapter = ConcatAdapter(animePageAdapter, movieCompatAdapter)
         val layout = LinearLayoutManager(requireContext())
         binding.animePageRecyclerView.layoutManager = layout
 
@@ -68,7 +77,6 @@ class MovieVodScreen : BaseFragment<MovieVodScreenBinding>(MovieVodScreenBinding
                 .collect { animePageAdapter.handleBannerState(it) }
         }
     }
-
 
     private fun observeModelMovies() {
         lifecycleScope.launch {
@@ -92,6 +100,7 @@ class MovieVodScreen : BaseFragment<MovieVodScreenBinding>(MovieVodScreenBinding
             }
         }
     }
+
     private fun observeModelSeries() {
         lifecycleScope.launch {
             model.series.observe(this@MovieVodScreen) {
@@ -115,11 +124,39 @@ class MovieVodScreen : BaseFragment<MovieVodScreenBinding>(MovieVodScreenBinding
         }
     }
 
+    private fun observeModelDocumentary() {
+        lifecycleScope.launch {
+            model.documentary.observe(this@MovieVodScreen) {
+                when (it) {
+                    is Resource.Error -> {
+                        showSnack(binding.root, it.throwable.message.toString())
+                    }
+
+                    is Resource.Loading -> {
+                    }
+
+                    is Resource.Success -> {
+                        val movieAdapter = MovieAdapter()
+                        movieAdapter.submitList(it.data)
+                        animePageAdapter.updateDocumentary(movieAdapter)
+                    }
+
+                    else -> {}
+                }
+            }
+        }
+    }
+
     private fun loadRefresh() {
         binding.animeRefresh.setSlingshotDistance(128)
         binding.animeRefresh.setProgressViewEndTarget(false, 128)
         binding.animeRefresh.setOnRefreshListener {
-//            Refresh.activity[this.hashCode()]!!.postValue(true)
+            model.resetData()
+            model.loadBanner()
+            model.loadNextPage()
+            model.loadSeries()
+            model.loadDocumentary()
+            binding.animeRefresh.isRefreshing = false
         }
     }
 

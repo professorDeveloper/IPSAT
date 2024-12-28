@@ -16,6 +16,7 @@ import com.ip_tv.ipsat.domain.model.Movie
 import com.ip_tv.ipsat.utils.BaseFragment
 import com.ip_tv.ipsat.utils.MediaPageTransformer
 import com.ip_tv.ipsat.utils.gone
+import com.ip_tv.ipsat.utils.invisible
 import com.ip_tv.ipsat.utils.setAnimation
 import com.ip_tv.ipsat.utils.setSlideIn
 import com.ip_tv.ipsat.utils.setSlideUp
@@ -97,7 +98,7 @@ class MovieVodPageAdapter(
     fun handleBannerState(state: Resource<ArrayList<Movie>>) {
         when (state) {
             is Resource.Error -> {
-                binding.animeTrendingProgressBar.gone()
+                binding.animeTrendingProgressBar.invisible()
                 fragment.showSnack(
                     binding.root,
                     state.throwable.message.toString()
@@ -106,11 +107,11 @@ class MovieVodPageAdapter(
 
             is Resource.Loading -> {
                 binding.animeTrendingProgressBar.visible()
-                binding.bannerViewPager.gone()
+                binding.bannerViewPager.invisible()
             }
 
             is Resource.Success -> {
-                binding.animeTrendingProgressBar.gone()
+                binding.animeTrendingProgressBar.invisible()
                 binding.bannerViewPager.visible()
                 binding.bannerViewPager.adapter = BannerAdapter(
                     mediaList = state.data,
@@ -143,4 +144,18 @@ class MovieVodPageAdapter(
         }
     }
 
+    fun updateDocumentary(adaptor: MovieAdapter) {
+        binding.documentaryRecyclerView.adapter = adaptor
+        binding.documentaryRecyclerView.layoutManager =
+            LinearLayoutManager(
+                binding.documentaryRecyclerView.context,
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
+        binding.documentaryRecyclerView.visibility = View.VISIBLE
+        binding.documentaryRecyclerView.layoutAnimation =
+            LayoutAnimationController(setSlideIn(), 0.25f)
+        binding.documentaryRecyclerView.startAnimation(setSlideUp())
+
+    }
 }

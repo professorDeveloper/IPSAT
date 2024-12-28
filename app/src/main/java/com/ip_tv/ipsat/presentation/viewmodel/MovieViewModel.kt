@@ -17,13 +17,14 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.random.Random
 
 @HiltViewModel
 class MovieViewModel @Inject constructor(private val movieScreenUse: MovieScreenUseCase) : ViewModel() {
 
     private val _initBanner = MutableStateFlow<Resource<ArrayList<Movie>>>(Resource.Idle)
     val initBanner get() = _initBanner
-    private var page =1
+    private var page = Random.nextInt(1, 10)
     private var isDataLoaded = false
 
     private val _movies = MutableLiveData<Resource<ArrayList<Movie>>>(Resource.Idle)
@@ -34,6 +35,11 @@ class MovieViewModel @Inject constructor(private val movieScreenUse: MovieScreen
     private val _series = MutableLiveData<Resource<ArrayList<Movie>>>(Resource.Idle)
     val series: LiveData<Resource<ArrayList<Movie>>> get() = _series
 
+    private val  _documentary = MutableLiveData<Resource<ArrayList<Movie>>>(Resource.Idle)
+    val documentary: LiveData<Resource<ArrayList<Movie>>> get() = _documentary
+
+    private val  _randomMovies = MutableLiveData<Resource<ArrayList<Movie>>>(Resource.Idle)
+    val randomMovies: LiveData<Resource<ArrayList<Movie>>> get() = _randomMovies
 
     fun loadNextPage()
     {
@@ -104,8 +110,80 @@ class MovieViewModel @Inject constructor(private val movieScreenUse: MovieScreen
         }
     }
 
+    fun loadDocumentary(){
+        if (isDataLoaded) return
+        if (hasConnection()) {
+            _documentary.postValue(Resource.Loading)
+            viewModelScope.launch {
+                movieScreenUse.getDocumentary(page)
+                    .onEach { result ->
+                        result.onSuccess { data ->
+                            isDataLoaded = true
+                            page+=1
+                            _documentary.value = Resource.Success(data)
+                        }
+                        result.onFailure { exception ->
+                            _documentary.value = Resource.Error(Exception(exception.message))
+                        }
+                    }
+                    .launchIn(viewModelScope)
+            }
+        } else {
+            _documentary.postValue(Resource.Error(Exception("No internet connection !")))
+        }
+    }
+
+    fun loadRandomData() {
+        val random = (1..4).random()
+        viewModelScope.launch {
+            when (random) {
+                1 -> {
+                    val randomPage =(10..40).random()
+                    movieScreenUse.getMovies(page=randomPage.toString().toInt()).onEach { result ->
+                        result.onSuccess { data ->
+                            _randomMovies.value = Resource.Success(data)
+                        }
+                        result.onFailure { exception ->
+                            _randomMovies.value = Resource.Error(Exception(exception.message))
+                        }
+
+                    }
+                }
+                2 -> {
+                    val randomPage =(10..40).random()
+                    movieScreenUse.getSeries(page=randomPage.toString().toInt()).onEach { result ->
+                        result.onSuccess { data ->
+                            _randomMovies.value = Resource.Success(data)
+                        }
+                        result.onFailure { exception ->
+                            _randomMovies.value = Resource.Error(Exception(exception.message))
+                        }
+                    }
+                }
+                3 -> {
+                    val randomPage =(10..40).random()
+                    movieScreenUse.getDocumentary(page=randomPage.toString().toInt()).onEach { result ->
+                        result.onSuccess { data ->
+                            _randomMovies.value = Resource.Success(data)
+                        }
+                        result.onFailure { exception ->
+                            _randomMovies.value = Resource.Error(Exception(exception.message))
+                        }
+                    }
+                }
+                4 -> {
+//                    loadDocumentary(
+                }
+            }
+
+        }
+    }
+
     fun resetData() {
         isDataLoaded = false
         _initBanner.value = Resource.Idle
+        _movies.value = Resource.Idle
+        _series.value = Resource.Idle
+
     }
 }

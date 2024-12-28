@@ -87,6 +87,7 @@ fun View.gone() {
     this.visibility = View.GONE
 }
 
+
 fun MaterialCardView.select() {
     this.strokeWidth = 5
     this.strokeColor = ContextCompat.getColor(context, R.color.colorPrimary)

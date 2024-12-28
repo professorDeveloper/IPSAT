@@ -9,4 +9,6 @@ interface HomeRepository {
   suspend  fun getMovies(page: Int):Flow<Result<ArrayList<Movie>>>
 
   suspend fun getSeries(page: Int):Flow<Result<ArrayList<Movie>>>
+
+  suspend fun getDocuments(page: Int):Flow<Result<ArrayList<Movie>>>
 }
