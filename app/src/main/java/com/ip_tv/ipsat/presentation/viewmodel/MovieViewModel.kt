@@ -29,14 +29,22 @@ class MovieViewModel @Inject constructor(private val movieScreenUse: MovieScreen
     private val _movies = MutableLiveData<Resource<ArrayList<Movie>>>(Resource.Idle)
     val movies: LiveData<Resource<ArrayList<Movie>>> get() = _movies
 
+
+
+    private val _series = MutableLiveData<Resource<ArrayList<Movie>>>(Resource.Idle)
+    val series: LiveData<Resource<ArrayList<Movie>>> get() = _series
+
+
     fun loadNextPage()
     {
-      if (hasConnection()) {
+        if (isDataLoaded) return
+        if (hasConnection()) {
           _movies.postValue(Resource.Loading)
         viewModelScope.launch {
             movieScreenUse.getMovies(page)
                 .onEach { result ->
                     result.onSuccess { data ->
+                        isDataLoaded = true
                         page+=1
                         _movies.value = Resource.Success(data)
                     }
@@ -52,6 +60,28 @@ class MovieViewModel @Inject constructor(private val movieScreenUse: MovieScreen
     }
 
 
+    fun loadSeries() {
+        if (isDataLoaded) return
+        if (hasConnection()) {
+            _series.postValue(Resource.Loading)
+            viewModelScope.launch {
+                movieScreenUse.getSeries(page)
+                    .onEach { result ->
+                        result.onSuccess { data ->
+                            isDataLoaded = true
+                            page+=1
+                            _series.value = Resource.Success(data)
+                        }
+                        result.onFailure { exception ->
+                            _series.value = Resource.Error(Exception(exception.message))
+                        }
+                    }
+                    .launchIn(viewModelScope)
+            }
+        } else {
+            _series.postValue(Resource.Error(Exception("No internet connection !")))
+        }
+    }
 
     fun loadBanner() {
         if (isDataLoaded) return

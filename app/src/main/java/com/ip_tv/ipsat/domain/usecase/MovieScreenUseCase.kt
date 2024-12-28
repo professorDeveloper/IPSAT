@@ -11,5 +11,5 @@ import javax.inject.Inject
 class MovieScreenUseCase @Inject constructor(private val  repo: HomeRepositoryImpl) {
     fun getBannerData() = repo.loadBanner()
    suspend fun getMovies(page:Int) = repo.getMovies(page)
-
+    suspend fun getSeries(page:Int) = repo.getSeries(page)
 }

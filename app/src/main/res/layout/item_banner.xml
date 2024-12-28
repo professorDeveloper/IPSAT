@@ -29,9 +29,10 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingTop="@dimen/_60sdp"
         android:scaleType="fitXY"
         android:visibility="visible"
-        app:srcCompat="@drawable/banner_gradient_overlay"
+        app:srcCompat="@drawable/linear_gradient_bg"
         tools:ignore="ContentDescription,ImageContrastCheck" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -52,8 +53,8 @@
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/itemCompactImage"
-                android:layout_width="@dimen/_115sdp"
-                android:layout_height="@dimen/_160sdp"
+                android:layout_width="@dimen/_120sdp"
+                android:layout_height="@dimen/_180sdp"
                 android:scaleType="centerCrop"
 
                 android:transitionName="mediaCover"
@@ -135,7 +136,7 @@
                     android:includeFontPadding="false"
                     android:maxLength="20"
                     android:maxLines="2"
-                    android:textColor="@color/whiteMain"
+                    android:textColor="@color/white_and_black"
                     android:text="Venom Last Dance"
 
                     android:textSize="@dimen/_16ssp"
@@ -152,7 +153,7 @@
                     android:includeFontPadding="false"
                     android:maxLines="2"
                     android:text="Demon Slayer "
-                    android:textColor="#B1AEAE"
+                    android:textColor="@color/grayText"
                     android:textSize="@dimen/_12ssp" />
 
 

@@ -14,4 +14,12 @@ interface MovieService {
         @Query("page_size") pageSize: Int,
     ): Response<MovieResponse>
 
+    @GET("get_series/")
+    suspend fun getSeries(
+        @Query("subscription_code") subscriptionCode: String,
+        @Query("page") page: Int,
+        @Query("page_size") pageSize: Int,
+    ): Response<MovieResponse>
+
+
 }

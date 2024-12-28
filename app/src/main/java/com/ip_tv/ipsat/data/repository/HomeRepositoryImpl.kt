@@ -51,7 +51,7 @@ class HomeRepositoryImpl @Inject constructor(
         val response  =movieService.getMovies(
             subscriptionCode = userPreferenceManager.subCode,
             page=page,
-            pageSize = 50,
+            pageSize = 60,
         )
         if (response.isSuccessful) {
              val newList =ArrayList<Movie>()
@@ -73,5 +73,31 @@ class HomeRepositoryImpl @Inject constructor(
             }
         }
 
+    }
+
+    override suspend fun getSeries(page: Int)=flow<Result<ArrayList<Movie>>> {
+        val response  =movieService.getSeries(
+            subscriptionCode = userPreferenceManager.subCode,
+            page=page,
+            pageSize = 60,
+        )
+        if (response.isSuccessful) {
+            val newList =ArrayList<Movie>()
+            response.body()?.results?.onEach {
+                newList.add(it)
+            }
+            emit(Result.success(newList))
+        }else {
+            if (response.code() ==404|| response.code()==403) {
+                val errorResponse = response.errorBody()?.string()
+                val jsonObject = JSONObject(errorResponse)
+                val errorDetail = jsonObject.optString("detail")
+                emit(Result.failure(Exception(errorDetail)))
+            }else {
+                val errorResponse =
+                    response.errorBody()?.string().toString().toDataClass<ErrorResponse>()
+                emit(Result.failure(Exception(errorResponse.message)))
+            }
+        }
     }
 }

@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="@dimen/_90sdp"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="@dimen/_3sdp"
     android:layout_marginVertical="@dimen/_3sdp">
@@ -20,8 +20,8 @@
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/item_img"
-                android:layout_width="@dimen/_80sdp"
-                android:layout_height="@dimen/_120sdp"
+                android:layout_width="@dimen/_90sdp"
+                android:layout_height="@dimen/_140sdp"
                 android:scaleType="centerCrop"
                 android:transitionName="mediaCover"
                 app:shapeAppearanceOverlay="@style/roundedImageView"
@@ -65,26 +65,28 @@
 
         </androidx.cardview.widget.CardView>
 
-        <TextView
-            android:id="@+id/title_item"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_6sdp"
-            android:layout_marginStart="@dimen/_4sdp"
-            android:layout_marginBottom="@dimen/_3sdp"
-            android:ellipsize="marquee"
-            android:scrollHorizontally="true"
-            android:singleLine="true"
+    <TextView
+        android:id="@+id/title_item"
+        android:layout_width="0dp"
+        android:layout_marginStart="@dimen/_4sdp"
+        android:layout_height="20dp"
+        android:layout_marginTop="@dimen/_6sdp"
+        android:layout_marginEnd="@dimen/_2sdp"
+        android:layout_marginBottom="@dimen/_3sdp"
+        android:ellipsize="marquee"
+        android:fontFamily="@font/inter_bold"
+        android:includeFontPadding="false"
 
-            android:marqueeRepeatLimit="marquee_forever"
-            android:fontFamily="@font/inter_bold"
-            android:includeFontPadding="false"
-            android:maxLines="1"
-            android:textSize="@dimen/_12ssp"
-            android:transitionName="mediaTitle"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/cardView2"
-            app:layout_constraintTop_toBottomOf="@+id/cardView2"
-            tools:text="Get Color" />
+        android:marqueeRepeatLimit="marquee_forever"
+        android:maxLines="1"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+        android:textSize="@dimen/_12ssp"
+        android:transitionName="mediaTitle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/cardView2"
+        app:layout_constraintTop_toBottomOf="@+id/cardView2"
+        tools:text="Get Color" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

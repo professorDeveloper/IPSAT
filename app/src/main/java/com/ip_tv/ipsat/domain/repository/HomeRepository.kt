@@ -7,4 +7,6 @@ import kotlinx.coroutines.flow.Flow
 interface HomeRepository {
     fun loadBanner(): Flow<Result<ArrayList<Movie>>>
   suspend  fun getMovies(page: Int):Flow<Result<ArrayList<Movie>>>
+
+  suspend fun getSeries(page: Int):Flow<Result<ArrayList<Movie>>>
 }

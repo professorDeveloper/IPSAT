@@ -1,71 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:orientation="vertical"
-        app:elevation="0dp">
-
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbarBrowse"
+        android:id="@+id/animeRefresh"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:layout_height="match_parent">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/animePageRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clipToPadding="false"
-            app:contentInsetEnd="0dp"
-            app:contentInsetLeft="0dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            tools:itemCount="1"
+            tools:listitem="@layout/item_movie_page" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-            app:contentInsetRight="0dp"
-            app:contentInsetStart="0dp"
-            app:layout_scrollEffect="compress"
-            app:layout_scrollFlags="scroll|enterAlwaysCollapsed|snap">
+    <androidx.cardview.widget.CardView
+        android:id="@+id/animePageScrollTop"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="16dp"
+        android:visibility="gone"
+        app:cardBackgroundColor="@color/nav_bg"
+        app:cardCornerRadius="24dp"
+        app:contentPadding="12dp">
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <androidx.viewpager2.widget.ViewPager2
-                    android:id="@+id/bannerViewPager"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_270sdp"
-                    android:visibility="gone" />
-
-                <ProgressBar
-                    android:id="@+id/progressBanner"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:visibility="visible" />
-
-            </FrameLayout>
-
-        </androidx.appcompat.widget.Toolbar>
-
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabLayout"
+        <ImageView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:tabIndicatorColor="?attr/colorPrimary"
-            app:tabSelectedTextColor="?attr/colorPrimary"
-            app:tabTextColor="@color/textLightColor" />
+            android:layout_height="match_parent"
+            android:rotation="270"
+            app:srcCompat="@drawable/arrow_forward_24px"
+            app:tint="?attr/colorOnSurface"
+            tools:ignore="ContentDescription" />
+    </androidx.cardview.widget.CardView>
 
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/movieRv"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</FrameLayout>

@@ -19,7 +19,6 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieVh>() {
         }
     }
 
-    // Create new ViewHolder
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieVh {
         return MovieVh(ItemMovieBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }

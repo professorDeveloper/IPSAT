@@ -1,0 +1,146 @@
+package com.ip_tv.ipsat.presentation.adapters
+
+import Resource
+import android.os.Handler
+import android.os.Looper
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.animation.LayoutAnimationController
+import androidx.lifecycle.MutableLiveData
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
+import com.ip_tv.ipsat.databinding.ItemMoviePageBinding
+import com.ip_tv.ipsat.domain.model.Movie
+import com.ip_tv.ipsat.utils.BaseFragment
+import com.ip_tv.ipsat.utils.MediaPageTransformer
+import com.ip_tv.ipsat.utils.gone
+import com.ip_tv.ipsat.utils.setAnimation
+import com.ip_tv.ipsat.utils.setSlideIn
+import com.ip_tv.ipsat.utils.setSlideUp
+import com.ip_tv.ipsat.utils.showSnack
+import com.ip_tv.ipsat.utils.visible
+
+class MovieVodPageAdapter(
+    private val fragment: BaseFragment<*>,
+    private val binding: ItemMoviePageBinding,
+) : RecyclerView.Adapter<MovieVodPageAdapter.MovieVodPageViewHolder>() {
+    private val ready = MutableLiveData(false)
+    private var trendHandler: Handler? = null
+    private lateinit var trendRun: Runnable
+    private var trendingViewPager: ViewPager2? = null
+
+    inner class MovieVodPageViewHolder(var binding: ItemMoviePageBinding) :
+        RecyclerView.ViewHolder(binding.root)
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieVodPageViewHolder {
+        return MovieVodPageViewHolder(binding)
+
+    }
+
+    override fun getItemCount(): Int {
+        return 1
+    }
+
+    override fun onBindViewHolder(holder: MovieVodPageViewHolder, position: Int) {
+        holder.binding.apply {
+            trendingViewPager = bannerViewPager
+            setAnimation(
+                root.context,
+                root,
+                150,
+                floatArrayOf(0.0f, 1.0f, 0.0f, 1.0f),
+                pivot = 0.5f to 0.5f
+            )
+            if (ready.value == false)
+                ready.postValue(true)
+        }
+    }
+
+    fun updateRecent(adaptor: MovieAdapter) {
+        binding.animeUpdatedProgressBar.visibility = View.GONE
+        binding.animeUpdatedRecyclerView.adapter = adaptor
+        binding.animeUpdatedRecyclerView.layoutManager =
+            LinearLayoutManager(
+                binding.animeUpdatedRecyclerView.context,
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
+        binding.animeUpdatedRecyclerView.visibility = View.VISIBLE
+        binding.recentlyMore.visible()
+
+        binding.animeRecently.visibility = View.VISIBLE
+        binding.animeRecently.startAnimation(setSlideUp())
+        binding.animeUpdatedRecyclerView.layoutAnimation =
+            LayoutAnimationController(setSlideUp(), 0.25f)
+        binding.animeRecently.visibility = View.VISIBLE
+    }
+
+    fun updateSeries(adaptor: MovieAdapter) {
+        binding.animeTopStarsProgressBar.visibility = View.GONE
+        binding.animeTopStarsRecyclerView.adapter = adaptor
+        binding.topSeriesMore.visible()
+        binding.animeTopStarsRecyclerView.layoutManager =
+            LinearLayoutManager(
+                binding.animeTopStarsRecyclerView.context,
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
+        binding.animeTopStarsRecyclerView.visibility = View.VISIBLE
+        binding.animeTopStarsRecyclerView.layoutAnimation =
+            LayoutAnimationController(setSlideIn(), 0.25f)
+        binding.animeUpdatedRecyclerView.startAnimation(setSlideUp())
+        binding.animeTopStars.visible()
+    }
+
+    fun handleBannerState(state: Resource<ArrayList<Movie>>) {
+        when (state) {
+            is Resource.Error -> {
+                binding.animeTrendingProgressBar.gone()
+                fragment.showSnack(
+                    binding.root,
+                    state.throwable.message.toString()
+                )
+            }
+
+            is Resource.Loading -> {
+                binding.animeTrendingProgressBar.visible()
+                binding.bannerViewPager.gone()
+            }
+
+            is Resource.Success -> {
+                binding.animeTrendingProgressBar.gone()
+                binding.bannerViewPager.visible()
+                binding.bannerViewPager.adapter = BannerAdapter(
+                    mediaList = state.data,
+                    activity = fragment.requireActivity()
+                )
+                trendHandler = Handler(Looper.getMainLooper())
+                trendRun = Runnable {
+                    binding.bannerViewPager.currentItem += 1
+                }
+                binding.bannerViewPager.registerOnPageChangeCallback(
+                    object : ViewPager2.OnPageChangeCallback() {
+                        override fun onPageSelected(position: Int) {
+                            super.onPageSelected(position)
+                            trendHandler!!.removeCallbacks(trendRun)
+                            trendHandler!!.postDelayed(trendRun, 4000)
+                        }
+                    }
+                )
+
+                binding.bannerViewPager.setPageTransformer(MediaPageTransformer())
+                binding.bannerViewPager.getChildAt(0).overScrollMode =
+                    RecyclerView.OVER_SCROLL_NEVER
+                binding.bannerViewPager.offscreenPageLimit = 3
+                binding.bannerViewPager.layoutAnimation =
+                    LayoutAnimationController(setSlideIn(), 0.50f)
+
+            }
+
+            else -> {}
+        }
+    }
+
+}

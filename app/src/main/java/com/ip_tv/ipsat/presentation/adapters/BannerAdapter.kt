@@ -79,7 +79,6 @@ class BannerAdapter(
                         AccelerateDecelerateInterpolator()
                     )
                 )
-            banner.resume()
             val context = banner.context
             if (!(activity).isDestroyed)
                 Glide.with(context as Context)

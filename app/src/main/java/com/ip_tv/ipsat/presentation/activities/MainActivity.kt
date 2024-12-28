@@ -29,7 +29,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        ViewUtils.setLanguageForService(this, userPreferenceManager)
         viewBinding = ActivityMainBinding.inflate(layoutInflater)
         initActivity(this)
         setContentView(viewBinding.root)
@@ -40,22 +39,6 @@ class MainActivity : AppCompatActivity() {
   private  fun managePages(){
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-//                R.id.movie_vod -> {
-////                    viewBinding.homeNavigation.hideWithoutAnimation(viewBinding.navHost)
-//                }
-//
-//                R.id.popularSeeAllScreen -> {
-//                    binding.bottomNavigation.hideWithoutAnimation(binding.fragmentContainerView)
-//                }
-//
-//                R.id.navigation_settings -> {
-//                    binding.bottomNavigation.hideWithoutAnimation(binding.fragmentContainerView)
-//                }
-//
-//                R.id.searchScreen -> {
-//                    binding.bottomNavigation.hideWithoutAnimation(binding.fragmentContainerView)
-//                }
-
                 else -> {
                     viewBinding.homeNavigation.showWithAnimation(viewBinding.navHost)
                 }
@@ -64,12 +47,5 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    fun hideBottomNavigation() {
-        viewBinding.homeNavigation.visibility = View.GONE
-    }
-
-    fun showBottomNavigation() {
-        viewBinding.homeNavigation.visibility = View.VISIBLE
-    }
 
 }

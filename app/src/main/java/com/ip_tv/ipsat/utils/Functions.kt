@@ -3,6 +3,7 @@ package com.ip_tv.ipsat.utils
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.content.res.Resources.getSystem
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.net.wifi.WifiManager
@@ -36,6 +37,10 @@ import java.io.InputStreamReader
 import java.net.NetworkInterface
 import java.util.Timer
 import java.util.TimerTask
+var statusBarHeight = 0
+var navBarHeight = 0
+val Int.dp: Float get() = (this / getSystem().displayMetrics.density)
+val Float.px: Int get() = (this * getSystem().displayMetrics.density).toInt()
 
 
 fun hideKeyboard(view: View) {

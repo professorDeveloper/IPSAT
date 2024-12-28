@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <color name="card_background">#282829</color>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <color name="card_background">#D01A191E</color>
     <color name="prem_bg">#303032</color>
     <color name="white_and_black">#FFFFFF</color>
     <color name="white_and_black_hint">#99FFFFFF</color>
@@ -9,7 +9,7 @@
     <color name="settings_card_background">#1C1C1E</color>
     <color name="colorSecondary">#F2A33C</color>
     <color name="button_stations">#31250E</color>
-    <color name= "toolbarBg">#000000</color>
+    <color name="toolbarBg">#000000</color>
     <color name="colorGray">#DFDFE6</color>
 
     <color name="button_leaderboard">#172E4B</color>
@@ -21,6 +21,11 @@
     <color name="main_background">#323030</color>
     <color name="airplane_color">#fff</color>
     <color name="bottomBg">#232527</color>
+    <color name="bg">#000000</color>
+    <color name="fg" tools:ignore="MissingDefaultResource">#A8EEEEEE</color>
+    <color name="nav_bg">#1C1C1C</color>
+    <color name="nav_bg_inv">#001F1A2E</color>
+    <color name="filler">#29FF6B08</color>
 
 
 </resources>

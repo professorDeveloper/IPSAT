@@ -3,140 +3,124 @@ package com.ip_tv.ipsat.presentation.screens
 import Resource
 import android.graphics.Color
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.view.animation.LayoutAnimationController
-import androidx.appcompat.widget.TooltipCompat
+import android.view.LayoutInflater
+import androidx.core.view.updatePaddingRelative
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.ViewPager2
-import com.google.android.material.tabs.TabLayoutMediator
+import com.ip_tv.ipsat.databinding.ItemMoviePageBinding
 import com.ip_tv.ipsat.databinding.MovieVodScreenBinding
-import com.ip_tv.ipsat.domain.model.Movie
-import com.ip_tv.ipsat.presentation.adapters.BannerAdapter
 import com.ip_tv.ipsat.presentation.adapters.MovieAdapter
-import com.ip_tv.ipsat.presentation.adapters.TabAdapter
+import com.ip_tv.ipsat.presentation.adapters.MovieVodPageAdapter
 import com.ip_tv.ipsat.presentation.viewmodel.MovieViewModel
 import com.ip_tv.ipsat.utils.BaseFragment
-import com.ip_tv.ipsat.utils.MediaPageTransformer
-import com.ip_tv.ipsat.utils.gone
-import com.ip_tv.ipsat.utils.setSlideIn
+import com.ip_tv.ipsat.utils.navBarHeight
+import com.ip_tv.ipsat.utils.px
 import com.ip_tv.ipsat.utils.showSnack
-import com.ip_tv.ipsat.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 @AndroidEntryPoint
-class MovieVodScreen:BaseFragment<MovieVodScreenBinding>(MovieVodScreenBinding::inflate) {
+class MovieVodScreen : BaseFragment<MovieVodScreenBinding>(MovieVodScreenBinding::inflate) {
     private val model by activityViewModels<MovieViewModel>()
     private var isBannerLoaded = false
-    private var trendHandler: Handler? = null
-    private lateinit var trendRun: Runnable
-    private lateinit var movieAdapter: MovieAdapter
-    var list = arrayListOf("Movies","Series","Kids","Documentary")
+    private lateinit var animePageAdapter: MovieVodPageAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         if (!isBannerLoaded) {
             model.loadBanner()
+            model.loadNextPage()
+            model.loadSeries()
         }
     }
+
     override fun onViewCreate(savedInstanceState: Bundle?) {
         observeModel()
+        observeModelSeries()
+        observeModelMovies()
         requireActivity().window.statusBarColor = Color.parseColor("#25B8B8B8")
-        manageTabLayout()
 
-    }
-    private fun manageTabLayout(){
-        val adapter = TabAdapter(list, requireActivity())
-        binding.movieRv.adapter = adapter
 
-        TabLayoutMediator(binding.tabLayout, binding.movieRv) { _, _ ->
-        }.attach()
-        setTab()
+        val animePageBinding = ItemMoviePageBinding.inflate(LayoutInflater.from(requireActivity()), binding.root, false)
+        animePageAdapter = MovieVodPageAdapter(this,animePageBinding)
 
-        for (i in 0 until binding.tabLayout.tabCount) {
-            binding.tabLayout.getTabAt(i)?.let { TooltipCompat.setTooltipText(it.view, null) }
+        binding.animePageRecyclerView.adapter = animePageAdapter
+        val layout = LinearLayoutManager(requireContext())
+        binding.animePageRecyclerView.layoutManager = layout
+
+        loadRefresh()
+
+        binding.animePageScrollTop.setOnClickListener {
+            binding.animePageRecyclerView.scrollToPosition(4)
+            binding.animePageRecyclerView.smoothScrollToPosition(0)
         }
 
-
     }
 
-    private fun setTab() {
-        binding.apply {
-            val tabCount = binding.tabLayout.tabCount
-            for (i in 0 until tabCount) {
-                val tab = binding.tabLayout.getTabAt(i)
-                tab!!.text = list[i]
-            }
-
-        }
-    }
-
-   private fun observeModel(){
+    private fun observeModel() {
         lifecycleScope.launch {
             model.initBanner
                 .flowWithLifecycle(lifecycle, Lifecycle.State.RESUMED)
-                .collect { handleBannerState(it) }
+                .collect { animePageAdapter.handleBannerState(it) }
         }
     }
 
 
-
-//    private fun loadMovieRv () {
-//
-//    }
-
-    private fun handleBannerState(state:Resource<ArrayList<Movie>>) {
-        when(state){
-            is Resource.Error -> {
-                binding.progressBanner.gone()
-                showSnack(
-                    binding.root,
-                    state.throwable.message.toString()
-                )
-            }
-            is Resource.Loading -> {
-                binding.bannerViewPager.gone()
-                binding.progressBanner.visible()
-            }
-            is Resource.Success -> {
-                isBannerLoaded = true
-                binding.bannerViewPager.visible()
-                binding.progressBanner.gone()
-                binding.bannerViewPager.adapter = BannerAdapter(
-                    mediaList = state.data,
-                    activity=requireActivity()
-                )
-                trendHandler =Handler(Looper.getMainLooper())
-                trendRun = Runnable {
-                    binding.bannerViewPager.currentItem = binding.bannerViewPager.currentItem + 1
-                }
-                binding.bannerViewPager.registerOnPageChangeCallback(
-                    object : ViewPager2.OnPageChangeCallback() {
-                        override fun onPageSelected(position: Int) {
-                            super.onPageSelected(position)
-                            trendHandler!!.removeCallbacks(trendRun)
-                            trendHandler!!.postDelayed(trendRun, 4000)
-                        }
+    private fun observeModelMovies() {
+        lifecycleScope.launch {
+            model.movies.observe(this@MovieVodScreen) {
+                when (it) {
+                    is Resource.Error -> {
+                        showSnack(binding.root, it.throwable.message.toString())
                     }
-                )
 
-                binding.bannerViewPager.setPageTransformer(MediaPageTransformer())
-                binding.bannerViewPager.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
-                binding.bannerViewPager.offscreenPageLimit = 3
-                binding.bannerViewPager.layoutAnimation =
-                    LayoutAnimationController(setSlideIn(), 0.50f)
+                    is Resource.Loading -> {
+                    }
 
+                    is Resource.Success -> {
+                        val movieAdapter = MovieAdapter()
+                        movieAdapter.submitList(it.data)
+                        animePageAdapter.updateRecent(movieAdapter)
+                    }
+
+                    else -> {}
+                }
             }
-            else -> {}
         }
     }
+    private fun observeModelSeries() {
+        lifecycleScope.launch {
+            model.series.observe(this@MovieVodScreen) {
+                when (it) {
+                    is Resource.Error -> {
+                        showSnack(binding.root, it.throwable.message.toString())
+                    }
+
+                    is Resource.Loading -> {
+                    }
+
+                    is Resource.Success -> {
+                        val movieAdapter = MovieAdapter()
+                        movieAdapter.submitList(it.data)
+                        animePageAdapter.updateSeries(movieAdapter)
+                    }
+
+                    else -> {}
+                }
+            }
+        }
+    }
+
+    private fun loadRefresh() {
+        binding.animeRefresh.setSlingshotDistance(128)
+        binding.animeRefresh.setProgressViewEndTarget(false, 128)
+        binding.animeRefresh.setOnRefreshListener {
+//            Refresh.activity[this.hashCode()]!!.postValue(true)
+        }
+    }
+
 }
