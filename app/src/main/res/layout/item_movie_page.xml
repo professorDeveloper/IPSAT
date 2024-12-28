@@ -33,8 +33,11 @@
 
 
   <LinearLayout
+      android:id="@+id/moviesShowMore"
       android:layout_marginStart="@dimen/_6sdp"
       android:layout_width="match_parent"
+      android:clickable="true"
+      android:background="?selectableItemBackground"
       android:layout_marginEnd="@dimen/_14sdp"
       android:orientation="horizontal"
       android:layout_height="wrap_content">
@@ -45,7 +48,7 @@
           android:fontFamily="@font/inter_bold"
           android:padding="8dp"
           android:layout_weight="2"
-          android:text="Recently Updated"
+          android:text="Movies "
           android:textSize="@dimen/_14ssp"
           android:visibility="invisible"
           tools:visibility="visible" />
@@ -98,7 +101,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/inter_bold"
-            android:text="Top Series"
+            android:text="Series"
             android:textSize="@dimen/_14ssp"
             android:layout_weight="@integer/material_motion_duration_long_1"
             android:visibility="invisible"
