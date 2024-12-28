@@ -35,7 +35,7 @@ class MovieCompatAdapter (private val movieList:ArrayList<Movie>) : RecyclerView
                 .into(binding.itemCompactBanner)
             binding.itemCompactTitle.text = movie.name
             binding.itemCompactScore.text = movie.rating.toString()
-            binding.itemTotal.text=movie.description
+            binding.itemTotal.text=movie.language+" • "+movie.release_year+" • "+movie.country
 
         }
     }
@@ -61,5 +61,11 @@ class MovieCompatAdapter (private val movieList:ArrayList<Movie>) : RecyclerView
         val startPosition = movieList.size
         movieList.addAll(newMovies)
         notifyItemRangeInserted(startPosition, newMovies.size)
+    }
+
+    fun submitNewList(newMovies: List<Movie>) {
+        movieList.clear()
+        movieList.addAll(newMovies)
+        notifyDataSetChanged()
     }
 }

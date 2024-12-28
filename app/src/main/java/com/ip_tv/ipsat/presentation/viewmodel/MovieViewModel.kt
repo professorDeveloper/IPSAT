@@ -25,7 +25,9 @@ class MovieViewModel @Inject constructor(private val movieScreenUse: MovieScreen
     private val _initBanner = MutableStateFlow<Resource<ArrayList<Movie>>>(Resource.Idle)
     val initBanner get() = _initBanner
     private var page = Random.nextInt(1, 10)
+    private var randomPage = Random.nextInt(1, 10)
     private var isDataLoaded = false
+    private var isDataRandomLoaded = false
 
     private val _movies = MutableLiveData<Resource<ArrayList<Movie>>>(Resource.Idle)
     val movies: LiveData<Resource<ArrayList<Movie>>> get() = _movies
@@ -43,26 +45,7 @@ class MovieViewModel @Inject constructor(private val movieScreenUse: MovieScreen
 
     fun loadNextPage()
     {
-        if (isDataLoaded) return
-        if (hasConnection()) {
-          _movies.postValue(Resource.Loading)
-        viewModelScope.launch {
-            movieScreenUse.getMovies(page)
-                .onEach { result ->
-                    result.onSuccess { data ->
-                        isDataLoaded = true
-                        page+=1
-                        _movies.value = Resource.Success(data)
-                    }
-                    result.onFailure { exception ->
-                        _movies.value = Resource.Error(Exception(exception.message))
-                    }
-                }
-                .launchIn(viewModelScope)
-        }
-      }else {
-          _movies.postValue(Resource.Error(Exception("No internet connection !")))
-      }
+
     }
 
 
@@ -134,45 +117,54 @@ class MovieViewModel @Inject constructor(private val movieScreenUse: MovieScreen
     }
 
     fun loadRandomData() {
+      if (isDataLoaded) return
         val random = (1..4).random()
         viewModelScope.launch {
             when (random) {
                 1 -> {
-                    val randomPage =(10..40).random()
                     movieScreenUse.getMovies(page=randomPage.toString().toInt()).onEach { result ->
                         result.onSuccess { data ->
+                            randomPage+=1
                             _randomMovies.value = Resource.Success(data)
                         }
                         result.onFailure { exception ->
                             _randomMovies.value = Resource.Error(Exception(exception.message))
                         }
 
-                    }
+                    }.launchIn(viewModelScope)
                 }
                 2 -> {
-                    val randomPage =(10..40).random()
                     movieScreenUse.getSeries(page=randomPage.toString().toInt()).onEach { result ->
                         result.onSuccess { data ->
+                            randomPage+=1
                             _randomMovies.value = Resource.Success(data)
                         }
                         result.onFailure { exception ->
                             _randomMovies.value = Resource.Error(Exception(exception.message))
                         }
-                    }
+                    }.launchIn(viewModelScope)
                 }
                 3 -> {
-                    val randomPage =(10..40).random()
                     movieScreenUse.getDocumentary(page=randomPage.toString().toInt()).onEach { result ->
                         result.onSuccess { data ->
+                            randomPage+=1
                             _randomMovies.value = Resource.Success(data)
                         }
                         result.onFailure { exception ->
                             _randomMovies.value = Resource.Error(Exception(exception.message))
                         }
-                    }
+                    }.launchIn(viewModelScope)
                 }
                 4 -> {
-//                    loadDocumentary(
+                    movieScreenUse.getDocumentary(page=randomPage.toString().toInt()).onEach { result ->
+                        result.onSuccess { data ->
+                            randomPage+=1
+                            _randomMovies.value = Resource.Success(data)
+                        }
+                        result.onFailure { exception ->
+                            _randomMovies.value = Resource.Error(Exception(exception.message))
+                        }
+                    }.launchIn(viewModelScope)
                 }
             }
 

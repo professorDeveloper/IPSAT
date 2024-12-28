@@ -145,6 +145,8 @@ class MovieVodPageAdapter(
     }
 
     fun updateDocumentary(adaptor: MovieAdapter) {
+        binding.documentaryTxt.visible()
+        binding.documentaryMore.visible()
         binding.documentaryRecyclerView.adapter = adaptor
         binding.documentaryRecyclerView.layoutManager =
             LinearLayoutManager(

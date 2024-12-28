@@ -5,7 +5,7 @@
     android:id="@+id/itemContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
+    android:layout_margin="@dimen/_3sdp"
     app:cardBackgroundColor="@color/nav_bg"
     app:cardCornerRadius="28dp">
 
@@ -123,7 +123,7 @@
                     android:textSize="14dp"
                     android:maxLines="1"
                     android:clickable="true"
-                    android:maxEms="123"
+                    android:maxEms="50"
                     android:enabled="true"
                     android:marqueeRepeatLimit="marquee_forever"
                     android:ellipsize="marquee"
