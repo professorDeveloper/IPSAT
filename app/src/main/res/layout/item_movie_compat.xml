@@ -7,13 +7,13 @@
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/_3sdp"
     app:cardBackgroundColor="@color/nav_bg"
-    app:cardCornerRadius="28dp">
+    app:cardCornerRadius="@dimen/_12sdp">
 
 
     <ImageView
         android:id="@+id/itemCompactBanner"
         android:layout_width="match_parent"
-        android:layout_height="152dp"
+        android:layout_height="@dimen/_120sdp"
         android:scaleType="centerCrop"
         tools:ignore="ContentDescription"
         tools:srcCompat="@tools:sample/backgrounds/scenic" />
@@ -21,7 +21,7 @@
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
-        android:layout_height="153dp"
+        android:layout_height="@dimen/_120sdp"
         app:srcCompat="@drawable/linear_gradient_bg"
         tools:ignore="ContentDescription" />
 

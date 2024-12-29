@@ -3,15 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/app_graph"
-    app:startDestination="@id/homeScreen2">
+    app:startDestination="@id/button_live_tv">
 
     <fragment
-        android:id="@+id/homeScreen2"
+        android:id="@+id/button_profile_page"
         android:name="com.ip_tv.ipsat.presentation.screens.HomeScreen"
         android:label="home_screen"
         tools:layout="@layout/home_screen" />
     <fragment
-        android:id="@+id/liveTvScreen"
+        android:id="@+id/button_live_tv"
         android:name="com.ip_tv.ipsat.presentation.screens.LiveTvScreen"
         android:label="live_tv_screen"
         tools:layout="@layout/live_tv_screen" />

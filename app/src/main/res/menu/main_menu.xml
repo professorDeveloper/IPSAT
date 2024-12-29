@@ -3,7 +3,7 @@
 
 
     <item
-        android:id="@+id/liveTvScreen"
+        android:id="@+id/button_live_tv"
         android:icon="@drawable/live_tv_icon"
         android:title="LIVE" />
     <item
