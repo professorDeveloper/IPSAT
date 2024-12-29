@@ -43,19 +43,6 @@ class MainActivity : AppCompatActivity() {
                     viewBinding.homeNavigation.showWithAnimation(viewBinding.navHost)
                 }
             }
-            val selectedItemId = viewBinding.homeNavigation.menu.findItem(destination.id)?.itemId
-            if (selectedItemId != null && viewBinding.homeNavigation.selectedItemId != selectedItemId) {
-                viewBinding.homeNavigation.selectedItemId = selectedItemId
-            }
-            viewBinding.homeNavigation.setOnItemSelectedListener { item ->
-                val isNavigated = try {
-                    navController.navigate(item.itemId)
-                    true
-                } catch (e: IllegalArgumentException) {
-                    false
-                }
-                isNavigated
-            }
         }
 
     }
