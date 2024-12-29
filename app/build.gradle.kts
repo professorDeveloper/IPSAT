@@ -113,6 +113,10 @@ dependencies {
 
     implementation("com.tbuonomo:dotsindicator:5.1.0")
 
+    //Shimmer
+    implementation("com.facebook.shimmer:shimmer:0.5.0")  // Add Shimmer
+
+
 
 
 }

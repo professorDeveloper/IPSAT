@@ -13,4 +13,5 @@ class MovieScreenUseCase @Inject constructor(private val  repo: HomeRepositoryIm
    suspend fun getMovies(page:Int) = repo.getMovies(page)
     suspend fun getSeries(page:Int) = repo.getSeries(page)
     suspend fun getDocumentary(page:Int) = repo.getDocuments(page)
+    suspend fun getKids(page:Int) = repo.getKids(page)
 }

@@ -26,7 +26,7 @@
         <item name="colorSecondaryContainer">@color/colorPrimary</item>
 
         <item name="android:statusBarColor">@color/main_background</item>
-        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightStatusBar">false</item>
         <item name="android:navigationBarColor">?attr/colorSurfaceContainer</item>
     </style>
 

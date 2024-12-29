@@ -35,12 +35,25 @@ import com.ip_tv.ipsat.app.App
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.NetworkInterface
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Timer
 import java.util.TimerTask
 var statusBarHeight = 0
 var navBarHeight = 0
 val Int.dp: Float get() = (this / getSystem().displayMetrics.density)
 val Float.px: Int get() = (this * getSystem().displayMetrics.density).toInt()
+
+
+fun String.toReadableDateTime(): String {
+    return try {
+        val instant = LocalDateTime.parse(this, DateTimeFormatter.ISO_DATE_TIME)
+        val formatter = DateTimeFormatter.ofPattern("dd MMM yyyy, HH:mm")
+        instant.format(formatter)
+    } catch (e: Exception) {
+        "Wrong format"
+    }
+}
 
 
 fun hideKeyboard(view: View) {

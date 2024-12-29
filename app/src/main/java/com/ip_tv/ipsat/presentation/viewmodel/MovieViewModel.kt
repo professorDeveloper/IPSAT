@@ -5,19 +5,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingData
-import androidx.paging.cachedIn
 import com.ip_tv.ipsat.domain.model.Movie
 import com.ip_tv.ipsat.domain.usecase.MovieScreenUseCase
 import com.ip_tv.ipsat.utils.hasConnection
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.random.Random
 
 @HiltViewModel
 class MovieViewModel @Inject constructor(private val movieScreenUse: MovieScreenUseCase) : ViewModel() {
@@ -33,20 +29,27 @@ class MovieViewModel @Inject constructor(private val movieScreenUse: MovieScreen
     val movies: LiveData<Resource<ArrayList<Movie>>> get() = _movies
 
 
-
     private val _series = MutableLiveData<Resource<ArrayList<Movie>>>(Resource.Idle)
     val series: LiveData<Resource<ArrayList<Movie>>> get() = _series
+
 
     private val  _documentary = MutableLiveData<Resource<ArrayList<Movie>>>(Resource.Idle)
     val documentary: LiveData<Resource<ArrayList<Movie>>> get() = _documentary
 
+
     private val  _randomMovies = MutableLiveData<Resource<ArrayList<Movie>>>(Resource.Idle)
     val randomMovies: LiveData<Resource<ArrayList<Movie>>> get() = _randomMovies
+
 
     private val _nextRandomMovies = MutableLiveData<Resource<ArrayList<Movie>>>(Resource.Idle)
     val nextRandomMovies: LiveData<Resource<ArrayList<Movie>>> get() = _nextRandomMovies
 
-    fun loadNextPage()
+    private val _kids = MutableLiveData<Resource<ArrayList<Movie>>>(Resource.Idle)
+    val kids: LiveData<Resource<ArrayList<Movie>>> get() = _kids
+
+
+
+    fun loadMovies()
     {
         if (isDataLoaded) return
         if (hasConnection()) {
@@ -70,6 +73,30 @@ class MovieViewModel @Inject constructor(private val movieScreenUse: MovieScreen
       }
     }
 
+
+
+    fun loadKids() {
+        if (isDataLoaded) return
+        if (hasConnection()) {
+            _kids.postValue(Resource.Loading)
+            viewModelScope.launch {
+                movieScreenUse.getKids(page)
+                    .onEach { result ->
+                        result.onSuccess { data ->
+                            isDataLoaded = true
+                            data.shuffle()
+                            _kids.value = Resource.Success(data)
+                        }
+                        result.onFailure { exception ->
+                            _kids.value = Resource.Error(Exception(exception.message))
+                        }
+                    }
+                    .launchIn(viewModelScope)
+            }
+        }else {
+            _kids.postValue(Resource.Error(Exception("No internet connection !")))
+        }
+    }
 
     fun loadNextRandomPage() {
         randomPage+=1

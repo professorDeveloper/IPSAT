@@ -27,6 +27,12 @@ interface MovieService {
         @Query("page") page: Int,
         @Query("page_size") pageSize: Int,
     ): Response<MovieResponse>
+    @GET("get_kids/")
+    suspend fun getKids(
+        @Query("subscription_code") subscriptionCode: String,
+        @Query("page") page: Int,
+        @Query("page_size") pageSize: Int,
+    ): Response<MovieResponse>
 
 
 }

@@ -77,6 +77,23 @@ class MovieVodPageAdapter(
         binding.animeRecently.visibility = View.VISIBLE
     }
 
+    fun updateKids(adaptor: MovieAdapter) {
+        binding.kidsRecyclerView.adapter = adaptor
+        binding.kidsRecyclerView.layoutManager =
+            LinearLayoutManager(
+                binding.kidsRecyclerView.context,
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
+        binding.kidsRecyclerView.visibility = View.VISIBLE
+        binding.kidsMore.visible()
+        binding.kidsRecyclerView.layoutAnimation =
+            LayoutAnimationController(setSlideIn(), 0.25f)
+        binding.kidsRecyclerView.startAnimation(setSlideUp())
+        binding.kidsTxt.visible()
+        binding.kidsMore.visible()
+    }
+
     fun updateSeries(adaptor: MovieAdapter) {
         binding.animeTopStarsRecyclerView.adapter = adaptor
         binding.topSeriesMore.visible()

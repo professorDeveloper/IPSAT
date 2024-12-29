@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.OvershootInterpolator
-import androidx.core.view.updatePaddingRelative
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
@@ -23,14 +22,11 @@ import com.ip_tv.ipsat.presentation.adapters.MovieCompatAdapter
 import com.ip_tv.ipsat.presentation.adapters.MovieVodPageAdapter
 import com.ip_tv.ipsat.presentation.viewmodel.MovieViewModel
 import com.ip_tv.ipsat.utils.BaseFragment
-import com.ip_tv.ipsat.utils.navBarHeight
-import com.ip_tv.ipsat.utils.px
 import com.ip_tv.ipsat.utils.showSnack
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.koin.androidx.scope.scope
 
 @AndroidEntryPoint
 class MovieVodScreen : BaseFragment<MovieVodScreenBinding>(MovieVodScreenBinding::inflate) {
@@ -45,10 +41,11 @@ class MovieVodScreen : BaseFragment<MovieVodScreenBinding>(MovieVodScreenBinding
 
         if (!isBannerLoaded) {
             model.loadBanner()
-            model.loadNextPage()
+            model.loadMovies()
             model.loadSeries()
             model.loadDocumentary()
             model.loadRandomData()
+            model.loadKids()
         }
     }
 
@@ -59,6 +56,7 @@ class MovieVodScreen : BaseFragment<MovieVodScreenBinding>(MovieVodScreenBinding
         observeModelDocumentary()
         observeModelRandomData()
         observeModelRandomNextPage()
+        observeModelKids()
         requireActivity().window.statusBarColor = Color.parseColor("#25B8B8B8")
 
 
@@ -127,6 +125,28 @@ class MovieVodScreen : BaseFragment<MovieVodScreenBinding>(MovieVodScreenBinding
 
 
     }
+    private fun observeModelKids () {
+        lifecycleScope.launch {
+            model.kids.observe(this@MovieVodScreen) {
+                when (it) {
+                    is Resource.Error -> {
+                        showSnack(binding.root, it.throwable.message.toString()+" KIDS")
+                    }
+
+                    is Resource.Loading -> {
+                    }
+
+                    is Resource.Success -> {
+                        val movieAdapter = MovieAdapter()
+                        movieAdapter.submitList(it.data)
+                        animePageAdapter.updateKids(movieAdapter)
+                    }
+
+                    else -> {}
+                }
+            }
+        }
+    }
 
     private fun observeModelRandomData() {
         lifecycleScope.launch {
@@ -176,7 +196,7 @@ class MovieVodScreen : BaseFragment<MovieVodScreenBinding>(MovieVodScreenBinding
             model.movies.observe(this@MovieVodScreen) {
                 when (it) {
                     is Resource.Error -> {
-                        showSnack(binding.root, it.throwable.message.toString())
+                        showSnack(binding.root, it.throwable.message.toString()+" MOVIES")
                     }
 
                     is Resource.Loading -> {
@@ -199,7 +219,7 @@ class MovieVodScreen : BaseFragment<MovieVodScreenBinding>(MovieVodScreenBinding
             model.series.observe(this@MovieVodScreen) {
                 when (it) {
                     is Resource.Error -> {
-                        showSnack(binding.root, it.throwable.message.toString())
+                        showSnack(binding.root, it.throwable.message.toString()+" SERIES")
                     }
 
                     is Resource.Loading -> {
@@ -222,7 +242,7 @@ class MovieVodScreen : BaseFragment<MovieVodScreenBinding>(MovieVodScreenBinding
             model.documentary.observe(this@MovieVodScreen) {
                 when (it) {
                     is Resource.Error -> {
-                        showSnack(binding.root, it.throwable.message.toString())
+                        showSnack(binding.root, it.throwable.message.toString() +" DOCUMENTARY")
                     }
 
                     is Resource.Loading -> {
@@ -246,10 +266,11 @@ class MovieVodScreen : BaseFragment<MovieVodScreenBinding>(MovieVodScreenBinding
         binding.animeRefresh.setOnRefreshListener {
             model.resetData()
             model.loadBanner()
-            model.loadNextPage()
+            model.loadMovies()
             model.loadSeries()
             model.loadDocumentary()
             model.loadRandomData()
+            model.loadKids()
             binding.animeRefresh.isRefreshing = false
         }
     }
