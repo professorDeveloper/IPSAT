@@ -60,7 +60,6 @@ class MovieVodPageAdapter(
     }
 
     fun updateRecent(adaptor: MovieAdapter) {
-        binding.animeUpdatedProgressBar.visibility = View.GONE
         binding.animeUpdatedRecyclerView.adapter = adaptor
         binding.animeUpdatedRecyclerView.layoutManager =
             LinearLayoutManager(
@@ -79,7 +78,6 @@ class MovieVodPageAdapter(
     }
 
     fun updateSeries(adaptor: MovieAdapter) {
-        binding.animeTopStarsProgressBar.visibility = View.GONE
         binding.animeTopStarsRecyclerView.adapter = adaptor
         binding.topSeriesMore.visible()
         binding.animeTopStarsRecyclerView.layoutManager =
@@ -143,6 +141,9 @@ class MovieVodPageAdapter(
             else -> {}
         }
     }
+    fun  updatePopularVertical(){
+        binding.movieVertical.visible()
+    }
 
     fun updateDocumentary(adaptor: MovieAdapter) {
         binding.documentaryTxt.visible()
@@ -158,6 +159,6 @@ class MovieVodPageAdapter(
         binding.documentaryRecyclerView.layoutAnimation =
             LayoutAnimationController(setSlideIn(), 0.25f)
         binding.documentaryRecyclerView.startAnimation(setSlideUp())
-
     }
+
 }

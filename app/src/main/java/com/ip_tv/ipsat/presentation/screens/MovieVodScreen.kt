@@ -35,8 +35,8 @@ import org.koin.androidx.scope.scope
 @AndroidEntryPoint
 class MovieVodScreen : BaseFragment<MovieVodScreenBinding>(MovieVodScreenBinding::inflate) {
     private val model by activityViewModels<MovieViewModel>()
-    private var isBannerLoaded = false
     private var loading = false
+    private var isBannerLoaded = false
     private lateinit var animePageAdapter: MovieVodPageAdapter
     private lateinit var movieCompatAdapter: MovieCompatAdapter
 
@@ -58,6 +58,7 @@ class MovieVodScreen : BaseFragment<MovieVodScreenBinding>(MovieVodScreenBinding
         observeModelMovies()
         observeModelDocumentary()
         observeModelRandomData()
+        observeModelRandomNextPage()
         requireActivity().window.statusBarColor = Color.parseColor("#25B8B8B8")
 
 
@@ -68,7 +69,8 @@ class MovieVodScreen : BaseFragment<MovieVodScreenBinding>(MovieVodScreenBinding
         )
         animePageAdapter = MovieVodPageAdapter(this, animePageBinding)
         movieCompatAdapter = MovieCompatAdapter(arrayListOf())
-        binding.animePageRecyclerView.adapter = ConcatAdapter(animePageAdapter, movieCompatAdapter)
+        val progressAdaptor = ProgressAdapter(searched = false)
+        binding.animePageRecyclerView.adapter = ConcatAdapter(animePageAdapter, movieCompatAdapter,progressAdaptor)
         val layout = LinearLayoutManager(requireContext())
         binding.animePageRecyclerView.layoutManager = layout
 
@@ -99,6 +101,11 @@ class MovieVodScreen : BaseFragment<MovieVodScreenBinding>(MovieVodScreenBinding
         binding.animePageRecyclerView.addOnScrollListener(object :
             RecyclerView.OnScrollListener() {
             override fun onScrolled(v: RecyclerView, dx: Int, dy: Int) {
+                if (!v.canScrollVertically(1)) {
+                        lifecycleScope.launch(Dispatchers.IO) {
+                            model.loadNextRandomPage()
+                    }
+                }
                 if (layout.findFirstVisibleItemPosition() > 1 && !visible) {
                     binding.animePageScrollTop.visibility = View.VISIBLE
                     visible = true
@@ -113,6 +120,7 @@ class MovieVodScreen : BaseFragment<MovieVodScreenBinding>(MovieVodScreenBinding
                         binding.animePageScrollTop.visibility = View.GONE
                     }
                 }
+
                 super.onScrolled(v, dx, dy)
             }
         })
@@ -132,6 +140,7 @@ class MovieVodScreen : BaseFragment<MovieVodScreenBinding>(MovieVodScreenBinding
                     }
 
                     is Resource.Success -> {
+                        animePageAdapter.updatePopularVertical()
                         movieCompatAdapter.submitNewList(it.data)
                     }
 
@@ -141,95 +150,108 @@ class MovieVodScreen : BaseFragment<MovieVodScreenBinding>(MovieVodScreenBinding
         }
     }
 
-private fun observeModel() {
-    lifecycleScope.launch {
-        model.initBanner
-            .flowWithLifecycle(lifecycle, Lifecycle.State.RESUMED)
-            .collect { animePageAdapter.handleBannerState(it) }
-    }
-}
-
-private fun observeModelMovies() {
-    lifecycleScope.launch {
-        model.movies.observe(this@MovieVodScreen) {
-            when (it) {
-                is Resource.Error -> {
-                    showSnack(binding.root, it.throwable.message.toString())
+    private fun observeModelRandomNextPage() {
+        lifecycleScope.launch {
+            model.nextRandomMovies.observe(this@MovieVodScreen ){
+                when(it) {
+                    is Resource.Success ->{
+                        movieCompatAdapter.submitList(it.data)
+                    }
+                    else -> {}
                 }
-
-                is Resource.Loading -> {
-                }
-
-                is Resource.Success -> {
-                    val movieAdapter = MovieAdapter()
-                    movieAdapter.submitList(it.data)
-                    animePageAdapter.updateRecent(movieAdapter)
-                }
-
-                else -> {}
             }
         }
     }
-}
 
-private fun observeModelSeries() {
-    lifecycleScope.launch {
-        model.series.observe(this@MovieVodScreen) {
-            when (it) {
-                is Resource.Error -> {
-                    showSnack(binding.root, it.throwable.message.toString())
+    private fun observeModel() {
+        lifecycleScope.launch {
+            model.initBanner
+                .flowWithLifecycle(lifecycle, Lifecycle.State.RESUMED)
+                .collect { animePageAdapter.handleBannerState(it) }
+        }
+    }
+
+    private fun observeModelMovies() {
+        lifecycleScope.launch {
+            model.movies.observe(this@MovieVodScreen) {
+                when (it) {
+                    is Resource.Error -> {
+                        showSnack(binding.root, it.throwable.message.toString())
+                    }
+
+                    is Resource.Loading -> {
+                    }
+
+                    is Resource.Success -> {
+                        val movieAdapter = MovieAdapter()
+                        movieAdapter.submitList(it.data)
+                        animePageAdapter.updateRecent(movieAdapter)
+                    }
+
+                    else -> {}
                 }
-
-                is Resource.Loading -> {
-                }
-
-                is Resource.Success -> {
-                    val movieAdapter = MovieAdapter()
-                    movieAdapter.submitList(it.data)
-                    animePageAdapter.updateSeries(movieAdapter)
-                }
-
-                else -> {}
             }
         }
     }
-}
 
-private fun observeModelDocumentary() {
-    lifecycleScope.launch {
-        model.documentary.observe(this@MovieVodScreen) {
-            when (it) {
-                is Resource.Error -> {
-                    showSnack(binding.root, it.throwable.message.toString())
+    private fun observeModelSeries() {
+        lifecycleScope.launch {
+            model.series.observe(this@MovieVodScreen) {
+                when (it) {
+                    is Resource.Error -> {
+                        showSnack(binding.root, it.throwable.message.toString())
+                    }
+
+                    is Resource.Loading -> {
+                    }
+
+                    is Resource.Success -> {
+                        val movieAdapter = MovieAdapter()
+                        movieAdapter.submitList(it.data)
+                        animePageAdapter.updateSeries(movieAdapter)
+                    }
+
+                    else -> {}
                 }
-
-                is Resource.Loading -> {
-                }
-
-                is Resource.Success -> {
-                    val movieAdapter = MovieAdapter()
-                    movieAdapter.submitList(it.data)
-                    animePageAdapter.updateDocumentary(movieAdapter)
-                }
-
-                else -> {}
             }
         }
     }
-}
 
-private fun loadRefresh() {
-    binding.animeRefresh.setSlingshotDistance(128)
-    binding.animeRefresh.setProgressViewEndTarget(false, 128)
-    binding.animeRefresh.setOnRefreshListener {
-        model.resetData()
-        model.loadBanner()
-        model.loadNextPage()
-        model.loadSeries()
-        model.loadDocumentary()
-        model.loadRandomData()
-        binding.animeRefresh.isRefreshing = false
+    private fun observeModelDocumentary() {
+        lifecycleScope.launch {
+            model.documentary.observe(this@MovieVodScreen) {
+                when (it) {
+                    is Resource.Error -> {
+                        showSnack(binding.root, it.throwable.message.toString())
+                    }
+
+                    is Resource.Loading -> {
+                    }
+
+                    is Resource.Success -> {
+                        val movieAdapter = MovieAdapter()
+                        movieAdapter.submitList(it.data)
+                        animePageAdapter.updateDocumentary(movieAdapter)
+                    }
+
+                    else -> {}
+                }
+            }
+        }
     }
-}
+
+    private fun loadRefresh() {
+        binding.animeRefresh.setSlingshotDistance(128)
+        binding.animeRefresh.setProgressViewEndTarget(false, 128)
+        binding.animeRefresh.setOnRefreshListener {
+            model.resetData()
+            model.loadBanner()
+            model.loadNextPage()
+            model.loadSeries()
+            model.loadDocumentary()
+            model.loadRandomData()
+            binding.animeRefresh.isRefreshing = false
+        }
+    }
 
 }
