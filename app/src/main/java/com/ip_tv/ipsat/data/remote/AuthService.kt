@@ -1,5 +1,6 @@
 package com.ip_tv.ipsat.data.remote
 
+import com.ip_tv.ipsat.domain.model.GetMessagesResponse
 import com.ip_tv.ipsat.domain.model.LoginResponse
 import com.ip_tv.ipsat.domain.model.SubscriptionResponse
 import retrofit2.Response
@@ -18,6 +19,9 @@ interface AuthService {
         @Query("code") code: String,
     ): Response<SubscriptionResponse>
 
-
+    @GET("get_messages/")
+    suspend fun getMessages(
+        @Query("code") code: String,
+    ): Response<GetMessagesResponse>
 }
 

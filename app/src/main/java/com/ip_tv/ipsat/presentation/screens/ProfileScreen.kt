@@ -9,6 +9,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.ip_tv.ipsat.R
 import com.ip_tv.ipsat.databinding.ProfileScreenBinding
 import com.ip_tv.ipsat.domain.preference.UserPreferenceManager
@@ -28,7 +29,6 @@ class ProfileScreen  : BaseFragment<ProfileScreenBinding>(ProfileScreenBinding::
         profileViewModel.getUserDetail()
     }
     override fun onViewCreate(savedInstanceState: Bundle?) {
-        requireActivity().window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         requireActivity().window.statusBarColor = Color.parseColor("#E5F4FA")
         setupUI()
         observeModel()
@@ -95,7 +95,7 @@ class ProfileScreen  : BaseFragment<ProfileScreenBinding>(ProfileScreenBinding::
         }
 
         binding.subscriptionUpdateInfo.setOnClickListener {
-
+            findNavController().navigate(R.id.updateInfoScreen)
         }
     }
 }

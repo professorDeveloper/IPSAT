@@ -9,6 +9,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.ip_tv.ipsat.R
 import com.ip_tv.ipsat.databinding.ActivityMainBinding
 import com.ip_tv.ipsat.domain.preference.UserPreferenceManager
+import com.ip_tv.ipsat.utils.hideWithAnimation
 import com.ip_tv.ipsat.utils.hideWithoutAnimation
 import com.ip_tv.ipsat.utils.initActivity
 import com.ip_tv.ipsat.utils.showWithAnimation
@@ -39,6 +40,9 @@ class MainActivity : AppCompatActivity() {
   private  fun managePages(){
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
+                R.id.updateInfoScreen -> {
+                    viewBinding.homeNavigation.hideWithAnimation(viewBinding.navHost)
+                }
                 else -> {
                     viewBinding.homeNavigation.showWithAnimation(viewBinding.navHost)
                 }

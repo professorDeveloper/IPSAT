@@ -20,4 +20,9 @@
         android:name="com.ip_tv.ipsat.presentation.screens.MovieVodScreen"
         android:label="movie_vod_screen"
         tools:layout="@layout/movie_vod_screen" />
+    <fragment
+        android:id="@+id/updateInfoScreen"
+        android:name="com.ip_tv.ipsat.presentation.screens.UpdateInfoScreen"
+        android:label="update_info_screen"
+        tools:layout="@layout/update_info_screen" />
 </navigation>

@@ -1,36 +1,37 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
-    android:padding="8dp">
+    android:padding="8dp"
+    android:gravity="center_vertical"
+    android:background="@drawable/notification_item_background">
 
-    <com.google.android.material.imageview.ShapeableImageView
-        android:layout_width="@dimen/_14sdp"
-        android:layout_height="@dimen/_14sdp"
-        android:layout_marginStart="@dimen/_24sdp"
-        android:layout_gravity="center"
-        app:srcCompat="@drawable/info"/>
+    <ImageView
+        android:id="@+id/notificationIcon"
+        android:layout_width="@dimen/_16sdp"
+        android:layout_height="@dimen/_16sdp"
+        android:src="@drawable/ic_info"
+        android:tint="@color/blue"
+        android:layout_marginEnd="8dp" />
+
     <TextView
-        android:id="@+id/tvDate"
+        android:id="@+id/notificationDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="2024-12-23"
-        android:layout_width="wrap_content"
-        android:layout_gravity="center"
-        android:fontFamily="@font/inter_semi_bold"
-        android:layout_marginStart="@dimen/_8sdp"
-        android:layout_height="wrap_content"
-        android:textColor="@color/textLightColor"
-        android:textSize="@dimen/_12ssp" />
+        android:textSize="@dimen/_9ssp"
+        android:textColor="@color/black"
+        android:layout_marginEnd="8dp" />
 
     <TextView
-        android:id="@+id/tvMessage"
-        android:layout_marginStart="@dimen/_8sdp"
+        android:id="@+id/notificationBody"
         android:layout_width="wrap_content"
-        android:fontFamily="@font/inter_bold"
-        android:text="we add Bein Sports"
         android:layout_height="wrap_content"
+        android:text="we add Bein Sports"
+        android:textSize="@dimen/_9ssp"
         android:textColor="@color/map_green"
-        android:textSize="@dimen/_13ssp" />
+        android:ellipsize="end"
+        android:maxLines="1" />
 
 </LinearLayout>
