@@ -40,8 +40,14 @@ class MainActivity : AppCompatActivity() {
   private  fun managePages(){
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
+                R.id.moviesShowMore -> {
+                    viewBinding.homeNavigation.hideWithAnimation(viewBinding.navHost)
+                }
                 R.id.updateInfoScreen -> {
                     viewBinding.homeNavigation.hideWithAnimation(viewBinding.navHost)
+                }
+                R.id.button_profile_page -> {
+                    viewBinding.homeNavigation.showWithAnimation(viewBinding.navHost)
                 }
                 else -> {
                     viewBinding.homeNavigation.showWithAnimation(viewBinding.navHost)

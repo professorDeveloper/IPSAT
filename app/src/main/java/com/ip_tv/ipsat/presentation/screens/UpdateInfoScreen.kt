@@ -12,6 +12,7 @@ import com.ip_tv.ipsat.presentation.adapters.UpdateAdapter
 import com.ip_tv.ipsat.presentation.viewmodel.ProfileViewModel
 import com.ip_tv.ipsat.utils.BaseFragment
 import com.ip_tv.ipsat.utils.gone
+import com.ip_tv.ipsat.utils.initActivity
 import com.ip_tv.ipsat.utils.showSnack
 import com.ip_tv.ipsat.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,6 +24,7 @@ class UpdateInfoScreen : BaseFragment<UpdateInfoScreenBinding>(UpdateInfoScreenB
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         model.getNotificationList()
+        initActivity(requireActivity())
     }
 
     override fun onViewCreate(savedInstanceState: Bundle?) {

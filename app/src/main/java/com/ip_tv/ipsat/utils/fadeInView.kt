@@ -47,7 +47,7 @@ fun BottomNavigationView.showWithAnimation(fragmentContainerView: View) {
     if (this.visibility == View.VISIBLE) return
     this.visible()
     this.animateTranslationY(0f, 66f, 700)
-    fragmentContainerView.animateMarginBottom(66f, 700)
+    fragmentContainerView.animateMarginBottom(0f, 700)
 }
 fun BottomNavigationView.hideWithoutAnimation(fragmentContainerView: View) {
     if (this.visibility == View.GONE) return
@@ -68,7 +68,7 @@ fun BottomNavigationView.hideWithoutAnimation(fragmentContainerView: View) {
 fun BottomNavigationView.hideWithAnimation(fragmentContainerView: View) {
     if (this.visibility == View.GONE) return
     this.animateTranslationY(66f, 0f, 700)
-    fragmentContainerView.animateMarginBottom(0f, 700)
+//    fragmentContainerView.animateMarginBottom(0f, 700)
 }
 fun toast(string: String?) {
     if (string != null) {
