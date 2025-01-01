@@ -15,6 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ShowMoreMovieViewModel @Inject constructor(private val repository: HomeRepository) : ViewModel() {
     val result: MutableLiveData<SearchResults?> = MutableLiveData()
+    val nextPageResult: MutableLiveData<SearchResults?> = MutableLiveData()
     var searched = false
     var notSet = true
     lateinit var searchResults: SearchResults
@@ -42,7 +43,7 @@ class ShowMoreMovieViewModel @Inject constructor(private val repository: HomeRep
                 }
 
                 it.onSuccess {
-                    result.postValue(it)
+                    nextPageResult.postValue(it)
                 }
             }.launchIn(viewModelScope)
         }

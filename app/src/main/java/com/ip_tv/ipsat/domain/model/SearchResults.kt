@@ -3,17 +3,9 @@ package com.ip_tv.ipsat.domain.model
 import java.io.Serializable
 
 data class SearchResults(
-    val type: String,
-    var isAdult: Boolean,
-    var onList: Boolean? = null,
-    var perPage: Int? = null,
     var search: String? = null,
     var rating: String? = null,
     var genres: MutableList<String>? = null,
-    var excludedGenres: MutableList<String>? = null,
-    var tags: MutableList<String>? = null,
-    var excludedTags: MutableList<String>? = null,
-    var format: String? = null,
     var releaseYear: Int? = null,
     var country: String? = null,
     var page: Int = 1,
@@ -25,9 +17,6 @@ data class SearchResults(
         rating?.let {
             list.add(SearchChip("rating", "Rating : $it"))
         }
-        format?.let {
-            list.add(SearchChip("FORMAT", "Format : $it"))
-        }
         country?.let {
             list.add(SearchChip("country", it))
         }
@@ -37,15 +26,7 @@ data class SearchResults(
         genres?.forEach {
             list.add(SearchChip("GENRE", it))
         }
-        excludedGenres?.forEach {
-            list.add(SearchChip("EXCLUDED_GENRE", "Not $it"))
-        }
-        tags?.forEach {
-            list.add(SearchChip("TAG", it))
-        }
-        excludedTags?.forEach {
-            list.add(SearchChip("EXCLUDED_TAG", "Not $it"))
-        }
+
         return list
     }
 
@@ -54,7 +35,7 @@ data class SearchResults(
             "rating" -> rating = null
             "releaseYear" -> releaseYear = null
             "country" -> country = null
-            "categoryProperty" -> tags?.remove(chip.text)
+            "categoryProperty" -> genres?.remove(chip.text)
 //            "EXCLUDED_TAG" -> excludedTags?.remove(chip.text)
         }
     }

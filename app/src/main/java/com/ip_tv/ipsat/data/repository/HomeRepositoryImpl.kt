@@ -156,9 +156,9 @@ class HomeRepositoryImpl @Inject constructor(
                 subscriptionCode = userPreferenceManager.subCode,
                 page = results.page,
                 country = results.country?:"All",
-                rating = results.rating?:"1",
+                rating = results.rating?:"All",
                 categoryProperty = "All",
-                releaseYear = results.releaseYear.toString(),
+                releaseYear = if (results.releaseYear == -1) "All" else results.releaseYear.toString(),
                 pageSize = 60
             )
 

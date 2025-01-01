@@ -20,16 +20,13 @@ import kotlin.math.log
 
 
 class ShowMoreItemAdapter(
-    var type: Int,
-    private val mediaList: ArrayList<Movie>,
     private val activity: FragmentActivity,
     private val matchParent: Boolean = false,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
+     val mediaList: ArrayList<Movie> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when (type) {
-            0 -> MediaViewHolder(
+        return  MediaViewHolder(
                 ItemMovieBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
@@ -38,15 +35,11 @@ class ShowMoreItemAdapter(
             )
 
 
-            else -> throw IllegalArgumentException()
-        }
-
     }
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when (type) {
-            0 -> {
+
                 val b = (holder as MediaViewHolder).binding
                 setAnimation(activity, b.root)
 
@@ -56,18 +49,13 @@ class ShowMoreItemAdapter(
                     holder.binding.apply {
                         itemImg.loadImage(media.image )
                         titleItem.text = media.name
+                        b.itemCompactScore.text = media.rating.toString()
                     }
                 }
-            }
-
-        }
     }
 
     override fun getItemCount() = mediaList!!.size
 
-    override fun getItemViewType(position: Int): Int {
-        return type
-    }
 
     inner class MediaViewHolder(val binding: ItemMovieBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -90,6 +78,18 @@ class ShowMoreItemAdapter(
 //                ), null
 //            )
         }
+    }
+
+    fun submitList(newMovies: List<Movie>) {
+        val startPosition = mediaList.size
+        mediaList.addAll(newMovies)
+        notifyItemRangeInserted(startPosition, newMovies.size)
+    }
+
+    fun submitListNew(newMovies: List<Movie>) {
+        mediaList.clear()
+        mediaList.addAll(newMovies)
+        notifyDataSetChanged()
     }
 
     fun longClicked(position: Int): Boolean {

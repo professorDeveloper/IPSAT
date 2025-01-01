@@ -3,193 +3,140 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-
     android:layout_height="wrap_content">
-
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="16dp">
 
         <TextView
             android:id="@+id/bottomSheerCustomTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="10dp"
+            android:layout_marginBottom="16dp"
             android:fontFamily="@font/inter_bold"
-            android:padding="5dp"
             android:text="Filter"
             android:textAlignment="center"
             android:textSize="20sp" />
 
 
-
-
-        <LinearLayout
+        <!-- Country Section -->
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="32dp"
-            android:orientation="horizontal">
+            android:fontFamily="@font/inter_bold"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="4dp"
+            android:text="Country"
+            android:textSize="16sp" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@font/inter_bold"
-                android:text="Years"
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:scrollbars="horizontal"
+            android:layout_height="wrap_content">
 
-                android:textSize="16sp" />
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/countryChipGroup"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="horizontal"
+                app:singleLine="true"
+                android:padding="8dp"
+                app:singleSelection="false" />
 
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/searchGenresGrid"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Grid"
-                android:textColor="@color/white"
-                android:visibility="gone"
-                app:thumbTint="@color/bg" />
-        </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/searchFilterFormat"
+        </HorizontalScrollView>
+
+        <!-- Years Section -->
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:clipToPadding="false"
-            android:fadingEdge="horizontal"
-            android:orientation="horizontal"
-            android:paddingStart="16dp"
-            android:paddingTop="4dp"
-            android:paddingEnd="16dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:spanCount="6"
-            tools:listitem="@layout/item_single_click" />
+            android:fontFamily="@font/inter_bold"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:text="Years"
+            android:textSize="16sp" />
 
 
-        <LinearLayout
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/yearsChipGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:scrollbars="vertical"
+                app:singleLine="true"
+                app:singleSelection="false" />
+
+        </HorizontalScrollView>
+        <!-- Categories Section -->
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="14dp"
-            android:layout_marginEnd="32dp"
-            android:orientation="horizontal">
+            android:fontFamily="@font/inter_bold"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:text="Categories"
+            android:textSize="16sp" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@font/inter_bold"
-                android:text="Categories"
-                android:textSize="16sp" />
 
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/searchTagsGrid"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/inter_bold"
-                android:textColor="@color/white"
-                android:visibility="gone"
-                app:switchPadding="4dp"
-                app:thumbTint="@color/grayText" />
-        </LinearLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/searchFilterTags"
+        <HorizontalScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:clipToPadding="false"
-            android:fadeScrollbars="true"
-            android:orientation="horizontal"
-            android:paddingStart="16dp"
-            android:paddingTop="4dp"
-            android:paddingEnd="16dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:spanCount="6"
-            tools:listitem="@layout/item_chip" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="14dp"
-            android:layout_marginEnd="32dp"
-            android:orientation="horizontal"
-            android:visibility="gone">
-
-            <TextView
-                android:layout_width="0dp"
+            android:layout_height="wrap_content">
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/categoriesChipGroup"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@font/inter_bold"
-                android:text="Years"
-                android:textSize="16sp" />
+                android:padding="8dp"
+                android:scrollbars="vertical"
+                app:singleLine="true"
+                app:singleSelection="false" />
 
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/search_year"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Grid"
-                android:textColor="@color/white"
-                android:visibility="gone"
-                app:thumbTint="?attr/colorSecondary" />
-        </LinearLayout>
+        </HorizontalScrollView>
 
-
+        <!-- Divider -->
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="20dp"
-
+            android:layout_marginTop="16dp"
             android:background="#ABABAB" />
 
+        <!-- Buttons -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="8dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="16dp"
             android:orientation="horizontal">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/searchFilterCancel"
                 android:layout_width="0dp"
                 android:layout_height="56dp"
-                android:layout_margin="8dp"
+                android:layout_marginEnd="8dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/inter_bold"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
-                android:padding="8dp"
                 android:text="Cancel"
-
                 android:textColor="@color/white"
-                android:textSize="16sp"
                 app:backgroundTint="?attr/colorOnBackground"
-                app:cornerRadius="16dp"
-                tools:ignore="SpeakableTextPresentCheck" />
+                app:cornerRadius="16dp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/searchFilterApply"
                 android:layout_width="0dp"
-
                 android:layout_height="56dp"
-                android:layout_margin="8dp"
+                android:layout_marginStart="8dp"
                 android:layout_weight="1"
-                android:fontFamily="@font/inter_semi_bold"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
-                android:padding="8dp"
+                android:fontFamily="@font/inter_bold"
                 android:text="Apply"
                 android:textColor="@color/white"
-                android:textSize="16sp"
                 app:backgroundTint="?attr/colorPrimary"
-                app:cornerRadius="16dp"
-                tools:ignore="SpeakableTextPresentCheck" />
+                app:cornerRadius="16dp" />
         </LinearLayout>
-    </LinearLayout>
 
+    </LinearLayout>
 </androidx.core.widget.NestedScrollView>
