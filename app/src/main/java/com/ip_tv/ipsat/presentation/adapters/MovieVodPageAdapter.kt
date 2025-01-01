@@ -36,6 +36,7 @@ class MovieVodPageAdapter(
     private lateinit var kidsShowMoreClick: (Int) -> Unit
     private lateinit var seriesShowMoreClick: (Int) -> Unit
     private lateinit var documentaryShowMoreClick: (Int) -> Unit
+    private lateinit var searchIconClick:() ->Unit
 
     fun setMoviesShowMoreClick(moviesShowMoreClick: (Int) -> Unit) {
         this.moviesShowMoreClick = moviesShowMoreClick
@@ -49,6 +50,10 @@ class MovieVodPageAdapter(
     }
     fun setDocumentaryShowMoreClick(moviesShowMoreClick: (Int) -> Unit) {
         this.documentaryShowMoreClick = moviesShowMoreClick
+    }
+
+    fun setSearchIconClick(searchIconClick:() ->Unit){
+        this.searchIconClick = searchIconClick
     }
 
     inner class MovieVodPageViewHolder(var binding: ItemMoviePageBinding) :
@@ -106,6 +111,9 @@ class MovieVodPageAdapter(
         binding.documentaryShowMore.setOnClickListener {
             documentaryShowMoreClick.invoke(adaptor.itemCount)
         }
+        binding.searchIcon.setOnClickListener {
+            searchIconClick.invoke()
+        }
     }
 
     fun updateKids(adaptor: MovieAdapter) {
@@ -159,10 +167,20 @@ class MovieVodPageAdapter(
             is Resource.Success -> {
                 binding.animeTrendingProgressBar.invisible()
                 binding.bannerViewPager.visible()
-                binding.bannerViewPager.adapter = BannerAdapter(
+                BannerAdapter(
                     mediaList = state.data,
                     activity = fragment.requireActivity()
-                )
+                ).also { binding.bannerViewPager.adapter = it
+
+                    it.setItemClickListener {
+
+                    }
+                    it.setPlayItemListener {
+
+                    }
+
+                }
+
                 trendHandler = Handler(Looper.getMainLooper())
                 trendRun = Runnable {
                     binding.bannerViewPager.currentItem += 1

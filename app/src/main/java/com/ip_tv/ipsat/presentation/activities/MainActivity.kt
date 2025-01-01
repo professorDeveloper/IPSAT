@@ -46,9 +46,13 @@ class MainActivity : AppCompatActivity() {
                 R.id.updateInfoScreen -> {
                     viewBinding.homeNavigation.hideWithAnimation(viewBinding.navHost)
                 }
+                R.id.searchScreen -> {
+                    viewBinding.homeNavigation.hideWithAnimation(viewBinding.navHost)
+                }
                 R.id.button_profile_page -> {
                     viewBinding.homeNavigation.showWithAnimation(viewBinding.navHost)
                 }
+
                 else -> {
                     viewBinding.homeNavigation.showWithAnimation(viewBinding.navHost)
                 }

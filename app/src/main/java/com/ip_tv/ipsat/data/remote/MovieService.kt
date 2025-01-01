@@ -3,7 +3,6 @@ package com.ip_tv.ipsat.data.remote
 import com.ip_tv.ipsat.domain.model.MovieResponse
 import retrofit2.Response
 import retrofit2.http.GET
-import retrofit2.http.Header
 import retrofit2.http.Query
 
 interface MovieService {
@@ -77,6 +76,12 @@ interface MovieService {
         @Query("release_year") releaseYear: String,
         @Query("page") page: Int,
         @Query("page_size") pageSize: Int,
+    ): Response<MovieResponse>
+
+    @GET("Search")
+    suspend fun search(
+        @Query("subscription_code") subscriptionCode: String,
+        @Query("query")  query: String
     ): Response<MovieResponse>
 
 

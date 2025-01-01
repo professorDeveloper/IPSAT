@@ -20,6 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="464dp" />
         <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/searchIcon"
             android:layout_width="@dimen/_20sdp"
             app:srcCompat="@drawable/ic_search"
             android:layout_gravity="end"

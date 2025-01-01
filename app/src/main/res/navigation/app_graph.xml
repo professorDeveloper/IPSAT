@@ -42,4 +42,9 @@
         android:id="@+id/showMoreSeriesScreen"
         android:name="com.ip_tv.ipsat.presentation.screens.show_more.ShowMoreSeriesScreen"
         android:label="ShowMoreSeriesScreen" />
+    <fragment
+        android:id="@+id/searchScreen"
+        android:name="com.ip_tv.ipsat.presentation.screens.SearchScreen"
+        android:label="search_screen"
+        tools:layout="@layout/search_screen" />
 </navigation>

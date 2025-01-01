@@ -75,21 +75,7 @@ class MovieVodScreen : BaseFragment<MovieVodScreenBinding>(MovieVodScreenBinding
         val layout = LinearLayoutManager(requireContext())
         binding.animePageRecyclerView.layoutManager = layout
 
-        animePageAdapter.setMoviesShowMoreClick {
-            findNavController().navigate(R.id.showMoreMoviesScreen,null, animationTransaction().build())
-        }
-
-        animePageAdapter.setDocumentaryShowMoreClick {
-            findNavController().navigate(R.id.showMoreDocumentaryScreen,null, animationTransaction().build())
-        }
-
-        animePageAdapter.setSeriesShowMoreClick {
-            findNavController().navigate(R.id.showMoreSeriesScreen,null, animationTransaction().build())
-        }
-
-        animePageAdapter.setKidsShowMoreClick {
-            findNavController().navigate(R.id.showMoreKidsScreen,null, animationTransaction().build())
-        }
+        manageClicks()
 
         loadRefresh()
 
@@ -164,6 +150,28 @@ class MovieVodScreen : BaseFragment<MovieVodScreenBinding>(MovieVodScreenBinding
                     else -> {}
                 }
             }
+        }
+    }
+
+    private fun manageClicks(){
+        animePageAdapter.setMoviesShowMoreClick {
+            findNavController().navigate(R.id.showMoreMoviesScreen,null, animationTransaction().build())
+        }
+
+        animePageAdapter.setDocumentaryShowMoreClick {
+            findNavController().navigate(R.id.showMoreDocumentaryScreen,null, animationTransaction().build())
+        }
+
+        animePageAdapter.setSeriesShowMoreClick {
+            findNavController().navigate(R.id.showMoreSeriesScreen,null, animationTransaction().build())
+        }
+
+        animePageAdapter.setKidsShowMoreClick {
+            findNavController().navigate(R.id.showMoreKidsScreen,null, animationTransaction().build())
+        }
+
+        animePageAdapter.setSearchIconClick {
+            findNavController().navigate(R.id.searchScreen,null, animationTransaction().build())
         }
     }
 

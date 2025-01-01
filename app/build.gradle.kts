@@ -116,6 +116,8 @@ dependencies {
     //Shimmer
     implementation("com.facebook.shimmer:shimmer:0.5.0")  // Add Shimmer
 
+    implementation("com.github.Ferfalk:SimpleSearchView:0.2.1")
+    implementation("com.github.mancj:MaterialSearchBar:0.8.5")
 
 
 

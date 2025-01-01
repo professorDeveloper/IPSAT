@@ -3,12 +3,15 @@ package com.ip_tv.ipsat.data.repository
 import com.ip_tv.ipsat.data.remote.MovieService
 import com.ip_tv.ipsat.domain.model.ErrorResponse
 import com.ip_tv.ipsat.domain.model.Movie
+import com.ip_tv.ipsat.domain.model.MovieResponse
 import com.ip_tv.ipsat.domain.model.SearchResults
 import com.ip_tv.ipsat.domain.preference.UserPreferenceManager
 import com.ip_tv.ipsat.domain.repository.HomeRepository
 import com.ip_tv.ipsat.utils.toDataClass
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import org.json.JSONObject
 import javax.inject.Inject
 
@@ -151,14 +154,14 @@ class HomeRepositoryImpl @Inject constructor(
     }
 
     override suspend fun filterMovies(results: SearchResults) = flow<Result<SearchResults>> {
-
+        val tags = results.genres?.map { "$it," }?.joinToString("")
         val response =
             movieService.filterMovies(
                 subscriptionCode = userPreferenceManager.subCode,
                 page = results.page,
                 country = results.country ?: "All",
                 rating = results.rating ?: "All",
-                categoryProperty = "All",
+                categoryProperty = tags ?: "All",
                 releaseYear = if (results.releaseYear == -1) "All" else results.releaseYear.toString(),
                 pageSize = 60
             )
@@ -185,13 +188,14 @@ class HomeRepositoryImpl @Inject constructor(
     }
 
     override suspend fun filterDocumentary(results: SearchResults) = flow<Result<SearchResults>> {
+        val tags = results.genres?.map { "$it," }?.joinToString("")
         val response =
             movieService.filterDocumentary(
                 subscriptionCode = userPreferenceManager.subCode,
                 page = results.page,
                 country = results.country ?: "All",
                 rating = results.rating ?: "All",
-                categoryProperty = "All",
+                categoryProperty = tags ?: "All",
                 releaseYear = if (results.releaseYear == -1) "All" else results.releaseYear.toString(),
                 pageSize = 60
             )
@@ -218,13 +222,14 @@ class HomeRepositoryImpl @Inject constructor(
     }
 
     override suspend fun filterKids(results: SearchResults) = flow<Result<SearchResults>> {
+        val tags = results.genres?.map { "$it," }?.joinToString("")
         val response =
             movieService.filterKids(
                 subscriptionCode = userPreferenceManager.subCode,
                 page = results.page,
                 country = results.country ?: "All",
                 rating = results.rating ?: "All",
-                categoryProperty = "All",
+                categoryProperty = tags ?: "All",
                 releaseYear = if (results.releaseYear == -1) "All" else results.releaseYear.toString(),
                 pageSize = 60
             )
@@ -251,13 +256,14 @@ class HomeRepositoryImpl @Inject constructor(
     }
 
     override suspend fun filterSeries(results: SearchResults) = flow<Result<SearchResults>> {
+        val tags = results.genres?.map { "$it," }?.joinToString("")
         val response =
             movieService.filterSeries(
                 subscriptionCode = userPreferenceManager.subCode,
                 page = results.page,
                 country = results.country ?: "All",
                 rating = results.rating ?: "All",
-                categoryProperty = "All",
+                categoryProperty = tags ?: "All",
                 releaseYear = if (results.releaseYear == -1) "All" else results.releaseYear.toString(),
                 pageSize = 60
             )
@@ -282,4 +288,27 @@ class HomeRepositoryImpl @Inject constructor(
             }
         }
     }
+
+    override suspend fun search(query: String) = flow<Result<MovieResponse>> {
+        val response = movieService.search(
+            subscriptionCode = userPreferenceManager.subCode,
+            query = query
+        )
+        if (response.isSuccessful) {
+            emit(Result.success(response.body()!!))
+        } else {
+            if (response.code() == 404 || response.code() == 403) {
+                val errorResponse = response.errorBody()?.string()
+                val jsonObject = JSONObject(errorResponse)
+                val errorDetail = jsonObject.optString("detail")
+                emit(Result.failure(Exception(errorDetail)))
+            } else {
+                val errorResponse =
+                    response.errorBody()?.string().toString().toDataClass<ErrorResponse>()
+                emit(Result.failure(Exception(errorResponse.message)))
+            }
+
+        }
+
+    }.flowOn(Dispatchers.IO)
 }

@@ -33,7 +33,11 @@ import com.google.gson.Gson
 import com.ip_tv.ipsat.R
 import com.ip_tv.ipsat.app.App
 import java.io.BufferedReader
+import java.io.FileInputStream
+import java.io.FileOutputStream
 import java.io.InputStreamReader
+import java.io.ObjectInputStream
+import java.io.ObjectOutputStream
 import java.net.NetworkInterface
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -57,6 +61,38 @@ fun String.toReadableDateTime(): String {
     }
 }
 
+
+fun <T> readData(fileName: String, context: Context? = null, toast: Boolean = true): T? {
+    val a = context ?: currContext()
+    try {
+        if (a?.fileList() != null)
+            if (fileName in a.fileList()) {
+                val fileIS: FileInputStream = a.openFileInput(fileName)
+                val objIS = ObjectInputStream(fileIS)
+                val data = objIS.readObject() as T
+                objIS.close()
+                fileIS.close()
+                return data
+            }
+    } catch (e: Exception) {
+        if (toast) snackString("Error loading data $fileName")
+        e.printStackTrace()
+    }
+    return null
+}
+
+fun saveData(fileName: String, data: Any?, context: Context? = null) {
+    tryWith {
+        val a = context ?: currContext()
+        if (a != null) {
+            val fos: FileOutputStream = a.openFileOutput(fileName, Context.MODE_PRIVATE)
+            val os = ObjectOutputStream(fos)
+            os.writeObject(data)
+            os.close()
+            fos.close()
+        }
+    }
+}
 
 fun hideKeyboard(view: View) {
     val imm = view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
