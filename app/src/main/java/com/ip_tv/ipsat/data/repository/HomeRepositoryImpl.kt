@@ -1,17 +1,13 @@
 package com.ip_tv.ipsat.data.repository
 
-import androidx.paging.PagingSource
-import androidx.paging.PagingState
 import com.ip_tv.ipsat.data.remote.MovieService
 import com.ip_tv.ipsat.domain.model.ErrorResponse
 import com.ip_tv.ipsat.domain.model.Movie
+import com.ip_tv.ipsat.domain.model.SearchResults
 import com.ip_tv.ipsat.domain.preference.UserPreferenceManager
 import com.ip_tv.ipsat.domain.repository.HomeRepository
 import com.ip_tv.ipsat.utils.toDataClass
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import org.json.JSONObject
 import javax.inject.Inject
 
@@ -146,6 +142,40 @@ class HomeRepositoryImpl @Inject constructor(
                 val errorDetail = jsonObject.optString("detail")
                 emit(Result.failure(Exception(errorDetail)))
             }else {
+                val errorResponse =
+                    response.errorBody()?.string().toString().toDataClass<ErrorResponse>()
+                emit(Result.failure(Exception(errorResponse.message)))
+            }
+        }
+    }
+
+    override suspend fun filterMovies(results: SearchResults)=flow<Result<SearchResults>> {
+
+        val response =
+            movieService.filterMovies(
+                subscriptionCode = userPreferenceManager.subCode,
+                page = results.page,
+                country = results.country?:"All",
+                rating = results.rating?:"1",
+                categoryProperty = "All",
+                releaseYear = results.releaseYear.toString(),
+                pageSize = 60
+            )
+
+        if (response.isSuccessful) {
+            val newList = ArrayList<Movie>()
+            response.body()?.results?.onEach {
+                newList.add(it)
+            }
+            results.results = newList
+            emit(Result.success(results))
+        } else {
+            if (response.code() == 404 || response.code() == 403) {
+                val errorResponse = response.errorBody()?.string()
+                val jsonObject = JSONObject(errorResponse)
+                val errorDetail = jsonObject.optString("detail")
+                emit(Result.failure(Exception(errorDetail)))
+            } else {
                 val errorResponse =
                     response.errorBody()?.string().toString().toDataClass<ErrorResponse>()
                 emit(Result.failure(Exception(errorResponse.message)))

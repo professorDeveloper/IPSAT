@@ -37,8 +37,10 @@ import java.io.InputStreamReader
 import java.net.NetworkInterface
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.ArrayList
 import java.util.Timer
 import java.util.TimerTask
+
 var statusBarHeight = 0
 var navBarHeight = 0
 val Int.dp: Float get() = (this / getSystem().displayMetrics.density)
@@ -153,7 +155,6 @@ fun hasConnection(): Boolean {
 }
 
 
-
 private val PERMISSIONS_REQUEST_CODE = 100
 
 fun requestPermissionsIfNecessary(context: Context) {
@@ -169,7 +170,8 @@ fun requestPermissionsIfNecessary(context: Context) {
 
 @SuppressLint("HardwareIds")
 private fun getMacAddressWithWifiManager(context: Context): String? {
-    val wifiManager = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+    val wifiManager =
+        context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
     return try {
         val macAddress = wifiManager.connectionInfo.macAddress
         if (macAddress == "02:00:00:00:00:00") {
@@ -200,6 +202,7 @@ private fun getMacAddressWithNetworkInterface(): String? {
         null
     }
 }
+
 fun getMacAddressFromSystem(): String? {
     return try {
         val process = Runtime.getRuntime().exec("cat /sys/class/net/wlan0/address")
@@ -220,15 +223,42 @@ fun <T> tryWith(post: Boolean = false, snackbar: Boolean = true, call: () -> T):
 }
 
 
-
-
 fun ImageView.loadImage(file: String?, size: Int = 0) {
-        tryWith {
-            val glideUrl = GlideUrl(file)
-            Glide.with(this.context).load(glideUrl)
-                .transition(DrawableTransitionOptions.withCrossFade()).override(size).into(this)
+    tryWith {
+        val glideUrl = GlideUrl(file)
+        Glide.with(this.context).load(glideUrl)
+            .transition(DrawableTransitionOptions.withCrossFade()).override(size).into(this)
     }
 }
+
+fun View.preventTwoClick() {
+    this.isEnabled = false
+    this.postDelayed({
+        isEnabled = true
+    }, 300)
+}
+
+fun loadFilterTab(
+    defaultItemCountry: String,
+    defaultItemSort: String,
+): ArrayList<FilterTabModel> {
+    val list = ArrayList<FilterTabModel>()
+    list.add(FilterTabModel(LocalData.country, "Country", defaultItemCountry))
+
+
+
+
+    list.add(
+        FilterTabModel(
+            LocalData.rating,
+            "Rating",
+            defaultItemSort,
+        )
+    )
+
+    return list
+}
+
 
 class MediaPageTransformer : ViewPager2.PageTransformer {
     private fun parallax(view: View, position: Float) {
@@ -271,7 +301,6 @@ abstract class GesturesListener : GestureDetector.SimpleOnGestureListener() {
         processDoubleClickEvent(e)
         return super.onDoubleTap(e)
     }
-
 
 
     private fun processSingleClickEvent(e: MotionEvent) {

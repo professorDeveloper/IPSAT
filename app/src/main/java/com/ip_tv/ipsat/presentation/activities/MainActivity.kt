@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
   private  fun managePages(){
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.moviesShowMore -> {
+                R.id.showMoreMoviesScreen -> {
                     viewBinding.homeNavigation.hideWithAnimation(viewBinding.navHost)
                 }
                 R.id.updateInfoScreen -> {

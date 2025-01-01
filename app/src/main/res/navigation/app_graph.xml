@@ -25,4 +25,9 @@
         android:name="com.ip_tv.ipsat.presentation.screens.UpdateInfoScreen"
         android:label="update_info_screen"
         tools:layout="@layout/update_info_screen" />
+    <fragment
+        android:id="@+id/showMoreMoviesScreen"
+        tools:layout="@layout/show_more_movies_screen"
+        android:name="com.ip_tv.ipsat.presentation.screens.ShowMoreMoviesScreen"
+        android:label="ShowMoreMoviesScreen" />
 </navigation>

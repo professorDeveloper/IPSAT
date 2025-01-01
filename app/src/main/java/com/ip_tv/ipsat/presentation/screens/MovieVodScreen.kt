@@ -11,10 +11,12 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.animestudios.animeapp.others.ProgressAdapter
+import com.ip_tv.ipsat.R
 import com.ip_tv.ipsat.databinding.ItemMoviePageBinding
 import com.ip_tv.ipsat.databinding.MovieVodScreenBinding
 import com.ip_tv.ipsat.presentation.adapters.MovieAdapter
@@ -22,6 +24,7 @@ import com.ip_tv.ipsat.presentation.adapters.MovieCompatAdapter
 import com.ip_tv.ipsat.presentation.adapters.MovieVodPageAdapter
 import com.ip_tv.ipsat.presentation.viewmodel.MovieViewModel
 import com.ip_tv.ipsat.utils.BaseFragment
+import com.ip_tv.ipsat.utils.animationTransaction
 import com.ip_tv.ipsat.utils.showSnack
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -71,6 +74,10 @@ class MovieVodScreen : BaseFragment<MovieVodScreenBinding>(MovieVodScreenBinding
         binding.animePageRecyclerView.adapter = ConcatAdapter(animePageAdapter, movieCompatAdapter,progressAdaptor)
         val layout = LinearLayoutManager(requireContext())
         binding.animePageRecyclerView.layoutManager = layout
+
+        animePageAdapter.setMoviesShowMoreClick {
+            findNavController().navigate(R.id.showMoreMoviesScreen,null, animationTransaction().build())
+        }
 
         loadRefresh()
 

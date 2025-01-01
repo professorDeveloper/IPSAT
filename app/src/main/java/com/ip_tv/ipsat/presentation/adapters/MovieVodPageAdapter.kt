@@ -32,6 +32,12 @@ class MovieVodPageAdapter(
     private lateinit var trendRun: Runnable
     private var trendingViewPager: ViewPager2? = null
 
+    private lateinit var moviesShowMoreClick: (Int) -> Unit
+
+    fun setMoviesShowMoreClick(moviesShowMoreClick: (Int) -> Unit) {
+        this.moviesShowMoreClick = moviesShowMoreClick
+    }
+
     inner class MovieVodPageViewHolder(var binding: ItemMoviePageBinding) :
         RecyclerView.ViewHolder(binding.root)
 
@@ -75,6 +81,9 @@ class MovieVodPageAdapter(
         binding.animeUpdatedRecyclerView.layoutAnimation =
             LayoutAnimationController(setSlideUp(), 0.25f)
         binding.animeRecently.visibility = View.VISIBLE
+        binding.moviesShowMore.setOnClickListener {
+            moviesShowMoreClick.invoke(adaptor.itemCount)
+        }
     }
 
     fun updateKids(adaptor: MovieAdapter) {

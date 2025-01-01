@@ -15,6 +15,7 @@ import com.ip_tv.ipsat.databinding.ProfileScreenBinding
 import com.ip_tv.ipsat.domain.preference.UserPreferenceManager
 import com.ip_tv.ipsat.presentation.viewmodel.ProfileViewModel
 import com.ip_tv.ipsat.utils.BaseFragment
+import com.ip_tv.ipsat.utils.animationTransaction
 import com.ip_tv.ipsat.utils.gone
 import com.ip_tv.ipsat.utils.snackString
 import com.ip_tv.ipsat.utils.toReadableDateTime
@@ -95,7 +96,7 @@ class ProfileScreen  : BaseFragment<ProfileScreenBinding>(ProfileScreenBinding::
         }
 
         binding.subscriptionUpdateInfo.setOnClickListener {
-            findNavController().navigate(R.id.updateInfoScreen)
+            findNavController().navigate(R.id.updateInfoScreen,null, animationTransaction().build())
         }
     }
 }

@@ -34,5 +34,18 @@ interface MovieService {
         @Query("page_size") pageSize: Int,
     ): Response<MovieResponse>
 
+    @GET("filter_movies/")
+    suspend fun filterMovies(
+        @Query("subscription_code") subscriptionCode: String,
+        @Query("country") country: String,
+        @Query("rating") rating: String,
+        @Query("categoryProperty") categoryProperty: String,
+        @Query("release_year") releaseYear: String,
+        @Query("page") page: Int,
+        @Query("page_size") pageSize: Int,
+    ): Response<MovieResponse>
+
+
+
 
 }
