@@ -7,6 +7,7 @@ import com.ip_tv.ipsat.domain.model.SearchResults
 import com.ip_tv.ipsat.domain.preference.UserPreferenceManager
 import com.ip_tv.ipsat.domain.repository.HomeRepository
 import com.ip_tv.ipsat.utils.toDataClass
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.json.JSONObject
 import javax.inject.Inject
@@ -44,24 +45,24 @@ class HomeRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getMovies(page: Int) = flow<Result<ArrayList<Movie>>> {
-        val response  =movieService.getMovies(
+        val response = movieService.getMovies(
             subscriptionCode = userPreferenceManager.subCode,
-            page=page,
+            page = page,
             pageSize = 60,
         )
         if (response.isSuccessful) {
-             val newList =ArrayList<Movie>()
+            val newList = ArrayList<Movie>()
             response.body()?.results?.onEach {
                 newList.add(it)
             }
             emit(Result.success(newList))
-        }else {
-            if (response.code() ==404|| response.code()==403) {
+        } else {
+            if (response.code() == 404 || response.code() == 403) {
                 val errorResponse = response.errorBody()?.string()
                 val jsonObject = JSONObject(errorResponse)
                 val errorDetail = jsonObject.optString("detail")
                 emit(Result.failure(Exception(errorDetail)))
-            }else {
+            } else {
                 val errorResponse =
                     response.errorBody()?.string().toString().toDataClass<ErrorResponse>()
                 emit(Result.failure(Exception(errorResponse.message)))
@@ -71,25 +72,25 @@ class HomeRepositoryImpl @Inject constructor(
 
     }
 
-    override suspend fun getSeries(page: Int)=flow<Result<ArrayList<Movie>>> {
-        val response  =movieService.getSeries(
+    override suspend fun getSeries(page: Int) = flow<Result<ArrayList<Movie>>> {
+        val response = movieService.getSeries(
             subscriptionCode = userPreferenceManager.subCode,
-            page=page,
+            page = page,
             pageSize = 60,
         )
         if (response.isSuccessful) {
-            val newList =ArrayList<Movie>()
+            val newList = ArrayList<Movie>()
             response.body()?.results?.onEach {
                 newList.add(it)
             }
             emit(Result.success(newList))
-        }else {
-            if (response.code() ==404|| response.code()==403) {
+        } else {
+            if (response.code() == 404 || response.code() == 403) {
                 val errorResponse = response.errorBody()?.string()
                 val jsonObject = JSONObject(errorResponse)
                 val errorDetail = jsonObject.optString("detail")
                 emit(Result.failure(Exception(errorDetail)))
-            }else {
+            } else {
                 val errorResponse =
                     response.errorBody()?.string().toString().toDataClass<ErrorResponse>()
                 emit(Result.failure(Exception(errorResponse.message)))
@@ -97,25 +98,25 @@ class HomeRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getDocuments(page: Int)=flow<Result<ArrayList<Movie>>> {
+    override suspend fun getDocuments(page: Int) = flow<Result<ArrayList<Movie>>> {
         val response = movieService.getDocumentary(
             subscriptionCode = userPreferenceManager.subCode,
             page = page,
             pageSize = 60
         )
         if (response.isSuccessful) {
-            val newList =ArrayList<Movie>()
+            val newList = ArrayList<Movie>()
             response.body()?.results?.onEach {
                 newList.add(it)
             }
             emit(Result.success(newList))
-        }else {
-            if (response.code() ==404|| response.code()==403) {
+        } else {
+            if (response.code() == 404 || response.code() == 403) {
                 val errorResponse = response.errorBody()?.string()
                 val jsonObject = JSONObject(errorResponse)
                 val errorDetail = jsonObject.optString("detail")
                 emit(Result.failure(Exception(errorDetail)))
-            }else {
+            } else {
                 val errorResponse =
                     response.errorBody()?.string().toString().toDataClass<ErrorResponse>()
                 emit(Result.failure(Exception(errorResponse.message)))
@@ -123,25 +124,25 @@ class HomeRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getKids(page: Int)=flow<Result<ArrayList<Movie>>> {
+    override suspend fun getKids(page: Int) = flow<Result<ArrayList<Movie>>> {
         val response = movieService.getKids(
             subscriptionCode = userPreferenceManager.subCode,
             page = page,
             pageSize = 60
         )
         if (response.isSuccessful) {
-            val newList =ArrayList<Movie>()
+            val newList = ArrayList<Movie>()
             response.body()?.results?.onEach {
                 newList.add(it)
             }
             emit(Result.success(newList))
-        }else {
-            if (response.code() ==404|| response.code()==403) {
+        } else {
+            if (response.code() == 404 || response.code() == 403) {
                 val errorResponse = response.errorBody()?.string()
                 val jsonObject = JSONObject(errorResponse)
                 val errorDetail = jsonObject.optString("detail")
                 emit(Result.failure(Exception(errorDetail)))
-            }else {
+            } else {
                 val errorResponse =
                     response.errorBody()?.string().toString().toDataClass<ErrorResponse>()
                 emit(Result.failure(Exception(errorResponse.message)))
@@ -149,14 +150,113 @@ class HomeRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun filterMovies(results: SearchResults)=flow<Result<SearchResults>> {
+    override suspend fun filterMovies(results: SearchResults) = flow<Result<SearchResults>> {
 
         val response =
             movieService.filterMovies(
                 subscriptionCode = userPreferenceManager.subCode,
                 page = results.page,
-                country = results.country?:"All",
-                rating = results.rating?:"All",
+                country = results.country ?: "All",
+                rating = results.rating ?: "All",
+                categoryProperty = "All",
+                releaseYear = if (results.releaseYear == -1) "All" else results.releaseYear.toString(),
+                pageSize = 60
+            )
+
+        if (response.isSuccessful) {
+            val newList = ArrayList<Movie>()
+            response.body()?.results?.onEach {
+                newList.add(it)
+            }
+            results.results = newList
+            emit(Result.success(results))
+        } else {
+            if (response.code() == 404 || response.code() == 403) {
+                val errorResponse = response.errorBody()?.string()
+                val jsonObject = JSONObject(errorResponse)
+                val errorDetail = jsonObject.optString("detail")
+                emit(Result.failure(Exception(errorDetail)))
+            } else {
+                val errorResponse =
+                    response.errorBody()?.string().toString().toDataClass<ErrorResponse>()
+                emit(Result.failure(Exception(errorResponse.message)))
+            }
+        }
+    }
+
+    override suspend fun filterDocumentary(results: SearchResults) = flow<Result<SearchResults>> {
+        val response =
+            movieService.filterDocumentary(
+                subscriptionCode = userPreferenceManager.subCode,
+                page = results.page,
+                country = results.country ?: "All",
+                rating = results.rating ?: "All",
+                categoryProperty = "All",
+                releaseYear = if (results.releaseYear == -1) "All" else results.releaseYear.toString(),
+                pageSize = 60
+            )
+
+        if (response.isSuccessful) {
+            val newList = ArrayList<Movie>()
+            response.body()?.results?.onEach {
+                newList.add(it)
+            }
+            results.results = newList
+            emit(Result.success(results))
+        } else {
+            if (response.code() == 404 || response.code() == 403) {
+                val errorResponse = response.errorBody()?.string()
+                val jsonObject = JSONObject(errorResponse)
+                val errorDetail = jsonObject.optString("detail")
+                emit(Result.failure(Exception(errorDetail)))
+            } else {
+                val errorResponse =
+                    response.errorBody()?.string().toString().toDataClass<ErrorResponse>()
+                emit(Result.failure(Exception(errorResponse.message)))
+            }
+        }
+    }
+
+    override suspend fun filterKids(results: SearchResults) = flow<Result<SearchResults>> {
+        val response =
+            movieService.filterKids(
+                subscriptionCode = userPreferenceManager.subCode,
+                page = results.page,
+                country = results.country ?: "All",
+                rating = results.rating ?: "All",
+                categoryProperty = "All",
+                releaseYear = if (results.releaseYear == -1) "All" else results.releaseYear.toString(),
+                pageSize = 60
+            )
+
+        if (response.isSuccessful) {
+            val newList = ArrayList<Movie>()
+            response.body()?.results?.onEach {
+                newList.add(it)
+            }
+            results.results = newList
+            emit(Result.success(results))
+        } else {
+            if (response.code() == 404 || response.code() == 403) {
+                val errorResponse = response.errorBody()?.string()
+                val jsonObject = JSONObject(errorResponse)
+                val errorDetail = jsonObject.optString("detail")
+                emit(Result.failure(Exception(errorDetail)))
+            } else {
+                val errorResponse =
+                    response.errorBody()?.string().toString().toDataClass<ErrorResponse>()
+                emit(Result.failure(Exception(errorResponse.message)))
+            }
+        }
+    }
+
+    override suspend fun filterSeries(results: SearchResults) = flow<Result<SearchResults>> {
+        val response =
+            movieService.filterSeries(
+                subscriptionCode = userPreferenceManager.subCode,
+                page = results.page,
+                country = results.country ?: "All",
+                rating = results.rating ?: "All",
                 categoryProperty = "All",
                 releaseYear = if (results.releaseYear == -1) "All" else results.releaseYear.toString(),
                 pageSize = 60

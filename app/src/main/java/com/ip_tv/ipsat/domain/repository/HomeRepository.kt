@@ -16,4 +16,7 @@ interface HomeRepository {
     suspend fun getKids(page: Int): Flow<Result<ArrayList<Movie>>>
 
     suspend fun filterMovies(results: SearchResults) :Flow<Result<SearchResults>>
+    suspend fun filterDocumentary(results: SearchResults) :Flow<Result<SearchResults>>
+    suspend fun filterKids(results: SearchResults) :Flow<Result<SearchResults>>
+    suspend fun filterSeries(results: SearchResults) :Flow<Result<SearchResults>>
 }

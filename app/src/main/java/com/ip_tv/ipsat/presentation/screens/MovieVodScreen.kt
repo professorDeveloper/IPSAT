@@ -79,6 +79,18 @@ class MovieVodScreen : BaseFragment<MovieVodScreenBinding>(MovieVodScreenBinding
             findNavController().navigate(R.id.showMoreMoviesScreen,null, animationTransaction().build())
         }
 
+        animePageAdapter.setDocumentaryShowMoreClick {
+            findNavController().navigate(R.id.showMoreDocumentaryScreen,null, animationTransaction().build())
+        }
+
+        animePageAdapter.setSeriesShowMoreClick {
+            findNavController().navigate(R.id.showMoreSeriesScreen,null, animationTransaction().build())
+        }
+
+        animePageAdapter.setKidsShowMoreClick {
+            findNavController().navigate(R.id.showMoreKidsScreen,null, animationTransaction().build())
+        }
+
         loadRefresh()
 
         var visible = false

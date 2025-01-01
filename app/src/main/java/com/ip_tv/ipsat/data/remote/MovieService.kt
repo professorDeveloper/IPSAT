@@ -46,6 +46,40 @@ interface MovieService {
     ): Response<MovieResponse>
 
 
+    @GET("filter_documentary/")
+    suspend fun filterDocumentary(
+        @Query("subscription_code") subscriptionCode: String,
+        @Query("country") country: String,
+        @Query("rating") rating: String,
+        @Query("categoryProperty") categoryProperty: String,
+        @Query("release_year") releaseYear: String,
+        @Query("page") page: Int,
+        @Query("page_size") pageSize: Int,
+    ): Response<MovieResponse>
+
+
+    @GET("filter_kids/")
+    suspend fun filterKids(
+        @Query("subscription_code") subscriptionCode: String,
+        @Query("country") country: String,
+        @Query("rating") rating: String,
+        @Query("categoryProperty") categoryProperty: String,
+        @Query("release_year") releaseYear: String,
+        @Query("page") page: Int,
+        @Query("page_size") pageSize: Int,
+    ): Response<MovieResponse>
+    @GET("filter_series/")
+    suspend fun filterSeries(
+        @Query("subscription_code") subscriptionCode: String,
+        @Query("country") country: String,
+        @Query("rating") rating: String,
+        @Query("categoryProperty") categoryProperty: String,
+        @Query("release_year") releaseYear: String,
+        @Query("page") page: Int,
+        @Query("page_size") pageSize: Int,
+    ): Response<MovieResponse>
+
+
 
 
 }

@@ -33,9 +33,22 @@ class MovieVodPageAdapter(
     private var trendingViewPager: ViewPager2? = null
 
     private lateinit var moviesShowMoreClick: (Int) -> Unit
+    private lateinit var kidsShowMoreClick: (Int) -> Unit
+    private lateinit var seriesShowMoreClick: (Int) -> Unit
+    private lateinit var documentaryShowMoreClick: (Int) -> Unit
 
     fun setMoviesShowMoreClick(moviesShowMoreClick: (Int) -> Unit) {
         this.moviesShowMoreClick = moviesShowMoreClick
+    }
+
+    fun setKidsShowMoreClick(moviesShowMoreClick: (Int) -> Unit) {
+        this.kidsShowMoreClick = moviesShowMoreClick
+    }
+    fun setSeriesShowMoreClick(moviesShowMoreClick: (Int) -> Unit) {
+        this.seriesShowMoreClick = moviesShowMoreClick
+    }
+    fun setDocumentaryShowMoreClick(moviesShowMoreClick: (Int) -> Unit) {
+        this.documentaryShowMoreClick = moviesShowMoreClick
     }
 
     inner class MovieVodPageViewHolder(var binding: ItemMoviePageBinding) :
@@ -83,6 +96,15 @@ class MovieVodPageAdapter(
         binding.animeRecently.visibility = View.VISIBLE
         binding.moviesShowMore.setOnClickListener {
             moviesShowMoreClick.invoke(adaptor.itemCount)
+        }
+        binding.kidsShowMore.setOnClickListener {
+            kidsShowMoreClick.invoke(adaptor.itemCount)
+        }
+        binding.seriesShowMore.setOnClickListener {
+            seriesShowMoreClick.invoke(adaptor.itemCount)
+        }
+        binding.documentaryShowMore.setOnClickListener {
+            documentaryShowMoreClick.invoke(adaptor.itemCount)
         }
     }
 

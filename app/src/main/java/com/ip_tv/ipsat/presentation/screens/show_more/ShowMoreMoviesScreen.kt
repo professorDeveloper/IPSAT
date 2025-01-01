@@ -1,31 +1,20 @@
-package com.ip_tv.ipsat.presentation.screens
+package com.ip_tv.ipsat.presentation.screens.show_more
 
-import android.graphics.Color
 import android.os.Bundle
-import android.os.Parcelable
-import android.speech.SpeechRecognizer
-import android.view.View
-import androidx.core.view.updatePaddingRelative
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ConcatAdapter
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ip_tv.ipsat.domain.model.SearchResults
-import com.animestudios.animeapp.others.ProgressAdapter
 import com.ip_tv.ipsat.databinding.ShowMoreMoviesScreenBinding
-import com.ip_tv.ipsat.presentation.adapters.FilterChipAdapter
 import com.ip_tv.ipsat.presentation.adapters.ShowMoreItemAdapter
 import com.ip_tv.ipsat.presentation.dialogs.FilterBottomSheetDialog
 import com.ip_tv.ipsat.presentation.viewmodel.ShowMoreMovieViewModel
 import com.ip_tv.ipsat.utils.BaseFragment
-import com.ip_tv.ipsat.utils.statusBarHeight
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.Timer
-import java.util.TimerTask
+
 @AndroidEntryPoint
 class ShowMoreMoviesScreen :
     BaseFragment<ShowMoreMoviesScreenBinding>(ShowMoreMoviesScreenBinding::inflate) {
@@ -110,7 +99,7 @@ class ShowMoreMoviesScreen :
                 }
                 model.searchResults.country =if (isDefaultCountry) default else selectedCountry
                 model.searchResults.releaseYear =if (isDefaultYear) (-1).toInt() else selectedYear!!.toInt()
-                model.searchResults.genres =if (isDefaultYear) arrayListOf() else categories.toMutableList()
+                model.searchResults.genres =if (isDefaultCategory) arrayListOf() else selectedCategories.toMutableList()
                 model.loadSearch(model.searchResults)
             }
             filterDialog.show(parentFragmentManager, "FilterDialog")

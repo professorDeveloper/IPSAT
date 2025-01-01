@@ -28,6 +28,18 @@
     <fragment
         android:id="@+id/showMoreMoviesScreen"
         tools:layout="@layout/show_more_movies_screen"
-        android:name="com.ip_tv.ipsat.presentation.screens.ShowMoreMoviesScreen"
+        android:name="com.ip_tv.ipsat.presentation.screens.show_more.ShowMoreMoviesScreen"
         android:label="ShowMoreMoviesScreen" />
+    <fragment
+        android:id="@+id/showMoreKidsScreen"
+        android:name="com.ip_tv.ipsat.presentation.screens.show_more.ShowMoreKidsScreen"
+        android:label="ShowMoreKidsScreen" />
+    <fragment
+        android:id="@+id/showMoreDocumentaryScreen"
+        android:name="com.ip_tv.ipsat.presentation.screens.show_more.ShowMoreDocumentaryScreen"
+        android:label="ShowMoreDocumentaryScreen" />
+    <fragment
+        android:id="@+id/showMoreSeriesScreen"
+        android:name="com.ip_tv.ipsat.presentation.screens.show_more.ShowMoreSeriesScreen"
+        android:label="ShowMoreSeriesScreen" />
 </navigation>

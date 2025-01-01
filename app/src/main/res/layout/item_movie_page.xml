@@ -95,6 +95,7 @@
 
 
     <LinearLayout
+        android:id="@+id/seriesShowMore"
         android:layout_marginStart="@dimen/_10sdp"
         android:layout_width="match_parent"
         android:clickable="true"
@@ -149,6 +150,7 @@
 
 
     <LinearLayout
+        android:id="@+id/documentaryShowMore"
         android:layout_marginStart="@dimen/_10sdp"
         android:layout_width="match_parent"
         android:layout_marginEnd="@dimen/_14sdp"
@@ -204,6 +206,7 @@
 
 
     <LinearLayout
+        android:id="@+id/kidsShowMore"
         android:layout_marginStart="@dimen/_10sdp"
         android:layout_width="match_parent"
         android:layout_marginEnd="@dimen/_14sdp"

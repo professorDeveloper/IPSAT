@@ -36,7 +36,7 @@
         <HorizontalScrollView
             android:layout_width="match_parent"
             android:scrollbars="horizontal"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/countryChipGroup"
@@ -63,7 +63,7 @@
 
         <HorizontalScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/yearsChipGroup"
                 android:layout_width="match_parent"
@@ -87,7 +87,7 @@
 
         <HorizontalScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/categoriesChipGroup"
                 android:layout_width="match_parent"
