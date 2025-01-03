@@ -10,12 +10,20 @@ import com.ip_tv.ipsat.utils.loadImage
 class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieVh>() {
 
     private val movieList = mutableListOf<Movie>()
+    private lateinit var clickListener : (Movie) -> Unit
 
-    class MovieVh(private val binding: ItemMovieBinding) : RecyclerView.ViewHolder(binding.root) {
+    fun setItemClickListener(listener: (Movie) -> Unit) {
+        clickListener = listener
+    }
+
+   inner class MovieVh(private val binding: ItemMovieBinding) : RecyclerView.ViewHolder(binding.root) {
         fun onBind(movie: Movie) {
             binding.titleItem.text = movie.name ?: "Unknown"
             binding.itemCompactScore.text = movie.rating?.toString() ?: "No Rating"
             binding.itemImg.loadImage(movie.image ?: "")
+            binding.root.setOnClickListener {
+                clickListener.invoke(movie)
+            }
         }
     }
 

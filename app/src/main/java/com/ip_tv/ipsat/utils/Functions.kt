@@ -60,6 +60,15 @@ fun String.toReadableDateTime(): String {
         "Wrong format"
     }
 }
+fun String.toYear(): String {
+    return try {
+        val instant = LocalDateTime.parse(this, DateTimeFormatter.ISO_DATE_TIME)
+        val formatter = DateTimeFormatter.ofPattern("yyyy")
+        instant.format(formatter)
+    } catch (e: Exception) {
+        "Wrong format"
+    }
+}
 
 
 fun <T> readData(fileName: String, context: Context? = null, toast: Boolean = true): T? {

@@ -19,9 +19,13 @@ import com.ip_tv.ipsat.utils.setAnimation
 import jp.wasabeef.glide.transformations.BlurTransformation
 
 class MovieCompatAdapter (private val movieList:ArrayList<Movie>) : RecyclerView.Adapter<MovieCompatAdapter.MovieVh>() {
+    lateinit var itemClickListener : (Movie) -> Unit
 
+    fun setOnItemClickListener(listener: (Movie) -> Unit) {
+        itemClickListener = listener
+    }
 
-    class MovieVh(private val binding: ItemMovieCompatBinding) :
+   inner class MovieVh(private val binding: ItemMovieCompatBinding) :
         RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("SetTextI18n")
         fun onBind(movie: Movie) {
@@ -36,6 +40,9 @@ class MovieCompatAdapter (private val movieList:ArrayList<Movie>) : RecyclerView
             binding.itemCompactTitle.text = movie.name
             binding.itemCompactScore.text = movie.rating.toString()
             binding.itemTotal.text=movie.language+" • "+movie.release_year+" • "+movie.country
+            binding.itemContainer.setOnClickListener {
+                itemClickListener.invoke(movie)
+            }
 
         }
     }

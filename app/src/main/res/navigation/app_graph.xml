@@ -47,4 +47,8 @@
         android:name="com.ip_tv.ipsat.presentation.screens.SearchScreen"
         android:label="search_screen"
         tools:layout="@layout/search_screen" />
+    <fragment
+        android:id="@+id/detailScreen"
+        android:name="com.ip_tv.ipsat.presentation.screens.DetailScreen"
+        android:label="DetailScreen" />
 </navigation>

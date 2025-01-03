@@ -70,6 +70,12 @@ class MovieVodScreen : BaseFragment<MovieVodScreenBinding>(MovieVodScreenBinding
         )
         animePageAdapter = MovieVodPageAdapter(this, animePageBinding)
         movieCompatAdapter = MovieCompatAdapter(arrayListOf())
+
+        movieCompatAdapter.setOnItemClickListener {
+            val bundle = Bundle()
+            bundle.putSerializable("movie", it)
+            findNavController().navigate(R.id.detailScreen,bundle, animationTransaction().build())
+        }
         val progressAdaptor = ProgressAdapter(searched = false)
         binding.animePageRecyclerView.adapter = ConcatAdapter(animePageAdapter, movieCompatAdapter,progressAdaptor)
         val layout = LinearLayoutManager(requireContext())
@@ -143,6 +149,9 @@ class MovieVodScreen : BaseFragment<MovieVodScreenBinding>(MovieVodScreenBinding
 
                     is Resource.Success -> {
                         val movieAdapter = MovieAdapter()
+                        movieAdapter.setItemClickListener {
+
+                        }
                         movieAdapter.submitList(it.data)
                         animePageAdapter.updateKids(movieAdapter)
                     }
@@ -232,6 +241,12 @@ class MovieVodScreen : BaseFragment<MovieVodScreenBinding>(MovieVodScreenBinding
                     is Resource.Success -> {
                         val movieAdapter = MovieAdapter()
                         movieAdapter.submitList(it.data)
+                        movieAdapter.setItemClickListener {
+                            val bundle = Bundle()
+                            bundle.putSerializable("movie", it)
+                            findNavController().navigate(R.id.detailScreen,bundle, animationTransaction().build())
+
+                        }
                         animePageAdapter.updateRecent(movieAdapter)
                     }
 
@@ -254,6 +269,13 @@ class MovieVodScreen : BaseFragment<MovieVodScreenBinding>(MovieVodScreenBinding
 
                     is Resource.Success -> {
                         val movieAdapter = MovieAdapter()
+
+                        movieAdapter.setItemClickListener {
+                            val bundle = Bundle()
+                            bundle.putSerializable("movie", it)
+                            findNavController().navigate(R.id.detailScreen,bundle, animationTransaction().build())
+
+                        }
                         movieAdapter.submitList(it.data)
                         animePageAdapter.updateSeries(movieAdapter)
                     }
@@ -277,6 +299,11 @@ class MovieVodScreen : BaseFragment<MovieVodScreenBinding>(MovieVodScreenBinding
 
                     is Resource.Success -> {
                         val movieAdapter = MovieAdapter()
+                        movieAdapter.setItemClickListener {
+                            val bundle = Bundle()
+                            bundle.putSerializable("movie", it)
+                            findNavController().navigate(R.id.detailScreen,bundle, animationTransaction().build())
+                        }
                         movieAdapter.submitList(it.data)
                         animePageAdapter.updateDocumentary(movieAdapter)
                     }

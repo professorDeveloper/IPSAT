@@ -118,6 +118,8 @@ dependencies {
 
     implementation("com.github.Ferfalk:SimpleSearchView:0.2.1")
     implementation("com.github.mancj:MaterialSearchBar:0.8.5")
+    implementation("org.jsoup:jsoup:1.15.1")
+    implementation("com.github.Blatzar:NiceHttp:0.4.4")
 
 
 

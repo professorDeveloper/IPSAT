@@ -1,0 +1,38 @@
+package com.ip_tv.ipsat.presentation.screens
+
+import android.annotation.SuppressLint
+import android.os.Bundle
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import com.ip_tv.ipsat.R
+import com.ip_tv.ipsat.databinding.DetailScreenBinding
+import com.ip_tv.ipsat.domain.model.Movie
+import com.ip_tv.ipsat.utils.BaseFragment
+import com.ip_tv.ipsat.utils.gone
+import com.ip_tv.ipsat.utils.loadImage
+import com.ip_tv.ipsat.utils.toReadableDateTime
+import com.ip_tv.ipsat.utils.toYear
+
+class DetailScreen : BaseFragment<DetailScreenBinding>(DetailScreenBinding::inflate) {
+    override fun onViewCreate(savedInstanceState: Bundle?) {
+        val movie =requireArguments().getSerializable("movie") as Movie
+        loadData(movie)
+    }
+    @SuppressLint("SetTextI18n")
+    private fun loadData(movie: Movie) {
+        binding.ivBackdrop.loadImage(movie.image)
+        binding.tvMovieTitleValue.text = movie.name
+        if (movie.categoryProperty != null) {
+            binding.tvGnreValue.text =movie.categoryProperty
+        }else {
+            binding.tvGnreValue.text ="Movie Language : ${movie.language}, IMDB Rating : ${movie.rating}"
+        }
+        binding.yearValue.text = movie.release_year
+        binding.durationValue.text = movie.country
+        binding.tvDescriptionValue.text = movie.description
+        binding.countryValue.text=movie.rating.toString()
+
+    }
+}
