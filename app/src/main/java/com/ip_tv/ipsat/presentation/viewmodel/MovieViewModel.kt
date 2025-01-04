@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ip_tv.ipsat.domain.model.Movie
+import com.ip_tv.ipsat.domain.repository.HomeRepository
 import com.ip_tv.ipsat.domain.usecase.MovieScreenUseCase
 import com.ip_tv.ipsat.utils.hasConnection
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +17,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MovieViewModel @Inject constructor(private val movieScreenUse: MovieScreenUseCase) : ViewModel() {
+class MovieViewModel @Inject constructor(private val movieScreenUse: MovieScreenUseCase,private val repo: HomeRepository) : ViewModel() {
 
     private val _initBanner = MutableStateFlow<Resource<ArrayList<Movie>>>(Resource.Idle)
     val initBanner get() = _initBanner
@@ -276,6 +277,10 @@ class MovieViewModel @Inject constructor(private val movieScreenUse: MovieScreen
             }
 
         }
+    }
+
+    suspend fun checkMovieSeries(query: Int,movie: Movie) :Boolean{
+        return repo.checkMovieOrSeries(query)
     }
 
     fun resetData() {

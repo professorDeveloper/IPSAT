@@ -26,6 +26,7 @@ import com.ip_tv.ipsat.presentation.viewmodel.MovieViewModel
 import com.ip_tv.ipsat.utils.BaseFragment
 import com.ip_tv.ipsat.utils.animationTransaction
 import com.ip_tv.ipsat.utils.showSnack
+import com.kongzue.dialogx.dialogs.WaitDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -72,9 +73,22 @@ class MovieVodScreen : BaseFragment<MovieVodScreenBinding>(MovieVodScreenBinding
         movieCompatAdapter = MovieCompatAdapter(arrayListOf())
 
         movieCompatAdapter.setOnItemClickListener {
-            val bundle = Bundle()
-            bundle.putSerializable("movie", it)
-            findNavController().navigate(R.id.detailScreen,bundle, animationTransaction().build())
+            WaitDialog.setMessage("Loading..").show(requireActivity())
+            lifecycleScope.launch {
+                delay(300)
+                model.checkMovieSeries(it.id,it).apply {
+                    WaitDialog.dismiss()
+                    if ( this) {
+                        val bundle = Bundle()
+                        bundle.putSerializable("movie", it)
+                        findNavController().navigate(R.id.detailSeriesScreen, bundle, animationTransaction().build())
+                    }else {
+                        val bundle = Bundle()
+                        bundle.putSerializable("movie", it)
+                        findNavController().navigate(R.id.detailScreen, bundle)
+                    }
+                }
+            }
         }
         val progressAdaptor = ProgressAdapter(searched = false)
         binding.animePageRecyclerView.adapter = ConcatAdapter(animePageAdapter, movieCompatAdapter,progressAdaptor)
