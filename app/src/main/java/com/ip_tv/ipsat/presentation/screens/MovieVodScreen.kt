@@ -148,7 +148,7 @@ class MovieVodScreen : BaseFragment<MovieVodScreenBinding>(MovieVodScreenBinding
                     }
 
                     is Resource.Success -> {
-                        val movieAdapter = MovieAdapter()
+                        val movieAdapter = MovieAdapter(this@MovieVodScreen)
                         movieAdapter.setItemClickListener {
                             val bundle = Bundle()
                             bundle.putSerializable("movie", it)
@@ -241,7 +241,7 @@ class MovieVodScreen : BaseFragment<MovieVodScreenBinding>(MovieVodScreenBinding
                     }
 
                     is Resource.Success -> {
-                        val movieAdapter = MovieAdapter()
+                        val movieAdapter = MovieAdapter(this@MovieVodScreen)
                         movieAdapter.submitList(it.data)
                         movieAdapter.setItemClickListener {
                             val bundle = Bundle()
@@ -270,11 +270,11 @@ class MovieVodScreen : BaseFragment<MovieVodScreenBinding>(MovieVodScreenBinding
                     }
 
                     is Resource.Success -> {
-                        val movieAdapter = MovieAdapter()
+                        val movieAdapter = MovieAdapter(this@MovieVodScreen)
 
                         movieAdapter.setItemClickListener {
                             val bundle = Bundle()
-                            bundle.putSerializable("series", it)
+                            bundle.putSerializable("movie", it)
                             findNavController().navigate(R.id.detailSeriesScreen,bundle, animationTransaction().build())
 
                         }
@@ -300,7 +300,7 @@ class MovieVodScreen : BaseFragment<MovieVodScreenBinding>(MovieVodScreenBinding
                     }
 
                     is Resource.Success -> {
-                        val movieAdapter = MovieAdapter()
+                        val movieAdapter = MovieAdapter(this@MovieVodScreen)
                         movieAdapter.setItemClickListener {
                             val bundle = Bundle()
                             bundle.putSerializable("movie", it)

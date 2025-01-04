@@ -1,8 +1,10 @@
 package com.ip_tv.ipsat.di
 
 import com.ip_tv.ipsat.data.repository.AuthRepositoryImpl
+import com.ip_tv.ipsat.data.repository.DetailRepositoryImpl
 import com.ip_tv.ipsat.data.repository.HomeRepositoryImpl
 import com.ip_tv.ipsat.domain.repository.AuthRepository
+import com.ip_tv.ipsat.domain.repository.DetailRepository
 import com.ip_tv.ipsat.domain.repository.HomeRepository
 import dagger.Binds
 import dagger.Module
@@ -21,5 +23,10 @@ abstract class RepositoryModule {
     abstract fun bindHomeRepository(
         homeRepository: HomeRepositoryImpl
     ): HomeRepository
+
+    @Binds
+    abstract fun bindDetailRepository(
+        detailRepository: DetailRepositoryImpl
+    ): DetailRepository
 
 }

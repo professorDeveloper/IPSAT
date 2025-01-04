@@ -1,0 +1,30 @@
+package com.ip_tv.ipsat.domain.model
+
+data class SeriesDetailResponse(
+    val cast: String,
+    val certification: String,
+    val country: String,
+    val description: String,
+    val director: String,
+    val horizontalPoster: String,
+    val id: Int,
+    val image1: Any,
+    val image2: Any,
+    val image3: Any,
+    val image4: Any,
+    val imdbId: String,
+    val language: String,
+    val poster: String,
+    val programName: String,
+    val programType: Int,
+    val `property`: String,
+    val rating: Double,
+    val releaseDate: String,
+    val releaseYear: String,
+    val resourceType: String,
+    val runtime: String,
+    val seriesList: SeriesList,
+    val sourceId: Any,
+    val sourceName: Any,
+    val subtitleList: List<Subtitle>
+)

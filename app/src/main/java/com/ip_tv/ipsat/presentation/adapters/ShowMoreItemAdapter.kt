@@ -31,6 +31,7 @@ class ShowMoreItemAdapter(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
      val mediaList: ArrayList<Movie> = ArrayList()
 
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return  MediaViewHolder(
                 ItemMovieBinding.inflate(
@@ -57,6 +58,7 @@ class ShowMoreItemAdapter(
                         titleItem.text = media.name
                         b.itemCompactScore.text = media.rating.toString()
                     }
+
                 }
     }
 

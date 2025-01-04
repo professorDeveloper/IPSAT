@@ -1,5 +1,6 @@
 package com.ip_tv.ipsat.data.repository
 
+import com.ip_tv.ipsat.data.remote.DetailService
 import com.ip_tv.ipsat.data.remote.MovieService
 import com.ip_tv.ipsat.domain.model.ErrorResponse
 import com.ip_tv.ipsat.domain.model.Movie
@@ -17,6 +18,7 @@ import javax.inject.Inject
 
 class HomeRepositoryImpl @Inject constructor(
     private val movieService: MovieService,
+    private val detailService: DetailService,
     private val userPreferenceManager: UserPreferenceManager
 ) :
     HomeRepository {
@@ -311,4 +313,16 @@ class HomeRepositoryImpl @Inject constructor(
         }
 
     }.flowOn(Dispatchers.IO)
+
+    override suspend fun checkMovieOrSeries(id: Int):Boolean {
+        val response =detailService.getSeriesDetail(userPreferenceManager.subCode,id.toString())
+        return if (response.isSuccessful) {
+            true
+        }else if (response.code()==400)  {
+            false
+        } else {
+            val errorResponse = response.errorBody()?.string().toString().toDataClass<ErrorResponse>()
+            throw Exception(errorResponse.message)
+        }
+    }
 }

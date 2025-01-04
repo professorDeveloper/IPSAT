@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.updateInfoScreen -> {
                     viewBinding.homeNavigation.hideWithAnimation(viewBinding.navHost)
                 }
-                R.id.detailScreen -> {
+                R.id.detailScreen ,R.id.detailSeriesScreen-> {
                     viewBinding.homeNavigation.hideWithAnimation(viewBinding.navHost)
                 }
                 R.id.searchScreen -> {

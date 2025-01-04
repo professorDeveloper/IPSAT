@@ -119,6 +119,9 @@ dependencies {
     implementation("com.github.Ferfalk:SimpleSearchView:0.2.1")
     implementation("com.github.mancj:MaterialSearchBar:0.8.5")
     implementation("org.jsoup:jsoup:1.15.1")
+    val dialogx_version = "0.0.49"
+    implementation("com.kongzue.dialogx:DialogX:${dialogx_version}")
+
     implementation("com.github.Blatzar:NiceHttp:0.4.4")
 
 

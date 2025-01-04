@@ -17,6 +17,8 @@ import javax.inject.Inject
 class SearchViewModel @Inject constructor(private val repository: HomeRepository) : ViewModel() {
     private val _searchResult: MutableLiveData<Resource<ArrayList<Movie>>> = MutableLiveData()
     val searchResult: MutableLiveData<Resource<ArrayList<Movie>>> = _searchResult
+
+    private val _checkMovieSeries:MutableLiveData<Pair<Movie,Boolean>> = MutableLiveData()
     var hasNextPage = false
     fun getSearchResult(query: String) {
         _searchResult.postValue(Resource.Loading)
@@ -30,5 +32,9 @@ class SearchViewModel @Inject constructor(private val repository: HomeRepository
                 }
             }.launchIn(viewModelScope)
         }
+    }
+
+   suspend fun checkMovieSeries(query: Int,movie: Movie) :Boolean{
+        return repository.checkMovieOrSeries(query)
     }
 }

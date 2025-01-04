@@ -13,6 +13,10 @@ data class Movie(
     val name: String,
     val rating: Double,
     val release_year: String
-):Serializable
+):Serializable {
+    override fun hashCode(): Int {
+        return super.hashCode()
 
+    }
+}
 

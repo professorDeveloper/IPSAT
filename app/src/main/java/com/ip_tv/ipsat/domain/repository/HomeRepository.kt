@@ -22,4 +22,6 @@ interface HomeRepository {
     suspend fun filterSeries(results: SearchResults) :Flow<Result<SearchResults>>
 
     suspend fun search(query: String): Flow<Result<MovieResponse>>
+
+    suspend fun checkMovieOrSeries(id: Int): Boolean
 }
