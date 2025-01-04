@@ -2,16 +2,22 @@ package com.ip_tv.ipsat.presentation.adapters
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.view.updateLayoutParams
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.ip_tv.ipsat.R
 import com.ip_tv.ipsat.databinding.ItemMovieBinding
 import com.ip_tv.ipsat.domain.model.Movie
+import com.ip_tv.ipsat.utils.animationTransaction
 import com.ip_tv.ipsat.utils.loadImage
 import com.ip_tv.ipsat.utils.setAnimation
 import com.ip_tv.ipsat.utils.setSafeOnClickListener
@@ -20,7 +26,7 @@ import kotlin.math.log
 
 
 class ShowMoreItemAdapter(
-    private val activity: FragmentActivity,
+    private val activity: Fragment,
     private val matchParent: Boolean = false,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
      val mediaList: ArrayList<Movie> = ArrayList()
@@ -41,7 +47,7 @@ class ShowMoreItemAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
                 val b = (holder as MediaViewHolder).binding
-                setAnimation(activity, b.root)
+                setAnimation(activity.requireActivity(), b.root)
 
                 val media = mediaList?.getOrNull(position)
                 Log.d("TAG", "onBindViewHolder: ${media.toString()}")
@@ -69,14 +75,14 @@ class ShowMoreItemAdapter(
 
     fun clicked(position: Int) {
         if ((mediaList?.size ?: 0) > position && position != -1) {
-//            val media = mediaList?.get(position)
-//            ContextCompat.startActivity(
-//                activity,
-//                Intent(activity, DetailActivity::class.java).putExtra(
-//                    "media",
-//                    media as Serializable
-//                ), null
-//            )
+            val bundle = Bundle()
+            bundle.putSerializable("movie", mediaList.get(position))
+            if (matchParent) {
+                activity. findNavController().navigate(R.id.detailSeriesScreen,bundle, animationTransaction().build())
+            }else {
+                activity. findNavController().navigate(R.id.detailScreen,bundle, animationTransaction().build())
+            }
+
         }
     }
 

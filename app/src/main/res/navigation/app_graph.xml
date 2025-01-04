@@ -51,4 +51,9 @@
         android:id="@+id/detailScreen"
         android:name="com.ip_tv.ipsat.presentation.screens.DetailScreen"
         android:label="DetailScreen" />
+    <fragment
+        android:id="@+id/detailSeriesScreen"
+        android:name="com.ip_tv.ipsat.presentation.screens.DetailSeriesScreen"
+        android:label="detail_series_screen"
+        tools:layout="@layout/detail_series_screen" />
 </navigation>

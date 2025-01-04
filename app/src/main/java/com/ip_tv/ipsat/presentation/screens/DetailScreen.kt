@@ -17,22 +17,21 @@ import com.ip_tv.ipsat.utils.toYear
 
 class DetailScreen : BaseFragment<DetailScreenBinding>(DetailScreenBinding::inflate) {
     override fun onViewCreate(savedInstanceState: Bundle?) {
-        val movie =requireArguments().getSerializable("movie") as Movie
+        val movie = requireArguments().getSerializable("movie") as Movie
         loadData(movie)
     }
+
     @SuppressLint("SetTextI18n")
     private fun loadData(movie: Movie) {
         binding.ivBackdrop.loadImage(movie.image)
         binding.tvMovieTitleValue.text = movie.name
-        if (movie.categoryProperty != null) {
-            binding.tvGnreValue.text =movie.categoryProperty
-        }else {
-            binding.tvGnreValue.text ="Movie Language : ${movie.language}, IMDB Rating : ${movie.rating}"
-        }
+
         binding.yearValue.text = movie.release_year
         binding.durationValue.text = movie.country
-        binding.tvDescriptionValue.text = movie.description
-        binding.countryValue.text=movie.rating.toString()
+        binding.itemImg.loadImage(movie.image)
+        binding.tvDescriptionValue.text =
+            "Movie Rating :${movie.rating} - Movie Language: ${movie.language.toUpperCase()} ${if (movie.categoryProperty != null) "\n Movie Category :${movie.categoryProperty}" else ""} \nMovie Description :" + movie.description
+        binding.countryValue.text = movie.rating.toString()
 
     }
 }

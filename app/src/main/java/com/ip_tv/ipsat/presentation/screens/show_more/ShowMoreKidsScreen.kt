@@ -52,7 +52,7 @@ class ShowMoreKidsScreen : BaseFragment<ShowMoreKidsScreenBinding>(
             )
         }
         model.loadSearch(model.searchResults)
-        mediaAdapter = ShowMoreItemAdapter(requireActivity(),)
+        mediaAdapter = ShowMoreItemAdapter(this,)
         binding.moviesShowMoreRv.adapter = ConcatAdapter(
             mediaAdapter,
         )

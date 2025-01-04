@@ -35,7 +35,7 @@ class SearchScreen : BaseFragment<SearchScreenBinding>(SearchScreenBinding::infl
     private var historyList = readData<ArrayList<String>>("history_search") ?: arrayListOf()
     override fun onViewCreate(savedInstanceState: Bundle?) {
         adapter = ShowMoreItemAdapter(
-            requireActivity()
+            this
         )
         manageSearch()
         model.searchResult.observe(this) { observeModel(it) }

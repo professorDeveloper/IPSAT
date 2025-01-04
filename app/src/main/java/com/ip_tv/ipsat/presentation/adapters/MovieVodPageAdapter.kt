@@ -1,6 +1,7 @@
 package com.ip_tv.ipsat.presentation.adapters
 
 import Resource
+import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
@@ -8,13 +9,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.LayoutAnimationController
 import androidx.lifecycle.MutableLiveData
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.ip_tv.ipsat.R
 import com.ip_tv.ipsat.databinding.ItemMoviePageBinding
 import com.ip_tv.ipsat.domain.model.Movie
 import com.ip_tv.ipsat.utils.BaseFragment
 import com.ip_tv.ipsat.utils.MediaPageTransformer
+import com.ip_tv.ipsat.utils.animationTransaction
 import com.ip_tv.ipsat.utils.gone
 import com.ip_tv.ipsat.utils.invisible
 import com.ip_tv.ipsat.utils.setAnimation
@@ -173,7 +177,9 @@ class MovieVodPageAdapter(
                 ).also { binding.bannerViewPager.adapter = it
 
                     it.setItemClickListener {
-
+                        val bundle = Bundle()
+                        bundle.putSerializable("movie", it)
+                        fragment.findNavController().navigate(R.id.detailScreen,bundle, animationTransaction().build())
                     }
                     it.setPlayItemListener {
 

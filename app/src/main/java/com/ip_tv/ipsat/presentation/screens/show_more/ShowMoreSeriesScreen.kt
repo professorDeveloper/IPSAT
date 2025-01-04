@@ -52,7 +52,7 @@ class ShowMoreSeriesScreen:
             )
         }
         model.loadSearch(model.searchResults)
-        mediaAdapter = ShowMoreItemAdapter(requireActivity(),)
+        mediaAdapter = ShowMoreItemAdapter(this,matchParent = true)
         binding.moviesShowMoreRv.adapter = ConcatAdapter(
             mediaAdapter,
         )

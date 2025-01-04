@@ -150,7 +150,9 @@ class MovieVodScreen : BaseFragment<MovieVodScreenBinding>(MovieVodScreenBinding
                     is Resource.Success -> {
                         val movieAdapter = MovieAdapter()
                         movieAdapter.setItemClickListener {
-
+                            val bundle = Bundle()
+                            bundle.putSerializable("movie", it)
+                            findNavController().navigate(R.id.detailScreen,bundle, animationTransaction().build())
                         }
                         movieAdapter.submitList(it.data)
                         animePageAdapter.updateKids(movieAdapter)
@@ -272,8 +274,8 @@ class MovieVodScreen : BaseFragment<MovieVodScreenBinding>(MovieVodScreenBinding
 
                         movieAdapter.setItemClickListener {
                             val bundle = Bundle()
-                            bundle.putSerializable("movie", it)
-                            findNavController().navigate(R.id.detailScreen,bundle, animationTransaction().build())
+                            bundle.putSerializable("series", it)
+                            findNavController().navigate(R.id.detailSeriesScreen,bundle, animationTransaction().build())
 
                         }
                         movieAdapter.submitList(it.data)

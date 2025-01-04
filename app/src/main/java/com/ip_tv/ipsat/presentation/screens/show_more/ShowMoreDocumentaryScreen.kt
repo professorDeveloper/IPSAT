@@ -54,7 +54,7 @@ class ShowMoreDocumentaryScreen :   BaseFragment<ShowMoreDocumentaryScreenBindin
             )
         }
         model.loadSearch(model.searchResults)
-        mediaAdapter = ShowMoreItemAdapter(requireActivity(),)
+        mediaAdapter = ShowMoreItemAdapter(this,)
         binding.moviesShowMoreRv.adapter = ConcatAdapter(
             mediaAdapter,
         )
