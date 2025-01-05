@@ -1,268 +1,192 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nestedDetail"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:clipToPadding="false"
-    android:paddingBottom="16dp">
+    android:scrollbars="vertical"
+    android:overScrollMode="always"
+    android:layout_height="match_parent">
+ <androidx.constraintlayout.widget.ConstraintLayout
+     android:layout_width="match_parent"
+     android:layout_height="match_parent">
+     <ImageView
+         android:id="@+id/backgroundImage"
+         android:layout_width="match_parent"
+         android:layout_height="@dimen/_280sdp"
+         android:scaleType="centerCrop"
+         android:src="@drawable/joker_banner"
+         app:layout_constraintTop_toTopOf="parent" />
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+     <View
+         android:id="@+id/overlay"
+         android:layout_width="match_parent"
+         android:layout_height="@dimen/_280sdp"
+         android:background="@drawable/linear_gradient_bg"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toTopOf="parent" />
 
-        android:gravity="center">
+     <ImageView
+         android:id="@+id/backButton"
+         android:layout_width="24dp"
+         android:layout_height="24dp"
+         android:layout_marginStart="16dp"
+         android:layout_marginTop="16dp"
+         android:src="@drawable/ic_arrow_back"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toTopOf="parent" />
 
+     <androidx.cardview.widget.CardView
+         android:id="@+id/moviePoster"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         app:cardBackgroundColor="?attr/colorSurface"
+         android:layout_marginStart="16dp"
+         android:layout_marginBottom="@dimen/_14sdp"
+         app:cardCornerRadius="10dp"
+         app:cardElevation="8dp"
+         app:layout_constraintBottom_toBottomOf="@+id/backgroundImage"
+         app:layout_constraintStart_toStartOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="visible"
-            tools:visibility="visible">
+         <androidx.appcompat.widget.AppCompatImageView
+             android:id="@+id/ivPoster"
+             android:layout_width="@dimen/_100sdp"
+             app:srcCompat="@drawable/joker_banner"
+             android:layout_height="@dimen/_150sdp"
+             android:scaleType="centerCrop" />
 
-            <FrameLayout
-                android:id="@+id/flBackdrop"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/_310sdp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+     </androidx.cardview.widget.CardView>
 
+     <!-- Movie Details Section -->
+     <LinearLayout
+         android:id="@+id/movieDetails"
+         android:layout_width="0dp"
+         android:layout_height="wrap_content"
+         android:layout_marginStart="16dp"
+         android:orientation="vertical"
+         android:layout_marginBottom="@dimen/_8sdp"
+         app:layout_constraintBottom_toBottomOf="@+id/moviePoster"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintHorizontal_bias="0"
+         app:layout_constraintStart_toEndOf="@id/moviePoster">
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/ivBackdrop"
-                    android:layout_width="match_parent"
+         <TextView
+             android:id="@+id/movieTitle"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:fontFamily="@font/inter_bold"
+             android:text="Jimmy Carr: Natural Born Killer"
+             android:textSize="20sp"
+             android:textStyle="bold" />
 
-                    android:layout_height="@dimen/_310sdp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/joker_banner" />
+         <!-- Movie Rating -->
+         <LinearLayout
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:orientation="horizontal">
 
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="bottom"
-                    android:foreground="@drawable/linear_gradient_bg" />
+             <ImageView
+                 android:id="@+id/starIcon"
+                 android:layout_width="16dp"
+                 android:layout_height="16dp"
+                 android:layout_marginEnd="4dp"
+                 android:src="@drawable/ic_star"
+                 app:tint="@color/map_yellow" />
 
-            </FrameLayout>
+             <TextView
+                 android:id="@+id/ratingText"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:fontFamily="@font/inter_bold"
+                 android:layout_marginEnd="8dp"
+                 android:text="6.6"
+                 android:textSize="14sp" />
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/item_img"
-                android:layout_width="@dimen/_110sdp"
-                android:layout_height="@dimen/_160sdp"
-                android:scaleType="centerCrop"
-                android:transitionName="mediaCover"
-                app:shapeAppearanceOverlay="@style/roundedImageView"
-                tools:srcCompat="@drawable/joker_banner"
-                app:layout_constraintBottom_toBottomOf="@+id/flBackdrop"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+         </LinearLayout>
 
+         <TextView
+             android:id="@+id/releaseYear"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_marginTop="4dp"
+             android:fontFamily="@font/nunito_semi_bold"
+             android:text="Release Year: 2024"
+             android:textSize="14sp" />
 
-            <TextView
-                android:id="@+id/tvMovieTitleValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="marquee"
-                android:fontFamily="@font/inter_bold"
-                android:marqueeRepeatLimit="marquee_forever"
-                android:singleLine="true"
-                android:text="Movie Title"
-                android:textSize="@dimen/_20ssp"
-                app:layout_constraintBottom_toBottomOf="@+id/flBackdrop"
-                app:layout_constraintEnd_toEndOf="@+id/shapeableImageView2"
-                app:layout_constraintStart_toStartOf="@+id/shapeableImageView2"
-                app:layout_constraintTop_toBottomOf="@+id/flBackdrop" />
+         <TextView
+             android:id="@+id/movieLanguage"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_marginTop="4dp"
+             android:text="Language: en"
+             android:fontFamily="@font/inter_regular"
+             android:textSize="14sp" />
+     </LinearLayout>
 
-            <TextView
-                android:id="@+id/tvGnreValue"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_4sdp"
-                android:layout_marginEnd="16dp"
-                android:ellipsize="end"
-                android:fontFamily="@font/nunito_medium"
-                android:maxLines="3"
-                android:visibility="gone"
-                android:text="Alien Invasion, Kaiju, Road Trip, Superhero, Action, Adventure, Sci-Fi, Thriller"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/tvMovieTitleValue"
-                app:layout_constraintTop_toBottomOf="@+id/tvMovieTitleValue" />
+     <com.google.android.material.button.MaterialButton
+         android:id="@+id/materialButton"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:insetLeft="0dp"
+         android:layout_marginTop="@dimen/_8sdp"
+         android:text="Watch Now"
+         android:textSize="@dimen/_14ssp"
+         android:fontFamily="@font/inter_bold"
+         android:layout_marginHorizontal="@dimen/_8sdp"
+         android:insetTop="0dp"
+         android:insetRight="0dp"
+         android:insetBottom="0dp"
+         app:cornerRadius="@dimen/_8sdp"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toBottomOf="@+id/backgroundImage" />
 
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/shapeableImageView2"
-                android:layout_width="@dimen/_120sdp"
-                android:layout_height="@dimen/_40sdp"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/_16sdp"
-                android:fontFamily="@font/inter_bold"
-                android:insetLeft="0dp"
-                android:insetTop="0dp"
-                android:insetRight="0dp"
-                android:insetBottom="0dp"
-                android:text="Play"
-                android:textColor="@color/white_and_black"
-                android:textSize="@dimen/_15ssp"
-                app:backgroundTint="@color/prem_bg"
-                app:cornerRadius="@dimen/_8sdp"
-                app:elevation="@dimen/_4sdp"
-                app:icon="@drawable/play_banner"
-                app:iconSize="@dimen/_20sdp"
-                app:iconTint="@color/white_and_black"
-                app:layout_constraintEnd_toEndOf="@+id/line"
-                app:layout_constraintStart_toStartOf="@+id/line"
-                app:layout_constraintTop_toBottomOf="@+id/tvMovieTitleValue" />
-
-            <LinearLayout
-                android:id="@+id/linearLayout2"
-                android:layout_width="match_parent"
-                android:weightSum="3"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_marginTop="@dimen/_24sdp"
-                android:orientation="horizontal"
-
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/shapeableImageView2">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_weight="1"
-                    android:layout_height="55dp"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/yearValue"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/inter_bold"
-                        android:text="2024"
-                        android:textSize="16sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/inter_semi_bold"
-                        android:text="Year"
-                        android:textSize="14sp" />
-
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/durationValue"
-                        android:layout_width="wrap_content"
-
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/inter_bold"
-                        android:text="United State"
-                        android:textSize="16sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/inter_semi_bold"
-                        android:text="Country"
-                        android:textSize="14sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_weight="1"
-                    android:layout_height="55dp"
-                    android:layout_gravity="center"
-
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/countryValue"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:fontFamily="@font/inter_bold"
-                        android:text="465"
-                        android:textSize="16sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/inter_bold"
-                        android:text="Rating"
-                        android:textSize="14sp" />
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <View
-                android:id="@+id/line"
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:layout_marginHorizontal="24dp"
-                android:layout_marginTop="4dp"
-                android:background="@color/prem_bg"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/linearLayout2" />
+     <ScrollView
+         android:id="@+id/descriptionSection"
+         android:layout_width="0dp"
+         android:layout_height="wrap_content"
+         android:layout_marginStart="16dp"
+         android:layout_marginTop="@dimen/_8sdp"
+         android:layout_marginEnd="16dp"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toBottomOf="@+id/materialButton">
 
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/contentDescription"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_24sdp"
-                android:visibility="visible"
-                app:layout_constraintTop_toBottomOf="@+id/line">
+         <TextView
+             android:id="@+id/movieDescription"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:lineSpacingExtra="4dp"
+             android:text="An iconic comedian tackles controversial issues such as gun control, religion, cancellation cultu..."
+             android:textSize="14sp" />
+     </ScrollView>
 
-                <TextView
-                    android:id="@+id/tvDescriptionTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_16sdp"
-                    android:fontFamily="@font/inter_bold"
-                    android:text="Description"
-                    android:textSize="18sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+     <TextView
+         android:id="@+id/similarMoviesLabel"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_marginTop="16dp"
+         android:layout_marginStart="16dp"
+         android:text="Similar Movies"
+         android:textSize="16sp"
+         android:textStyle="bold"
+         app:layout_constraintTop_toBottomOf="@+id/descriptionSection"
+         app:layout_constraintStart_toStartOf="parent" />
 
-                <TextView
-                    android:id="@+id/tvDescriptionValue"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="@dimen/_10sdp"
-                    android:ellipsize="end"
-                    android:fontFamily="@font/nunito_black_italic"
-                    android:text="Follows Red, daughter of the Queen of Hearts, and Chloe, daughter of Cinderella, as they team up, to save the world from the evil Queen. Director: Kelly Marcel Kelly Marcel. \nStars :Tom Hardy, Chiwetel Ejiofor, Juno Temple, Tom Hardy, Chiwetel Ejiofor, Juno Temple"
+     <androidx.recyclerview.widget.RecyclerView
+         android:id="@+id/similarMoviesRecycler"
+         android:layout_width="match_parent"
+         android:paddingStart="@dimen/_4sdp"
 
-                    android:textSize="16sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/tvDescriptionTitle"
-                    app:layout_constraintTop_toBottomOf="@+id/tvDescriptionTitle" />
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+         android:layout_height="wrap_content"
+         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+         android:orientation="horizontal"
+         tools:listitem="@layout/item_movie"
+         android:layout_marginTop="8dp"
+         app:layout_constraintTop_toBottomOf="@+id/similarMoviesLabel"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintEnd_toEndOf="parent" />
 
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+ </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-
-    </FrameLayout>
 </androidx.core.widget.NestedScrollView>

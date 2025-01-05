@@ -61,13 +61,8 @@ fun String.toReadableDateTime(): String {
     }
 }
 fun String.toYear(): String {
-    return try {
-        val instant = LocalDateTime.parse(this, DateTimeFormatter.ISO_DATE_TIME)
-        val formatter = DateTimeFormatter.ofPattern("yyyy")
-        instant.format(formatter)
-    } catch (e: Exception) {
-        "Wrong format"
-    }
+    val year = this.substringBefore("-")
+    return year
 }
 
 
