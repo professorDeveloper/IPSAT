@@ -1,12 +1,16 @@
 package com.ip_tv.ipsat.presentation.screens
 
 import Resource
+import android.content.Intent
 import android.os.Bundle
+import androidx.annotation.OptIn
 import androidx.fragment.app.viewModels
+import androidx.media3.common.util.UnstableApi
 import androidx.recyclerview.widget.ConcatAdapter
 import com.ip_tv.ipsat.databinding.DetailSeriesScreenBinding
 import com.ip_tv.ipsat.databinding.SeriesDetailItemBinding
 import com.ip_tv.ipsat.domain.model.Movie
+import com.ip_tv.ipsat.presentation.activities.TrailerActivity
 import com.ip_tv.ipsat.presentation.adapters.EpisodeAdapter
 import com.ip_tv.ipsat.presentation.adapters.SeriesDetailPageAdapter
 import com.ip_tv.ipsat.presentation.viewmodel.DetailViewModel
@@ -24,6 +28,7 @@ class DetailSeriesScreen :
     private lateinit var pageAdapter: SeriesDetailPageAdapter
     private lateinit var episodeAdapter: EpisodeAdapter
 
+    @OptIn(UnstableApi::class)
     override fun onViewCreate(savedInstanceState: Bundle?) {
         val series = requireArguments().getSerializable("movie") as Movie
         LocalData.detailSeriesImage = series.image
@@ -32,7 +37,10 @@ class DetailSeriesScreen :
         pageAdapter = SeriesDetailPageAdapter(this, SeriesDetailItemBinding.inflate(layoutInflater))
         episodeAdapter = EpisodeAdapter(this)
         binding.seriesDetailPageRv.adapter =ConcatAdapter(pageAdapter,episodeAdapter)
-
+        pageAdapter.setSubTitleClick {
+            val intent = Intent(requireActivity(), TrailerActivity::class.java)
+            requireActivity().startActivity(intent)
+        }
 
     }
 

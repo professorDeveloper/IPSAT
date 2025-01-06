@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/exo_controller"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Background overlay for controls -->
+    <View
+        android:id="@+id/exo_black_screen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#A8000000" />
+
+    <!-- Main container for the controller layout -->
+    <FrameLayout
+        android:id="@+id/exo_controller_cont"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- Forward button area (can be used for fast forward or skip actions) -->
+        <View
+            android:id="@+id/exo_forward_area"
+            android:layout_width="300dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:layout_marginVertical="80dp" />
+
+
+        <!-- Brightness control card -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/exo_brightness_cont"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|end"
+            android:layout_margin="16dp"
+            android:clipChildren="true"
+            android:visibility="gone"
+            app:cardBackgroundColor="#A9000000"
+            app:cardCornerRadius="24dp"
+            app:contentPadding="4dp">
+
+            <LinearLayout
+                android:layout_width="32dp"
+                android:layout_height="236dp"
+                android:orientation="vertical">
+
+                <com.google.android.material.slider.Slider
+                    android:id="@+id/exo_brightness"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="76dp"
+                    android:layout_marginBottom="-20dp"
+                    android:rotation="270"
+                    android:value="2"
+                    android:valueFrom="0"
+                    android:valueTo="10"
+                    app:labelBehavior="gone"
+                    app:thumbElevation="0dp"
+                    app:trackHeight="24dp" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="100dp"
+                    app:srcCompat="@drawable/ic_round_brightness_medium_24" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Volume control card -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/exo_volume_cont"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="16dp"
+            android:clipChildren="true"
+            android:visibility="gone"
+            app:cardBackgroundColor="#A9000000"
+            app:cardCornerRadius="24dp"
+            app:contentPadding="4dp">
+
+            <LinearLayout
+                android:layout_width="32dp"
+                android:layout_height="236dp"
+                android:orientation="vertical">
+
+                <com.google.android.material.slider.Slider
+                    android:id="@+id/exo_volume"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="76dp"
+                    android:layout_marginBottom="-20dp"
+                    android:rotation="270"
+                    android:value="2"
+                    android:valueFrom="0"
+                    android:valueTo="10"
+                    app:labelBehavior="gone"
+                    app:thumbElevation="0dp"
+                    app:trackHeight="24dp" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="100dp"
+                    app:srcCompat="@drawable/ic_round_volume_up_24" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Top bar for controls like back and download buttons -->
+        <LinearLayout
+            android:id="@+id/exo_top_controllers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="26dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="60dp"
+            android:clipToPadding="false">
+
+            <ImageButton
+                android:id="@+id/exo_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:backgroundTint="#00FFFFFF"
+                android:src="@drawable/ic_arrow_back"
+                app:tint="@color/white" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/exo_title"
+                    android:layout_width="430dp"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="marquee"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                     />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <!-- Lock button for controls -->
+
+        <!-- Controls for play/pause and next/previous episodes -->
+        <LinearLayout
+            android:id="@+id/exo_middle_controllers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                app:cardBackgroundColor="#00FFFFFF"
+                android:visibility="gone"
+                app:cardCornerRadius="40dp">
+
+                <ImageButton
+                    android:id="@+id/exo_prev_ep"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_skip_previous_32" />
+            </androidx.cardview.widget.CardView>
+
+            <FrameLayout
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginHorizontal="56dp">
+
+                <ImageView
+                    android:id="@+id/exo_play_pause"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:background="@drawable/background_selector" />
+            </FrameLayout>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:visibility="gone"
+                app:cardBackgroundColor="@android:color/transparent"
+                app:cardCornerRadius="40dp">
+
+                <ImageButton
+                    android:id="@+id/exo_next_ep"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_skip_next_32" />
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+
+        <!-- Bottom controls (pip, position, and duration) -->
+    </FrameLayout>
+</FrameLayout>

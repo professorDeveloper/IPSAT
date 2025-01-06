@@ -224,7 +224,7 @@
                         android:gravity="center"
                         android:orientation="vertical"
                         android:paddingHorizontal="@dimen/_20sdp"
-                        android:paddingVertical="@dimen/_4sdp">
+                        android:paddingVertical="@dimen/_7sdp">
 
                         <RelativeLayout
                             android:layout_width="wrap_content"
@@ -233,11 +233,11 @@
 
                             <ImageView
                                 android:id="@+id/imageViewEp"
-                                android:layout_width="16dp"
-                                android:layout_height="18dp"
+                                android:layout_width="@dimen/_20sdp"
+                                android:layout_height="@dimen/_20sdp"
                                 android:layout_centerVertical="true"
                                 android:paddingTop="2dp"
-                                android:src="@drawable/ic_episode"
+                                android:src="@drawable/play"
                                 app:tint="?attr/colorPrimary" />
 
                             <TextView
@@ -248,19 +248,9 @@
                                 android:layout_toEndOf="@+id/imageViewEp"
                                 android:fontFamily="sans-serif-condensed-medium"
                                 android:paddingHorizontal="6dp"
-                                android:textSize="16sp"
-                                android:text="Selected Subtitle:" />
+                                android:textSize="@dimen/_14ssp"
+                                android:text="Watch Trailer" />
                         </RelativeLayout>
-
-                        <TextView
-                            android:id="@+id/ep_text_view"
-
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/inter_bold"
-                            android:text="English"
-                            android:textAlignment="textStart"
-                            android:textStyle="bold" />
 
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
