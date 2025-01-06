@@ -1,15 +1,9 @@
 package com.ip_tv.ipsat.presentation.screens
 
 import Resource
-import android.annotation.SuppressLint
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ConcatAdapter
-import com.ip_tv.ipsat.R
 import com.ip_tv.ipsat.databinding.DetailSeriesScreenBinding
 import com.ip_tv.ipsat.databinding.SeriesDetailItemBinding
 import com.ip_tv.ipsat.domain.model.Movie
@@ -19,7 +13,6 @@ import com.ip_tv.ipsat.presentation.viewmodel.DetailViewModel
 import com.ip_tv.ipsat.utils.BaseFragment
 import com.ip_tv.ipsat.utils.LocalData
 import com.ip_tv.ipsat.utils.gone
-import com.ip_tv.ipsat.utils.loadImage
 import com.ip_tv.ipsat.utils.showSnack
 import com.ip_tv.ipsat.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
@@ -39,6 +32,7 @@ class DetailSeriesScreen :
         pageAdapter = SeriesDetailPageAdapter(this, SeriesDetailItemBinding.inflate(layoutInflater))
         episodeAdapter = EpisodeAdapter(this)
         binding.seriesDetailPageRv.adapter =ConcatAdapter(pageAdapter,episodeAdapter)
+
 
     }
 
