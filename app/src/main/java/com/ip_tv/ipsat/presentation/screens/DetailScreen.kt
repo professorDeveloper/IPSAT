@@ -83,12 +83,11 @@ class DetailScreen : BaseFragment<DetailScreenBinding>(DetailScreenBinding::infl
             when(it) {
                 is Resource.Success -> {
                     binding.qualityProgress.gone()
-                    binding.qualityCard.visible()
+                    binding.materialButton.visible()
                     it.data?.let { videos ->
                         if (videos.urlobj.isNotEmpty()) {
-                            binding.qualityCard.setTextColor(requireActivity().getColor(R.color.textLightColor))
-                            binding.qualityCard.text="Default Quality:${videos.urlobj.get(0).hdtv}"
-                            binding.qualityCard.setOnClickListener {
+                            binding.materialButton.setTextColor(requireActivity().getColor(R.color.textLightColor))
+                            binding.materialButton.setOnClickListener {
                                 val movie = requireArguments().getSerializable("movie") as Movie
                                 if (videos.urlobj.isNotEmpty()){
                                     val dialog =ChooseQualityBottomSheet.newInstance(
@@ -102,8 +101,7 @@ class DetailScreen : BaseFragment<DetailScreenBinding>(DetailScreenBinding::infl
                         }else {
                             binding.materialButton.isEnabled=false
                             binding.materialButton.text="Movie Link was not found, Contact Admin"
-                            binding.qualityCard.setTextColor(requireActivity().getColor(R.color.map_red))
-                            binding.qualityCard.text="Movie is not available"
+                            binding.materialButton.setTextColor(requireActivity().getColor(R.color.map_red))
                         }
                     }
                 }
@@ -113,7 +111,7 @@ class DetailScreen : BaseFragment<DetailScreenBinding>(DetailScreenBinding::infl
                 is Resource.Loading -> {
 
                     binding.qualityProgress.visible()
-                    binding.qualityCard.invisible()
+                    binding.materialButton.invisible()
                 }
                 else -> {}
             }

@@ -249,7 +249,7 @@
                                 android:fontFamily="sans-serif-condensed-medium"
                                 android:paddingHorizontal="6dp"
                                 android:textSize="16sp"
-                                android:text="Subtitle" />
+                                android:text="Selected Subtitle:" />
                         </RelativeLayout>
 
                         <TextView

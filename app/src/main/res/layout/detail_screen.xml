@@ -146,32 +146,6 @@
                  android:layout_gravity="center"/>
 
          </com.google.android.material.card.MaterialCardView>
-         <com.google.android.material.button.MaterialButton
-             android:id="@+id/qualityCard"
-             style="@style/Widget.Material3.CardView.Filled"
-             android:layout_width="match_parent"
-             android:text="Default"
-             android:visibility="invisible"
-             android:fontFamily="@font/inter_bold"
-             android:textSize="@dimen/_13ssp"
-             app:iconSize="@dimen/_18sdp"
-             app:iconGravity="textStart"
-             app:iconTint="@color/textLightColor"
-             app:icon="@drawable/quality"
-             android:layout_marginHorizontal="@dimen/_8sdp"
-             android:textColor="@color/textLightColor"
-             android:layout_height="wrap_content"
-             android:layout_marginTop="@dimen/_8sdp"
-             android:clickable="true"
-             android:focusable="true"
-             app:backgroundTint="@color/prem_bg"
-             android:insetTop="0dp"
-             android:insetRight="0dp"
-             android:insetLeft="0dp"
-             android:insetBottom="0dp"
-             app:layout_constraintEnd_toEndOf="parent"
-             app:layout_constraintStart_toStartOf="parent"
-             app:layout_constraintTop_toBottomOf="@id/backgroundImage"/>
 
          <com.google.android.material.button.MaterialButton
              android:id="@+id/materialButton"
@@ -189,7 +163,8 @@
              app:cornerRadius="@dimen/_8sdp"
              app:layout_constraintEnd_toEndOf="parent"
              app:layout_constraintStart_toStartOf="parent"
-             app:layout_constraintTop_toBottomOf="@+id/qualityCard" />
+             app:layout_constraintTop_toBottomOf="@id/backgroundImage"
+ />
 
          <ScrollView
              android:id="@+id/descriptionSection"

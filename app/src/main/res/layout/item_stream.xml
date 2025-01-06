@@ -70,7 +70,7 @@
                             android:alpha="0.58"
                             android:fontFamily="@font/nunito_bold"
                             android:visibility="visible"
-                            android:text="Play Flag"
+                            android:text="Play Flag:"
                             tools:visibility="visible" />
 
                         <TextView
