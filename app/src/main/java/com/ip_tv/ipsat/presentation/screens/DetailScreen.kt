@@ -8,13 +8,16 @@ import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.ip_tv.ipsat.R
 import com.ip_tv.ipsat.databinding.DetailScreenBinding
 import com.ip_tv.ipsat.domain.model.Movie
 import com.ip_tv.ipsat.presentation.adapters.MovieAdapter
+import com.ip_tv.ipsat.presentation.dialogs.ChooseQualityBottomSheet
 import com.ip_tv.ipsat.presentation.viewmodel.DetailViewModel
 import com.ip_tv.ipsat.utils.BaseFragment
+import com.ip_tv.ipsat.utils.animationTransactionClearStack
 import com.ip_tv.ipsat.utils.gone
 import com.ip_tv.ipsat.utils.invisible
 import com.ip_tv.ipsat.utils.loadImage
@@ -22,6 +25,8 @@ import com.ip_tv.ipsat.utils.showSnack
 import com.ip_tv.ipsat.utils.toYear
 import com.ip_tv.ipsat.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class DetailScreen : BaseFragment<DetailScreenBinding>(DetailScreenBinding::inflate) {
@@ -30,13 +35,14 @@ class DetailScreen : BaseFragment<DetailScreenBinding>(DetailScreenBinding::infl
 
     override fun onViewCreate(savedInstanceState: Bundle?) {
         val movie = requireArguments().getSerializable("movie") as Movie
-        val query = if (movie.name.length > 4) movie.name.substring(0, 4) else movie.name
-        model.getSearchResult(query)
+        val query = movie.rating
+        model.getSearchResult(query.toString(), year = movie.release_year?.toYear()?:"2024")
         model.loadMovieVod(movie.id)
         loadData(movie)
         observeData()
     }
 
+    @SuppressLint("SetTextI18n")
     private fun observeData() {
         model.searchResult.observe(viewLifecycleOwner) {
             when (it) {
@@ -44,6 +50,18 @@ class DetailScreen : BaseFragment<DetailScreenBinding>(DetailScreenBinding::infl
                     binding.progresMayYouLike.gone()
 
                     val adapter = MovieAdapter(this)
+                    adapter.setItemClickListener {
+                        binding.container.gone()
+                        binding.rootProgress.visible()
+                        lifecycleScope.launch {
+                            delay(400)
+                            binding.rootProgress.gone()
+                            val movie = it
+                            val bundle = Bundle()
+                            bundle.putSerializable("movie", movie)
+                            findNavController().navigate(R.id.detailScreen, bundle, animationTransactionClearStack(R.id.detailScreen).build())
+                        }
+                    }
                     adapter.submitList(it.data)
                     binding.similarMoviesRecycler.adapter = adapter
                 }
@@ -69,7 +87,18 @@ class DetailScreen : BaseFragment<DetailScreenBinding>(DetailScreenBinding::infl
                     it.data?.let { videos ->
                         if (videos.urlobj.isNotEmpty()) {
                             binding.qualityCard.setTextColor(requireActivity().getColor(R.color.textLightColor))
-                            binding.qualityCard.text=videos.urlobj.get(0).hdtv
+                            binding.qualityCard.text="Default Quality:${videos.urlobj.get(0).hdtv}"
+                            binding.qualityCard.setOnClickListener {
+                                val movie = requireArguments().getSerializable("movie") as Movie
+                                if (videos.urlobj.isNotEmpty()){
+                                    val dialog =ChooseQualityBottomSheet.newInstance(
+                                        vodMovieResponse = videos,
+                                        server = movie
+                                    )
+                                    dialog.show(parentFragmentManager,"quality_choose")
+
+                                }
+                            }
                         }else {
                             binding.materialButton.isEnabled=false
                             binding.materialButton.text="Movie Link was not found, Contact Admin"
@@ -101,7 +130,7 @@ class DetailScreen : BaseFragment<DetailScreenBinding>(DetailScreenBinding::infl
         binding.backgroundImage.loadImage(movie.image)
         binding.movieTitle.text = movie.name
         binding.ratingText.text = movie.rating.toString()
-        binding.releaseYear.text = "Year :${movie.release_year.toYear()}"
+        binding.releaseYear.text = "Year :${movie.release_year!!.toYear()}"
         binding.movieLanguage.text = "Language: ${movie.language}"
         makeSpannable(movie = movie)
 

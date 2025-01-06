@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ip_tv.ipsat.domain.model.Movie
+import com.ip_tv.ipsat.domain.model.SearchResults
 import com.ip_tv.ipsat.domain.model.SeriesDetailResponse
 import com.ip_tv.ipsat.domain.model.VodMovieResponse
 import com.ip_tv.ipsat.domain.repository.DetailRepository
@@ -29,10 +30,10 @@ class DetailViewModel @Inject constructor(private val repo:DetailRepository,priv
     private val _searchResult: MutableLiveData<Resource<ArrayList<Movie>>> = MutableLiveData()
     val searchResult: MutableLiveData<Resource<ArrayList<Movie>>> = _searchResult
 
-    fun getSearchResult(query: String) {
+    fun getSearchResult(query: String,year:String) {
         _searchResult.postValue(Resource.Loading)
         viewModelScope.launch {
-            repository.search(query).onEach {
+            repository.filterMovies(SearchResults(hasNextPage = false, page = 1, rating =query, releaseYear = year.toInt(), results = arrayListOf())).onEach {
                 it.onSuccess {
                     _searchResult.postValue(Resource.Success(it.results as ArrayList<Movie>))
                 }

@@ -12,7 +12,7 @@ data class Movie(
     val language: String,
     val name: String,
     val rating: Double,
-    val release_year: String
+    val release_year: String?
 ):Serializable {
     override fun hashCode(): Int {
         return super.hashCode()
