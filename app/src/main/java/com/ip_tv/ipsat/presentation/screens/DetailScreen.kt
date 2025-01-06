@@ -1,57 +1,97 @@
 package com.ip_tv.ipsat.presentation.screens
 
+import Resource
 import android.annotation.SuppressLint
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.ip_tv.ipsat.R
 import com.ip_tv.ipsat.databinding.DetailScreenBinding
 import com.ip_tv.ipsat.domain.model.Movie
 import com.ip_tv.ipsat.presentation.adapters.MovieAdapter
-import com.ip_tv.ipsat.presentation.viewmodel.SearchViewModel
+import com.ip_tv.ipsat.presentation.viewmodel.DetailViewModel
 import com.ip_tv.ipsat.utils.BaseFragment
 import com.ip_tv.ipsat.utils.gone
+import com.ip_tv.ipsat.utils.invisible
 import com.ip_tv.ipsat.utils.loadImage
 import com.ip_tv.ipsat.utils.showSnack
-import com.ip_tv.ipsat.utils.toReadableDateTime
 import com.ip_tv.ipsat.utils.toYear
+import com.ip_tv.ipsat.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class DetailScreen : BaseFragment<DetailScreenBinding>(DetailScreenBinding::inflate) {
 
-    private val model by viewModels<SearchViewModel>()
+    private val model by viewModels<DetailViewModel>()
 
     override fun onViewCreate(savedInstanceState: Bundle?) {
         val movie = requireArguments().getSerializable("movie") as Movie
-        val query =if (movie.name.length>4) movie.name.substring(0,4) else movie.name
+        val query = if (movie.name.length > 4) movie.name.substring(0, 4) else movie.name
         model.getSearchResult(query)
+        model.loadMovieVod(movie.id)
         loadData(movie)
         observeData()
     }
 
-    private fun observeData () {
+    private fun observeData() {
         model.searchResult.observe(viewLifecycleOwner) {
-            when(it) {
+            when (it) {
                 is Resource.Success -> {
+                    binding.progresMayYouLike.gone()
+
                     val adapter = MovieAdapter(this)
                     adapter.submitList(it.data)
-                    binding.similarMoviesRecycler.adapter=adapter
+                    binding.similarMoviesRecycler.adapter = adapter
+                }
+
+                is Resource.Error -> {
+                    binding.progresMayYouLike.gone()
+                    showSnack(binding.root, it.throwable.message.toString())
+                }
+
+                is Resource.Loading -> {
+                    binding.progresMayYouLike.visible()
+                }
+
+                else -> {}
+            }
+        }
+
+        model.movieDetailResponse.observe(this) {
+            when(it) {
+                is Resource.Success -> {
+                    binding.qualityProgress.gone()
+                    binding.qualityCard.visible()
+                    it.data?.let { videos ->
+                        if (videos.urlobj.isNotEmpty()) {
+                            binding.qualityCard.setTextColor(requireActivity().getColor(R.color.textLightColor))
+                            binding.qualityCard.text=videos.urlobj.get(0).hdtv
+                        }else {
+                            binding.materialButton.isEnabled=false
+                            binding.materialButton.text="Movie Link was not found, Contact Admin"
+                            binding.qualityCard.setTextColor(requireActivity().getColor(R.color.map_red))
+                            binding.qualityCard.text="Movie is not available"
+                        }
+                    }
                 }
                 is Resource.Error -> {
                     showSnack(binding.root, it.throwable.message.toString())
                 }
                 is Resource.Loading -> {
 
+                    binding.qualityProgress.visible()
+                    binding.qualityCard.invisible()
                 }
                 else -> {}
             }
         }
+
     }
+
     @SuppressLint("SetTextI18n")
     private fun loadData(movie: Movie) {
         binding.backButton.setOnClickListener {
@@ -63,8 +103,47 @@ class DetailScreen : BaseFragment<DetailScreenBinding>(DetailScreenBinding::infl
         binding.ratingText.text = movie.rating.toString()
         binding.releaseYear.text = "Year :${movie.release_year.toYear()}"
         binding.movieLanguage.text = "Language: ${movie.language}"
-        binding.movieDescription.text = movie.description+"\nCountry: "+movie.country+"\nCategory: "+movie.categoryProperty
-
+        makeSpannable(movie = movie)
 
     }
+
+    private fun makeSpannable(movie: Movie) {
+        val description = "Description: "
+        val country = "Country: "
+        val category = "Category: "
+
+        val descriptionValue = movie.description.toString()
+        val countryValue = movie.country
+        val categoryValue = movie.categoryProperty
+
+        val primaryColor = ContextCompat.getColor(requireContext(), R.color.colorPrimary)
+
+        val spannable = SpannableString(
+            "$description$descriptionValue\n$country$countryValue\n$category$categoryValue"
+        )
+
+        spannable.setSpan(
+            ForegroundColorSpan(primaryColor),
+            0,
+            description.length,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+
+        spannable.setSpan(
+            ForegroundColorSpan(primaryColor),
+            description.toString().length + descriptionValue.length + 1,
+            description.length + descriptionValue.length + 1 + country.length,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+
+        spannable.setSpan(
+            ForegroundColorSpan(primaryColor),
+            spannable.length - (category.length + categoryValue.toString().length),
+            spannable.length - categoryValue.toString().length,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+
+        binding.movieDescription.text = spannable
+    }
 }
+

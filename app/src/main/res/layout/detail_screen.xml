@@ -11,7 +11,7 @@
      <ImageView
          android:id="@+id/backgroundImage"
          android:layout_width="match_parent"
-         android:layout_height="@dimen/_280sdp"
+         android:layout_height="@dimen/_290sdp"
          android:scaleType="centerCrop"
          android:src="@drawable/joker_banner"
          app:layout_constraintTop_toTopOf="parent" />
@@ -19,7 +19,7 @@
      <View
          android:id="@+id/overlay"
          android:layout_width="match_parent"
-         android:layout_height="@dimen/_280sdp"
+         android:layout_height="@dimen/_290sdp"
          android:background="@drawable/linear_gradient_bg"
          app:layout_constraintStart_toStartOf="parent"
          app:layout_constraintTop_toTopOf="parent" />
@@ -29,7 +29,7 @@
          android:layout_width="24dp"
          android:layout_height="24dp"
          android:layout_marginStart="16dp"
-         android:layout_marginTop="16dp"
+         android:layout_marginTop="@dimen/_14sdp"
          android:src="@drawable/ic_arrow_back"
          app:layout_constraintStart_toStartOf="parent"
          app:layout_constraintTop_toTopOf="parent" />
@@ -121,6 +121,53 @@
              android:textSize="14sp" />
      </LinearLayout>
 
+
+     <com.google.android.material.card.MaterialCardView
+         android:id="@+id/qualityProgress"
+         android:layout_width="match_parent"
+         android:layout_marginHorizontal="@dimen/_8sdp"
+         android:layout_height="@dimen/_40sdp"
+         android:layout_marginTop="@dimen/_8sdp"
+         android:clickable="true"
+         android:focusable="true"
+         app:cardBackgroundColor="@color/prem_bg"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toBottomOf="@id/backgroundImage">
+
+         <ProgressBar
+             android:layout_width="@dimen/_30sdp"
+             android:layout_height="@dimen/_30sdp"
+             android:layout_gravity="center"/>
+
+     </com.google.android.material.card.MaterialCardView>
+     <com.google.android.material.button.MaterialButton
+         android:id="@+id/qualityCard"
+         style="@style/Widget.Material3.CardView.Filled"
+         android:layout_width="match_parent"
+         android:text="Add Favorite"
+         android:visibility="invisible"
+         android:fontFamily="@font/inter_bold"
+         android:textSize="@dimen/_13ssp"
+         app:iconSize="@dimen/_18sdp"
+         app:iconGravity="textStart"
+         app:iconTint="@color/textLightColor"
+         app:icon="@drawable/quality"
+         android:layout_marginHorizontal="@dimen/_8sdp"
+         android:textColor="@color/textLightColor"
+         android:layout_height="wrap_content"
+         android:layout_marginTop="@dimen/_8sdp"
+         android:clickable="true"
+         android:focusable="true"
+         app:backgroundTint="@color/prem_bg"
+         android:insetTop="0dp"
+         android:insetRight="0dp"
+         android:insetLeft="0dp"
+         android:insetBottom="0dp"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toBottomOf="@id/backgroundImage"/>
+
      <com.google.android.material.button.MaterialButton
          android:id="@+id/materialButton"
          android:layout_width="match_parent"
@@ -137,7 +184,7 @@
          app:cornerRadius="@dimen/_8sdp"
          app:layout_constraintEnd_toEndOf="parent"
          app:layout_constraintStart_toStartOf="parent"
-         app:layout_constraintTop_toBottomOf="@+id/backgroundImage" />
+         app:layout_constraintTop_toBottomOf="@+id/qualityCard" />
 
      <ScrollView
          android:id="@+id/descriptionSection"
@@ -166,7 +213,7 @@
          android:layout_height="wrap_content"
          android:layout_marginTop="16dp"
          android:layout_marginStart="16dp"
-         android:text="Similar Movies"
+         android:text="Maybe you like"
          android:textSize="16sp"
          android:textStyle="bold"
          app:layout_constraintTop_toBottomOf="@+id/descriptionSection"
@@ -185,6 +232,17 @@
          app:layout_constraintTop_toBottomOf="@+id/similarMoviesLabel"
          app:layout_constraintStart_toStartOf="parent"
          app:layout_constraintEnd_toEndOf="parent" />
+
+     <ProgressBar
+         android:id="@+id/progresMayYouLike"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         app:layout_constraintBottom_toBottomOf="parent"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toBottomOf="@+id/similarMoviesLabel" />
+
+
 
 
  </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,7 +6,7 @@ data class Movie(
     val categoryProperty: String?,
     val categoryid: String,
     val country: String,
-    val description: String,
+    val description: String?,
     val id: Int,
     val image: String,
     val language: String,
