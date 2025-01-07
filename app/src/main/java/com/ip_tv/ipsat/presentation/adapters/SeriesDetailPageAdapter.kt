@@ -1,6 +1,7 @@
 package com.ip_tv.ipsat.presentation.adapters
 
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.ip_tv.ipsat.databinding.SeriesDetailItemBinding
 import com.ip_tv.ipsat.domain.model.Movie
@@ -47,6 +48,9 @@ class SeriesDetailPageAdapter(
         binding.yearValue.text = data.releaseYear
         binding.durationValue.text = data.language
         binding.ivBackdrop.loadImage(data.horizontalPoster)
+        binding.backButton.setOnClickListener {
+            fragment.findNavController().popBackStack()
+        }
         binding.tvGnreValue.text =
             "Property:" + data.property + "  Director: " + data.director
 
