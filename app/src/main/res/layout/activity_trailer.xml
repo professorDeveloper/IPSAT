@@ -1,16 +1,10 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
-    <!-- Updated PlayerView: Use androidx.media3.ui.PlayerView -->
-    <androidx.media3.ui.PlayerView
-        android:id="@+id/playerView"
-        app:controller_layout_id="@layout/custom_player_controls"
-        app:use_controller="true"
-        app:resize_mode="fixed_width"
+    <WebView
+        android:id="@+id/mediaInfoTrailer"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
-    <!-- Updated ControlView: Use androidx.media3.ui.StyledPlayerControlView -->
 </RelativeLayout>

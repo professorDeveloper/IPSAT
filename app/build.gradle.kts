@@ -124,8 +124,6 @@ dependencies {
 
     implementation("com.github.Blatzar:NiceHttp:0.4.4")
 
-
-    //Player
     // exo player
     implementation("androidx.media3:media3-exoplayer:1.4.1")
     implementation("androidx.media3:media3-exoplayer-dash:1.4.1")
@@ -133,7 +131,10 @@ dependencies {
 
     implementation("androidx.media3:media3-exoplayer-hls:1.4.1")
     implementation("androidx.media3:media3-session:1.4.1")
+    api ("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.1")
+    implementation("com.google.code.gson:gson:2.10.1")
 
+    implementation ("com.github.Blatzar:NiceHttp:0.4.4")// So wee Need this Libraries
 
 
 }

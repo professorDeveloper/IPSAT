@@ -3,10 +3,13 @@ package com.ip_tv.ipsat.presentation.screens
 import Resource
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.annotation.OptIn
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
 import androidx.recyclerview.widget.ConcatAdapter
+import com.ip_tv.ipsat.data.remote.TrailerService
 import com.ip_tv.ipsat.databinding.DetailSeriesScreenBinding
 import com.ip_tv.ipsat.databinding.SeriesDetailItemBinding
 import com.ip_tv.ipsat.domain.model.Movie
@@ -19,7 +22,11 @@ import com.ip_tv.ipsat.utils.LocalData
 import com.ip_tv.ipsat.utils.gone
 import com.ip_tv.ipsat.utils.showSnack
 import com.ip_tv.ipsat.utils.visible
+import com.kongzue.dialogx.dialogs.WaitDialog
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+
 
 @AndroidEntryPoint
 class DetailSeriesScreen :
@@ -36,10 +43,19 @@ class DetailSeriesScreen :
         observeModelData(series)
         pageAdapter = SeriesDetailPageAdapter(this, SeriesDetailItemBinding.inflate(layoutInflater))
         episodeAdapter = EpisodeAdapter(this)
-        binding.seriesDetailPageRv.adapter =ConcatAdapter(pageAdapter,episodeAdapter)
+        binding.seriesDetailPageRv.adapter = ConcatAdapter(pageAdapter, episodeAdapter)
         pageAdapter.setSubTitleClick {
-            val intent = Intent(requireActivity(), TrailerActivity::class.java)
-            requireActivity().startActivity(intent)
+            WaitDialog.show(requireActivity(),"Loading..")
+            val youtubeCrawler = TrailerService()
+            lifecycleScope.launch (Dispatchers.IO){
+                val youtubeId = youtubeCrawler.findMovie(series.name)
+                Log.d("GGG", "onViewCreate: $youtubeId")
+                val intent = Intent(requireActivity(), TrailerActivity::class.java)
+                intent.putExtra("apiKey", LocalData.youtube_key)
+                intent.putExtra("videoId", youtubeId)
+                startActivity(intent)
+                WaitDialog.dismiss(requireActivity())
+            }
         }
 
     }
@@ -62,8 +78,8 @@ class DetailSeriesScreen :
                     val data = it.data
                     binding.progress.gone()
                     binding.container.visible()
-                    episodeAdapter.submitList(data.seriesList.list)
-                    pageAdapter.manageUI(data, movie)
+//                    episodeAdapter.submitList(data.seriesList.list)
+//                    pageAdapter.manageUI(data, movie)
                 }
 
                 else -> {
