@@ -78,8 +78,8 @@ class DetailSeriesScreen :
                     val data = it.data
                     binding.progress.gone()
                     binding.container.visible()
-//                    episodeAdapter.submitList(data.seriesList.list)
-//                    pageAdapter.manageUI(data, movie)
+                    episodeAdapter.submitList(data.seriesList.list)
+                    pageAdapter.manageUI(data, movie)
                 }
 
                 else -> {
