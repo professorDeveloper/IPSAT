@@ -25,7 +25,8 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isShrinkResources =true
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -42,6 +43,35 @@ android {
     buildFeatures {
         viewBinding = true
 
+    }
+    packagingOptions {
+        exclude("AndroidManifest.xml")
+        exclude("lib/arm64-v8a/libcardioDecider.so")
+        exclude("lib/arm64-v8a/libcardioRecognizer.so")
+        exclude("lib/arm64-v8a/libcardioRecognizer_tegra2.so")
+        exclude("lib/arm64-v8a/libopencv_core.so")
+        exclude("lib/arm64-v8a/libopencv_imgproc.so")
+        exclude("lib/armeabi/libcardioDecider.so")
+        exclude("lib/armeabi-v7a/libcardioDecider.so")
+        exclude("lib/armeabi-v7a/libcardioRecognizer.so")
+        exclude("lib/armeabi-v7a/libcardioRecognizer_tegra2.so")
+        exclude ("lib/armeabi-v7a/libopencv_core.so")
+        exclude("lib/armeabi-v7a/libopencv_imgproc.so")
+        exclude("lib/mips/libcardioDecider.so")
+        exclude("lib/x86/libcardioDecider.so")
+        exclude("lib/x86/libcardioRecognizer.so")
+        exclude("lib/x86/libcardioRecognizer_tegra2.so")
+        exclude("lib/x86/libopencv_core.so")
+        exclude("lib/x86/libopencv_imgproc.so")
+        exclude("lib/x86_64/libcardioDecider.so")
+        exclude("lib/x86_64/libcardioRecognizer.so")
+        exclude("lib/x86_64/libcardioRecognizer_tegra2.so")
+        exclude("lib/x86_64/libopencv_core.so")
+        exclude("lib/x86_64/libopencv_imgproc.so")
+    }
+
+    lint {
+        checkReleaseBuilds =false
     }
 }
 
