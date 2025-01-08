@@ -8,7 +8,8 @@ import com.ip_tv.ipsat.domain.model.Cast
 import com.ip_tv.ipsat.utils.loadImage
 import com.ip_tv.ipsat.utils.setAnimation
 
-class CastAdapter(private val list:ArrayList<Cast>):RecyclerView.Adapter<CastAdapter.CastVh>() {
+class CastAdapter():RecyclerView.Adapter<CastAdapter.CastVh>() {
+    private val list:ArrayList<Cast> = ArrayList()
     inner class CastVh(private val binding:ItemCastBinding):RecyclerView.ViewHolder(binding.root){
         fun onBind(data: Cast){
             binding.apply {
@@ -30,6 +31,11 @@ class CastAdapter(private val list:ArrayList<Cast>):RecyclerView.Adapter<CastAda
     }
 
 
+    fun submitList(data:ArrayList<Cast>){
+        list.clear()
+        list.addAll(data)
+        notifyDataSetChanged()
+    }
 
     override fun getItemCount(): Int {
         return list.size

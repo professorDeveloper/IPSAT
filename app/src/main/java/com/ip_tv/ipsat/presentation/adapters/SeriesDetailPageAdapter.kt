@@ -70,9 +70,9 @@ class SeriesDetailPageAdapter(
     }
 
     fun updateCast(arrayList: ArrayList<Cast>) {
-        val adapter = CastAdapter(arrayList)
+        val adapter = CastAdapter()
         binding.castRv.adapter=adapter
-
+        adapter.submitList(arrayList)
     }
 
 
