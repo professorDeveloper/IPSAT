@@ -3,6 +3,7 @@ package com.ip_tv.ipsat.presentation.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.ip_tv.ipsat.databinding.ItemCastBinding
 import com.ip_tv.ipsat.domain.model.Cast
 import com.ip_tv.ipsat.utils.loadImage
@@ -15,7 +16,10 @@ class CastAdapter():RecyclerView.Adapter<CastAdapter.CastVh>() {
             binding.apply {
                 setAnimation(binding.root.context,binding.root)
                 castName.text=data.name
-                castImage.loadImage(data.image)
+                Glide.with()
+                    .load(data.image)
+                    .into(castImage)
+
             }
         }
     }
