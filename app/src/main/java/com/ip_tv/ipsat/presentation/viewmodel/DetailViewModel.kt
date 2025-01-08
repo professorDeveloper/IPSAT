@@ -60,6 +60,9 @@ class DetailViewModel @Inject constructor(private val repo:DetailRepository,priv
             _seriesDetailResponse.postValue(Resource.Error(Exception("No internet connection !")))
         }
     }
+    suspend fun checkMovieSeries(query: Int,movie: Movie) :Boolean{
+        return repository.checkMovieOrSeries(query)
+    }
 
     fun loadMovieVod(id:Int) {
         _movieDetailResponse.value = Resource.Loading

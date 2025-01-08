@@ -25,8 +25,10 @@ import com.ip_tv.ipsat.utils.showSnack
 import com.ip_tv.ipsat.utils.toYear
 import com.ip_tv.ipsat.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class DetailScreen : BaseFragment<DetailScreenBinding>(DetailScreenBinding::inflate) {
@@ -53,13 +55,22 @@ class DetailScreen : BaseFragment<DetailScreenBinding>(DetailScreenBinding::infl
                     adapter.setItemClickListener {
                         binding.container.gone()
                         binding.rootProgress.visible()
-                        lifecycleScope.launch {
+                        lifecycleScope.launch (Dispatchers.IO){
                             delay(400)
-                            binding.rootProgress.gone()
+                            withContext(Dispatchers.Main) {
+                                binding.rootProgress.gone()
+                            }
                             val movie = it
                             val bundle = Bundle()
                             bundle.putSerializable("movie", movie)
-                            findNavController().navigate(R.id.detailScreen, bundle, animationTransactionClearStack(R.id.detailScreen).build())
+                            val isMovie = model.checkMovieSeries(movie.id, movie)
+                            withContext(Dispatchers.Main) {
+                                if (isMovie) {
+                                    findNavController().navigate(R.id.detailSeriesScreen, bundle, animationTransactionClearStack(R.id.detailScreen).build())
+                                } else {
+                                    findNavController().navigate(R.id.detailScreen, bundle, animationTransactionClearStack(R.id.detailScreen).build())
+                                }
+                            }
                         }
                     }
                     adapter.submitList(it.data)

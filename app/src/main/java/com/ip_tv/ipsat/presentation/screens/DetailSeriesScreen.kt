@@ -14,7 +14,6 @@ import com.ip_tv.ipsat.databinding.DetailSeriesScreenBinding
 import com.ip_tv.ipsat.databinding.SeriesDetailItemBinding
 import com.ip_tv.ipsat.domain.model.Movie
 import com.ip_tv.ipsat.presentation.activities.TrailerActivity
-import com.ip_tv.ipsat.presentation.adapters.CastAdapter
 import com.ip_tv.ipsat.presentation.adapters.EpisodeAdapter
 import com.ip_tv.ipsat.presentation.adapters.SeriesDetailPageAdapter
 import com.ip_tv.ipsat.presentation.viewmodel.DetailViewModel
@@ -27,6 +26,7 @@ import com.kongzue.dialogx.dialogs.WaitDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 @AndroidEntryPoint
@@ -77,15 +77,17 @@ class DetailSeriesScreen :
 
                 is Resource.Success -> {
                     val data = it.data
-                    binding.progress.gone()
-                    binding.container.visible()
-                    episodeAdapter.submitList(data.seriesList.list)
-                    pageAdapter.manageUI(data, movie)
+
                     lifecycleScope.launch (Dispatchers.IO){
                         val  service = TrailerService()
-                        val castList =service.getCast(movie.name)
-                        val adapter =CastAdapter(castList)
-                        pageAdapter.updateCast(adapter)
+                        val list =service.getCast(movie.name)
+                        withContext(Dispatchers.Main){
+                            binding.progress.gone()
+                            binding.container.visible()
+                            episodeAdapter.submitList(data.seriesList.list)
+                            pageAdapter.manageUI(data, movie)
+                            pageAdapter.updateCast(list)
+                        }
                     }
                 }
 

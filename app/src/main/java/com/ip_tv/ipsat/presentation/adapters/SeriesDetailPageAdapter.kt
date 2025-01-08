@@ -4,6 +4,7 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.ip_tv.ipsat.databinding.SeriesDetailItemBinding
+import com.ip_tv.ipsat.domain.model.Cast
 import com.ip_tv.ipsat.domain.model.Movie
 import com.ip_tv.ipsat.domain.model.SeriesDetailResponse
 import com.ip_tv.ipsat.utils.BaseFragment
@@ -68,7 +69,8 @@ class SeriesDetailPageAdapter(
 //        }
     }
 
-    fun updateCast(adapter:CastAdapter) {
+    fun updateCast(arrayList: ArrayList<Cast>) {
+        val adapter = CastAdapter(arrayList)
         binding.castRv.adapter=adapter
 
     }
