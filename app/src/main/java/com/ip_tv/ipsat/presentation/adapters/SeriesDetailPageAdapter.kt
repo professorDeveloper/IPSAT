@@ -55,7 +55,7 @@ class SeriesDetailPageAdapter(
             "Property:" + data.property + "  Director: " + data.director
 
 
-        binding.tvDescriptionTitle.text = "Episodes ${data.seriesList.totalNum} Count"
+        binding.tvEpisodeTitle.text = "Episodes ${data.seriesList.totalNum} Count"
 //        if (data.subtitleList.isNotEmpty()) {
 //            binding.mainContainer.visible()
 //            binding.epCard.visible()
@@ -66,6 +66,11 @@ class SeriesDetailPageAdapter(
 //        } else {
 //            binding.mainContainer.gone()
 //        }
+    }
+
+    fun updateCast(adapter:CastAdapter) {
+        binding.castRv.adapter=adapter
+
     }
 
 

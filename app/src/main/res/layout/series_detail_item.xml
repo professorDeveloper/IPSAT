@@ -298,11 +298,32 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_8sdp"
                     android:fontFamily="@font/nunito_bold"
-                    android:text="Episodes 33 Count"
+                    android:text="Series Cast"
                     android:textSize="18sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
+
+                <com.ip_tv.ipsat.utils.FadingEdgeRecyclerView
+                    android:id="@+id/castRv"
+                    android:layout_width="match_parent"
+                    tools:listitem="@layout/item_cast"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintTop_toBottomOf="@id/tvDescriptionTitle"
+                    app:layout_constraintStart_toStartOf="@id/tvDescriptionTitle"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/tvEpisodeTitle"
+                    android:layout_width="wrap_content"
+                    android:fontFamily="@font/nunito_bold"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:text="Episodes 33 Count"
+                    app:layout_constraintStart_toStartOf="@+id/tvDescriptionTitle"
+                    app:layout_constraintTop_toBottomOf="@+id/castRv" />
 
 
 

@@ -14,6 +14,7 @@ import com.ip_tv.ipsat.databinding.DetailSeriesScreenBinding
 import com.ip_tv.ipsat.databinding.SeriesDetailItemBinding
 import com.ip_tv.ipsat.domain.model.Movie
 import com.ip_tv.ipsat.presentation.activities.TrailerActivity
+import com.ip_tv.ipsat.presentation.adapters.CastAdapter
 import com.ip_tv.ipsat.presentation.adapters.EpisodeAdapter
 import com.ip_tv.ipsat.presentation.adapters.SeriesDetailPageAdapter
 import com.ip_tv.ipsat.presentation.viewmodel.DetailViewModel
@@ -80,6 +81,12 @@ class DetailSeriesScreen :
                     binding.container.visible()
                     episodeAdapter.submitList(data.seriesList.list)
                     pageAdapter.manageUI(data, movie)
+                    lifecycleScope.launch (Dispatchers.IO){
+                        val  service = TrailerService()
+                        val castList =service.getCast(movie.name)
+                        val adapter =CastAdapter(castList)
+                        pageAdapter.updateCast(adapter)
+                    }
                 }
 
                 else -> {
