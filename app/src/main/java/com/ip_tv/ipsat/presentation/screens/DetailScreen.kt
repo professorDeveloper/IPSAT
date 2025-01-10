@@ -14,7 +14,6 @@ import com.ip_tv.ipsat.R
 import com.ip_tv.ipsat.databinding.DetailScreenBinding
 import com.ip_tv.ipsat.domain.model.Movie
 import com.ip_tv.ipsat.presentation.adapters.MovieAdapter
-import com.ip_tv.ipsat.presentation.dialogs.ChooseQualityBottomSheet
 import com.ip_tv.ipsat.presentation.viewmodel.DetailViewModel
 import com.ip_tv.ipsat.utils.BaseFragment
 import com.ip_tv.ipsat.utils.animationTransactionClearStack
@@ -101,11 +100,6 @@ class DetailScreen : BaseFragment<DetailScreenBinding>(DetailScreenBinding::infl
                             binding.materialButton.setOnClickListener {
                                 val movie = requireArguments().getSerializable("movie") as Movie
                                 if (videos.urlobj.isNotEmpty()){
-                                    val dialog =ChooseQualityBottomSheet.newInstance(
-                                        vodMovieResponse = videos,
-                                        server = movie
-                                    )
-                                    dialog.show(parentFragmentManager,"quality_choose")
 
                                 }
                             }

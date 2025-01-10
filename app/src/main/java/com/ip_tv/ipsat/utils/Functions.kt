@@ -4,16 +4,18 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.res.Resources.getSystem
+import android.graphics.Color
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.net.wifi.WifiManager
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
-import android.util.Log
+import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
@@ -22,7 +24,9 @@ import android.view.animation.OvershootInterpolator
 import android.view.animation.ScaleAnimation
 import android.view.animation.TranslateAnimation
 import android.view.inputmethod.InputMethodManager
+import android.widget.ArrayAdapter
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
@@ -41,7 +45,6 @@ import java.io.ObjectOutputStream
 import java.net.NetworkInterface
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.ArrayList
 import java.util.Timer
 import java.util.TimerTask
 
@@ -391,3 +394,42 @@ inline fun <reified T> String.toDataClass(): T {
 }
 
 
+
+open class NoPaddingArrayAdapter<T>(context: Context, layoutId: Int, items: List<T>) : ArrayAdapter<T>(context, layoutId, items) {
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        val view = super.getView(position, convertView, parent)
+        view.setPadding(0, view.paddingTop, view.paddingRight, view.paddingBottom)
+        (view as TextView).setTextColor(Color.WHITE)
+        return view
+    }
+}
+
+@SuppressLint("ClickableViewAccessibility")
+class SpinnerNoSwipe : androidx.appcompat.widget.AppCompatSpinner {
+    private var mGestureDetector: GestureDetector? = null
+
+    constructor(context: Context) : super(context) {
+        setup()
+    }
+
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
+        setup()
+    }
+
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+        setup()
+    }
+
+    private fun setup() {
+        mGestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
+            override fun onSingleTapUp(e: MotionEvent): Boolean {
+                return performClick()
+            }
+        })
+    }
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        mGestureDetector!!.onTouchEvent(event)
+        return true
+    }
+}

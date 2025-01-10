@@ -24,9 +24,15 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:screenOrientation="landscape"
-            android:name=".presentation.activities.TrailerActivity"
+            android:name=".presentation.activities.PlayerActivity"
             android:exported="false" />
+        <activity
+            android:name=".presentation.activities.ProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.activities.TrailerActivity"
+            android:exported="false"
+            android:screenOrientation="landscape" />
         <activity
             android:name=".presentation.activities.LoginActivity"
             android:exported="false" />

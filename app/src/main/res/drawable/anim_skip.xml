@@ -21,7 +21,7 @@
                     <path
                         android:name="path_2"
                         android:pathData="M 28.3 14.9 L 5.7 0.7 C 3.2 -0.8 0 1 0 3.9 L 0 32.3 C 0 35.2 3.2 37 5.7 35.4 L 28.3 21.2 C 30.6 19.8 30.6 16.4 28.3 14.9 Z"
-                        android:fillColor="#eeeeee"/>
+                        android:fillColor="@color/textLightColor"/>
                 </group>
                 <group
                     android:name="group_2"
@@ -30,13 +30,13 @@
                     <path
                         android:name="path_1"
                         android:pathData="M 52.3 14.9 L 29.7 0.7 C 27.2 -0.8 24 1 24 3.9 L 24 32.3 C 24 35.2 27.2 37 29.7 35.4 L 52.3 21.2 C 54.6 19.8 54.6 16.4 52.3 14.9 Z"
-                        android:fillColor="#eeeeee"/>
+                        android:fillColor="@color/textLightColor"/>
                 </group>
                 <group android:name="group_1">
                     <path
                         android:name="path"
                         android:pathData="M 28.3 14.9 L 5.7 0.7 C 3.2 -0.8 0 1 0 3.9 L 0 32.3 C 0 35.2 3.2 37 5.7 35.4 L 28.3 21.2 C 30.6 19.8 30.6 16.4 28.3 14.9 Z"
-                        android:fillColor="#eeeeee"/>
+                        android:fillColor="@color/textLightColor"/>
                 </group>
             </group>
         </vector>

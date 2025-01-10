@@ -12,6 +12,9 @@
 #   public *;
 #}
 
+
+-keep class com.ip_tv.ipsat.** { *; }
+
 # Uncomment this to preserve the line number information for
 # debugging stack traces.
 #-keepattributes SourceFile,LineNumberTable

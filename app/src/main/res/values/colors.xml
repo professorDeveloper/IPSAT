@@ -6,6 +6,8 @@
     <color name="colorSecondary">#FF9500</color>
     <color name="whiteMain">#FFFFFF</color>
     <color name="colorGray">#8E8E93</color>
+    <color name="playerDoubleTapTouch">#18FFFFFF</color>
+    <color name="playerDoubleTapBackground">#20EEEEEE</color>
     <color name="goldColor">#ffd700</color>
     <color name= "toolbarBg">@color/white</color>
     <color name="silverColor">#c0c0c0</color>

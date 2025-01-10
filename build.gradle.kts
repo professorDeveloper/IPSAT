@@ -1,7 +1,6 @@
 
 buildscript {
     dependencies {
-        classpath("com.android.tools:r8:8.1.56")
 
     }
 }
