@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="@dimen/_60sdp"
     android:layout_margin="@dimen/_8sdp"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -16,8 +16,9 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/castImage"
-            android:layout_width="@dimen/_80sdp"
-            android:layout_height="@dimen/_80sdp"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_gravity="center"
             android:scaleType="centerCrop"
             android:src="@drawable/img"
             android:transitionName="characterCover" />
@@ -28,14 +29,16 @@
             android:id="@+id/castName"
             android:layout_width="wrap_content"
             android:layout_gravity="center"
-
             android:layout_height="wrap_content"
-            android:fontFamily="@font/sfpro"
+            android:fontFamily="@font/inter_bold"
             android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:lines="1"
+
             android:singleLine="true"
-            android:textSize="@dimen/_14ssp"
-            android:layout_marginTop="@dimen/_8sdp"
-            android:text="Joker"
+            android:textSize="@dimen/_13ssp"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:text="JokerJokerJoker"
             android:transitionName="mediaTitle" />
 
 

@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.ip_tv.ipsat.R
 import com.ip_tv.ipsat.databinding.DetailScreenBinding
 import com.ip_tv.ipsat.domain.model.Movie
+import com.ip_tv.ipsat.presentation.activities.PlayerActivity
 import com.ip_tv.ipsat.presentation.adapters.MovieAdapter
 import com.ip_tv.ipsat.presentation.viewmodel.DetailViewModel
 import com.ip_tv.ipsat.utils.BaseFragment
@@ -37,7 +38,7 @@ class DetailScreen : BaseFragment<DetailScreenBinding>(DetailScreenBinding::infl
     override fun onViewCreate(savedInstanceState: Bundle?) {
         val movie = requireArguments().getSerializable("movie") as Movie
         val query = movie.rating
-        model.getSearchResult(query.toString(), year = movie.release_year?.toYear()?:"2024")
+        model.getSearchResult(query.toString(), year = movie.release_year?.toYear() ?: "2024")
         model.loadMovieVod(movie.id)
         loadData(movie)
         observeData()
@@ -49,12 +50,11 @@ class DetailScreen : BaseFragment<DetailScreenBinding>(DetailScreenBinding::infl
             when (it) {
                 is Resource.Success -> {
                     binding.progresMayYouLike.gone()
-
                     val adapter = MovieAdapter(this)
                     adapter.setItemClickListener {
                         binding.container.gone()
                         binding.rootProgress.visible()
-                        lifecycleScope.launch (Dispatchers.IO){
+                        lifecycleScope.launch(Dispatchers.IO) {
                             delay(400)
                             withContext(Dispatchers.Main) {
                                 binding.rootProgress.gone()
@@ -65,9 +65,17 @@ class DetailScreen : BaseFragment<DetailScreenBinding>(DetailScreenBinding::infl
                             val isMovie = model.checkMovieSeries(movie.id, movie)
                             withContext(Dispatchers.Main) {
                                 if (isMovie) {
-                                    findNavController().navigate(R.id.detailSeriesScreen, bundle, animationTransactionClearStack(R.id.detailScreen).build())
+                                    findNavController().navigate(
+                                        R.id.detailSeriesScreen,
+                                        bundle,
+                                        animationTransactionClearStack(R.id.detailScreen).build()
+                                    )
                                 } else {
-                                    findNavController().navigate(R.id.detailScreen, bundle, animationTransactionClearStack(R.id.detailScreen).build())
+                                    findNavController().navigate(
+                                        R.id.detailScreen,
+                                        bundle,
+                                        animationTransactionClearStack(R.id.detailScreen).build()
+                                    )
                                 }
                             }
                         }
@@ -89,35 +97,46 @@ class DetailScreen : BaseFragment<DetailScreenBinding>(DetailScreenBinding::infl
             }
         }
 
-        model.movieDetailResponse.observe(this) {
-            when(it) {
+        model.movieDetailResponse.observe(this) { vodMovie ->
+            when (vodMovie) {
                 is Resource.Success -> {
                     binding.qualityProgress.gone()
                     binding.materialButton.visible()
-                    it.data?.let { videos ->
+                    vodMovie.data?.let { videos ->
                         if (videos.urlobj.isNotEmpty()) {
                             binding.materialButton.setTextColor(requireActivity().getColor(R.color.textLightColor))
                             binding.materialButton.setOnClickListener {
                                 val movie = requireArguments().getSerializable("movie") as Movie
-                                if (videos.urlobj.isNotEmpty()){
 
-                                }
+                                PlayerActivity.currentEpIndex = 0
+                                PlayerActivity.epCount = 1
+                                PlayerActivity.epList = arrayListOf(
+                                    vodMovie.data
+                                )
+                                PlayerActivity.movie = movie
+                                PlayerActivity.pipStatus = true
+                                val intent =
+                                    PlayerActivity.newIntent(requireContext(), vodMovie.data)
+                                startActivity(intent)
                             }
-                        }else {
-                            binding.materialButton.isEnabled=false
-                            binding.materialButton.text="Movie Link was not found, Contact Admin"
+                        } else {
+                            binding.materialButton.isEnabled = false
+                            binding.materialButton.text = "Movie Link was not found, Contact Admin"
                             binding.materialButton.setTextColor(requireActivity().getColor(R.color.map_red))
                         }
                     }
                 }
+
                 is Resource.Error -> {
-                    showSnack(binding.root, it.throwable.message.toString())
+                    showSnack(binding.root, vodMovie.throwable.message.toString())
                 }
+
                 is Resource.Loading -> {
 
                     binding.qualityProgress.visible()
                     binding.materialButton.invisible()
                 }
+
                 else -> {}
             }
         }
@@ -135,6 +154,7 @@ class DetailScreen : BaseFragment<DetailScreenBinding>(DetailScreenBinding::infl
         binding.ratingText.text = movie.rating.toString()
         binding.releaseYear.text = "Year :${movie.release_year!!.toYear()}"
         binding.movieLanguage.text = "Language: ${movie.language}"
+
         makeSpannable(movie = movie)
 
     }

@@ -45,7 +45,8 @@ class TrailerService {
             println("Release Date: $releaseDate")
             println("---------")
         }
-    return  castList(arrayList.get(0))}
+    return  if(arrayList.size!=0) castList(arrayList.get(0)) else arrayListOf()
+    }
 
     suspend fun castList(link:String):ArrayList<Cast> {
         val doc = Utils.getJsoup("https://www.themoviedb.org/$link")

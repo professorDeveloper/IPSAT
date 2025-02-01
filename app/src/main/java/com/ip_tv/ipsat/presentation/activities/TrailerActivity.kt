@@ -4,10 +4,8 @@ import android.view.View
 import android.webkit.WebChromeClient
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
-import androidx.media3.common.util.UnstableApi
 import com.ip_tv.ipsat.databinding.ActivityTrailerBinding
 
-@UnstableApi
 class TrailerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityTrailerBinding

@@ -1,11 +1,9 @@
 package com.ip_tv.ipsat.domain.model
 
+import java.io.Serializable
+
 data class VodMovieResponse(
     val authInfo: String,
-    val subtitleList: Any,
+    @Transient val subtitleList: Any,  // Ignored during serialization
     val urlobj: List<Urlobj>
-):java.io.Serializable {
-    override fun hashCode(): Int {
-        return super.hashCode()
-    }
-}
+) : Serializable

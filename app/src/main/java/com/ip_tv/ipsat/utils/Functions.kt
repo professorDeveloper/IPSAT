@@ -15,6 +15,7 @@ import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewAnimationUtils
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AlphaAnimation
@@ -47,6 +48,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Timer
 import java.util.TimerTask
+import kotlin.math.max
 
 var statusBarHeight = 0
 var navBarHeight = 0
@@ -107,15 +109,14 @@ fun hideKeyboard(view: View) {
 }
 
 
-@Suppress("DEPRECATION")
-fun Activity.hideSystemBars() {
-    window.decorView.systemUiVisibility = (
-            View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                    or View.SYSTEM_UI_FLAG_FULLSCREEN
-                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-            )
+fun View.circularReveal(ex: Int, ey: Int, subX: Boolean, time: Long) {
+    ViewAnimationUtils.createCircularReveal(
+        this,
+        if (subX) (ex - x.toInt()) else ex,
+        ey - y.toInt(),
+        0f,
+        max(height, width).toFloat()
+    ).setDuration(time).start()
 }
 
 @Suppress("DEPRECATION")
@@ -432,4 +433,14 @@ class SpinnerNoSwipe : androidx.appcompat.widget.AppCompatSpinner {
         mGestureDetector!!.onTouchEvent(event)
         return true
     }
+}
+
+fun Activity.hideSystemBars() {
+    window.decorView.systemUiVisibility = (
+            View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    or View.SYSTEM_UI_FLAG_FULLSCREEN
+                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+            )
 }

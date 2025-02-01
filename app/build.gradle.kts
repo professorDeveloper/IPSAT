@@ -116,10 +116,7 @@ dependencies {
 
 
     // exo player
-    implementation("androidx.media3:media3-exoplayer:1.4.1")
-    implementation("androidx.media3:media3-exoplayer-dash:1.4.1")
     implementation("de.hdodenhof:circleimageview:3.1.0")
-    implementation("androidx.media3:media3-ui:1.4.1")
 
     //Chucker
     debugImplementation( "com.github.chuckerteam.chucker:library:4.0.0")
@@ -155,16 +152,16 @@ dependencies {
     implementation("com.github.Blatzar:NiceHttp:0.4.4")
 
     // exo player
-    implementation("androidx.media3:media3-datasource-okhttp:1.4.1")
-    implementation("androidx.media3:media3-exoplayer:1.4.1")
-    implementation("androidx.media3:media3-exoplayer-dash:1.4.1")
-    implementation("androidx.media3:media3-ui:1.4.1")
-    implementation("androidx.media3:media3-exoplayer-hls:1.4.1")
-    implementation("androidx.media3:media3-session:1.4.1")
     api ("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.1")
     implementation("com.google.code.gson:gson:2.10.1")
 
     implementation ("com.github.Blatzar:NiceHttp:0.4.4")// So wee Need this Libraries
 
+    implementation("org.apache.commons:commons-compress:1.21")
+    val exo_version = "2.19.1"
+    implementation( "com.google.android.exoplayer:exoplayer:$exo_version")
+    implementation("com.google.android.exoplayer:exoplayer-ui:$exo_version")
+    implementation( "com.google.android.exoplayer:exoplayer-hls:$exo_version")
+    implementation("com.google.android.exoplayer:extension-mediasession:$exo_version")
 
 }

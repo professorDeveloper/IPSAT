@@ -1,5 +1,7 @@
 package com.ip_tv.ipsat.domain.model
 
+import java.io.Serializable
+
 data class Urlobj(
     val encryptKey: String,
     val encryptType: Int,
@@ -8,4 +10,4 @@ data class Urlobj(
     val playflag: Int,
     val thumbnailUrl: String,
     val typeName: String
-)
+):Serializable

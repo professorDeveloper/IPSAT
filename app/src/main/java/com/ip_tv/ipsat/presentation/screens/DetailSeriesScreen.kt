@@ -4,10 +4,8 @@ import Resource
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.annotation.OptIn
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.media3.common.util.UnstableApi
 import androidx.recyclerview.widget.ConcatAdapter
 import com.ip_tv.ipsat.data.remote.TrailerService
 import com.ip_tv.ipsat.databinding.DetailSeriesScreenBinding
@@ -36,7 +34,6 @@ class DetailSeriesScreen :
     private lateinit var pageAdapter: SeriesDetailPageAdapter
     private lateinit var episodeAdapter: EpisodeAdapter
 
-    @OptIn(UnstableApi::class)
     override fun onViewCreate(savedInstanceState: Bundle?) {
         val series = requireArguments().getSerializable("movie") as Movie
         LocalData.detailSeriesImage = series.image
