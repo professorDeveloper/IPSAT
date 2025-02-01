@@ -11,7 +11,6 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
@@ -44,6 +43,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -63,11 +63,14 @@ import com.ip_tv.ipsat.presentation.adapters.QualityAdapter
 import com.ip_tv.ipsat.presentation.adapters.QualityItem
 import com.ip_tv.ipsat.presentation.viewmodel.PlayerViewModel
 import com.ip_tv.ipsat.utils.DoubleTapPlayerView
+import com.ip_tv.ipsat.utils.extractTarFile
 import com.ip_tv.ipsat.utils.hideSystemBars
 import com.ip_tv.ipsat.utils.readData
 import com.ip_tv.ipsat.utils.saveData
 import com.ip_tv.ipsat.utils.snackString
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import java.io.File
 import java.net.CookieHandler
 import java.net.CookieManager
 import java.net.CookiePolicy
@@ -233,6 +236,12 @@ class PlayerActivity : AppCompatActivity(), Player.Listener {
             .setKeyTimeIncrement(10000)
         prepareButtons()
         videoEpTextView.text = movie!!.name
+        val outputDir = File(applicationContext.cacheDir, "${movie!!.name}thumbnails")
+        lifecycleScope.launch {
+            extractTarFile(animePlayingDetails.urlobj.get(currentEpIndex).thumbnailUrl, outputDir)
+            val thumbnailMap = mapThumbnails(outputDir)
+            setupPreviewThumbnails(thumbnailMap)
+        }
 
 //        model.downloadLink.observe(this) { link ->
 //            downloadBtn.show()
@@ -404,8 +413,6 @@ class PlayerActivity : AppCompatActivity(), Player.Listener {
     }
 
 
-
-
     @SuppressLint("StringFormatInvalid")
     private fun changeVideoSpeed(byInt: Float) {
         model.player.playbackParameters = PlaybackParameters(byInt)
@@ -417,11 +424,12 @@ class PlayerActivity : AppCompatActivity(), Player.Listener {
             exoBottomControllers.visibility = View.INVISIBLE
             exoProgress.setForceDisabled(true)
         } else {
-            exoProgress.setForceDisabled(false)
+            exoProgress.setForceDisabled(false) // Re-enables interaction
             exoTopControllers.visibility = View.VISIBLE
             exoBottomControllers.visibility = View.VISIBLE
         }
     }
+
 
     override fun onSaveInstanceState(outState: Bundle) {
         if (isInit) {
@@ -679,7 +687,7 @@ class PlayerActivity : AppCompatActivity(), Player.Listener {
         val qualityList = animePlayingDetails.urlobj.map { QualityItem(it.hdtv, it.playUrl) }
 
         val adapter = QualityAdapter(qualityList, currentEpIndex) { selectedQuality, index ->
-            changePlayerSource(selectedQuality.playUrl, exoPlayer,  index)
+            changePlayerSource(selectedQuality.playUrl, exoPlayer, index)
             dialog.dismiss()
         }
 
@@ -718,6 +726,11 @@ class PlayerActivity : AppCompatActivity(), Player.Listener {
 
     override fun onStop() {
         model.player.pause()
+        saveData(
+            "${movie?.name}_${currentEpIndex}",
+            model.player.currentPosition,
+            this
+        )
         super.onStop()
 
     }
@@ -797,6 +810,11 @@ class PlayerActivity : AppCompatActivity(), Player.Listener {
         model.player.stop()
         model.player.release()
         finishAndRemoveTask()
+        saveData(
+            "${movie?.name}_${currentEpIndex}",
+            model.player.currentPosition,
+            this
+        )
     }
 
 
@@ -864,11 +882,90 @@ class PlayerActivity : AppCompatActivity(), Player.Listener {
         isFocusable = false
     }
 
+    fun mapThumbnails(outputDir: File): Map<Long, File> {
+        val thumbnailMap = mutableMapOf<Long, File>()
+        outputDir.listFiles()?.forEach { file ->
+            val timestamp = file.nameWithoutExtension.toLongOrNull()
+            if (timestamp != null) {
+                thumbnailMap[timestamp] = file
+            }
+        }
+        return thumbnailMap
+    }
+
+    private fun setupPreviewThumbnails(thumbnailMap: Map<Long, File>) {
+        val previewImageView = findViewById<ImageView>(R.id.exo_thumbnail)
+
+        val timeBar = findViewById<ExtendedTimeBar>(com.google.android.exoplayer2.R.id.exo_progress)
+
+        timeBar.addListener(object : com.google.android.exoplayer2.ui.TimeBar.OnScrubListener {
+            override fun onScrubStart(timeBar: com.google.android.exoplayer2.ui.TimeBar, position: Long) {
+                if (timeBar is ExtendedTimeBar) {
+                    previewImageView.visibility = View.VISIBLE
+                    updateThumbnail(previewImageView, timeBar, position, thumbnailMap)
+                }
+            }
+
+            override fun onScrubMove(timeBar: com.google.android.exoplayer2.ui.TimeBar, position: Long) {
+                if (timeBar is ExtendedTimeBar) {
+                    updateThumbnail(previewImageView, timeBar, position, thumbnailMap)
+                }
+            }
+
+            override fun onScrubStop(timeBar: com.google.android.exoplayer2.ui.TimeBar, position: Long, canceled: Boolean) {
+                previewImageView.visibility = View.GONE
+            }
+        })
+
+    }
+    private fun updateThumbnail(
+        imageView: ImageView,
+        timeBar: ExtendedTimeBar,
+        position: Long,
+        thumbnailMap: Map<Long, File>
+    ) {
+        val interval = 30_000L // 30 seconds interval in milliseconds
+        val previewSecond = (position / interval) * 30
+        val previewFile = thumbnailMap[previewSecond]
+
+        // Load the correct thumbnail using Glide
+        if (previewFile != null && previewFile.exists()) {
+            Glide.with(this)
+                .load(previewFile)
+                .into(imageView)
+        } else {
+            // Fallback for missing thumbnails
+            imageView.setImageResource(android.R.color.transparent)
+        }
+
+        // Get time bar width and duration
+        val timeBarWidth = timeBar.width
+        val duration = model.player.duration.takeIf { it > 0 } ?: return
+
+        // Calculate the scrubber's position on the x-axis
+        val scrubberPosition = (position.toFloat() / duration) * timeBarWidth
+
+        // Align thumbnail horizontally with the scrubber
+        val thumbnailX = scrubberPosition - (imageView.width / 2)
+        imageView.translationX = thumbnailX.coerceIn(0f, (timeBarWidth - imageView.width).toFloat())
+
+        // Align thumbnail vertically with the TimeBar
+        val timeBarHeight = timeBar.height
+        imageView.translationY = timeBar.top.toFloat() - imageView.height - 8f // 8dp padding
+    }
+
+
     @SuppressLint("ViewConstructor")
+
     class ExtendedTimeBar(
         context: Context,
         attrs: AttributeSet?
     ) : DefaultTimeBar(context, attrs) {
+
+        private var previewBitmap: Bitmap? = null
+        private val previewPaint = Paint().apply { isFilterBitmap = true }
+        private var videoDuration: Long = 0L
+        private var videoPosition: Long = 0L
         private var enabled = false
         private var forceDisabled = false
         override fun setEnabled(enabled: Boolean) {
@@ -881,39 +978,22 @@ class PlayerActivity : AppCompatActivity(), Player.Listener {
             isEnabled = enabled
         }
 
-        private var previewBitmap: Bitmap? = null
-        private val previewPaint = Paint()
-
-        init {
-            // Preview image paint settings
-            previewPaint.isFilterBitmap = true
-            // Load or generate the preview image
-            // Replace R.drawable.preview_image with your actual image resource
-            previewBitmap = BitmapFactory.decodeResource(resources, R.drawable.anim_rewind)
-        }
-
         override fun onDraw(canvas: Canvas) {
             super.onDraw(canvas)
 
-            // Preview image display logic during seek
-            val duration = 0L
-            if (duration > 0) {
-                val position = 3L
-                val relativePos =
-                    if (duration == 0L) 0f else (position.toFloat() / duration.toFloat())
-                val width = width
-                val previewWidth = previewBitmap?.width ?: 0
-                val previewHeight = previewBitmap?.height ?: 0
-
-                // Calculate the position to draw the preview image
+            if (videoDuration > 0) {
+                val relativePos = videoPosition.toFloat() / videoDuration.toFloat()
+                val previewWidth = previewBitmap?.width ?: 100
+                val previewHeight = previewBitmap?.height ?: 60
                 val previewX = (relativePos * width - previewWidth / 2).toInt()
-                val previewY = height - previewHeight
+                val previewY = height - previewHeight - 20 // Adjust for padding
 
-                // Display the preview image
                 previewBitmap?.let {
                     canvas.drawBitmap(it, previewX.toFloat(), previewY.toFloat(), previewPaint)
                 }
             }
         }
+
+
     }
 }

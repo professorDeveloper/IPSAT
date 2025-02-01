@@ -1,7 +1,6 @@
 package com.ip_tv.ipsat.presentation.activities
 
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -10,7 +9,6 @@ import com.ip_tv.ipsat.R
 import com.ip_tv.ipsat.databinding.ActivityMainBinding
 import com.ip_tv.ipsat.domain.preference.UserPreferenceManager
 import com.ip_tv.ipsat.utils.hideWithAnimation
-import com.ip_tv.ipsat.utils.hideWithoutAnimation
 import com.ip_tv.ipsat.utils.initActivity
 import com.ip_tv.ipsat.utils.showWithAnimation
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,7 +33,14 @@ class MainActivity : AppCompatActivity() {
         setContentView(viewBinding.root)
         viewBinding.homeNavigation.setupWithNavController(navController)
         managePages()
-    }
+        requestPermissions(
+            arrayOf(
+                android.Manifest.permission.INTERNET,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                android.Manifest.permission.READ_EXTERNAL_STORAGE
+            ),
+            100
+        ) }
 
   private  fun managePages(){
         navController.addOnDestinationChangedListener { _, destination, _ ->

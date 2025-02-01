@@ -370,6 +370,18 @@
             android:layout_marginBottom="36dp"
             android:orientation="vertical">
 
+            <!-- Thumbnail ImageView -->
+            <ImageView
+                android:id="@+id/exo_thumbnail"
+                android:layout_width="120dp"
+                android:layout_height="80dp"
+                android:layout_gravity="start"
+                android:layout_marginBottom="4dp"
+                android:scaleType="fitCenter"
+                android:visibility="visible"
+                app:cardCornerRadius="8dp"
+                tools:src="@drawable/gradient_back" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -411,21 +423,10 @@
                     tools:ignore="TextContrastCheck"
                     tools:text="24:00" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:includeFontPadding="false"
-                    android:text=" • "
-                    android:textColor="#80FFFFFF"
-                    android:textSize="14sp"
-                    tools:ignore="HardcodedText,TextContrastCheck" />
-
-
             </LinearLayout>
 
             <view
                 android:id="@id/exo_progress"
-
                 class="com.ip_tv.ipsat.presentation.activities.PlayerActivity$ExtendedTimeBar"
                 android:layout_width="match_parent"
                 android:layout_marginVertical="8dp"

@@ -37,13 +37,22 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.google.gson.Gson
 import com.ip_tv.ipsat.R
 import com.ip_tv.ipsat.app.App
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import org.apache.commons.compress.archivers.tar.TarArchiveEntry
+import org.apache.commons.compress.archivers.tar.TarArchiveInputStream
+import java.io.BufferedInputStream
+import java.io.BufferedOutputStream
 import java.io.BufferedReader
+import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
+import java.io.IOException
 import java.io.InputStreamReader
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 import java.net.NetworkInterface
+import java.net.URL
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Timer
@@ -128,6 +137,41 @@ fun Fragment.hideSystemBars() {
                     or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                     or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
             )
+}
+
+
+suspend fun extractTarFile(tarUrl: String, outputDir: File) {
+    withContext(Dispatchers.IO) {
+        try {
+            // Open the URL stream and wrap it in a TarArchiveInputStream
+            URL(tarUrl).openStream().use { inputStream ->
+                TarArchiveInputStream(BufferedInputStream(inputStream)).use { tarInputStream ->
+                    var entry: TarArchiveEntry?
+
+                    // Iterate through each entry in the .tar file
+                    while (tarInputStream.nextTarEntry.also { entry = it } != null) {
+                        val outputFile = File(outputDir, entry!!.name)
+
+                        if (entry!!.isDirectory) {
+                            // Create directories for folder entries
+                            outputFile.mkdirs()
+                        } else {
+                            // Ensure parent directories are created
+                            outputFile.parentFile?.mkdirs()
+
+                            // Write the file content using a buffered output stream
+                            BufferedOutputStream(FileOutputStream(outputFile)).use { outputStream ->
+                                tarInputStream.copyTo(outputStream)
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+            println("Failed to extract TAR file: ${e.message}")
+        }
+    }
 }
 
 fun setAnimation(
