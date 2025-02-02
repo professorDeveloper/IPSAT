@@ -10,7 +10,11 @@ import androidx.recyclerview.widget.ConcatAdapter
 import com.ip_tv.ipsat.data.remote.TrailerService
 import com.ip_tv.ipsat.databinding.DetailSeriesScreenBinding
 import com.ip_tv.ipsat.databinding.SeriesDetailItemBinding
+import com.ip_tv.ipsat.domain.model.Item0
 import com.ip_tv.ipsat.domain.model.Movie
+import com.ip_tv.ipsat.domain.model.SeriesDetailResponse
+import com.ip_tv.ipsat.domain.model.VodMovieResponse
+import com.ip_tv.ipsat.presentation.activities.PlayerSeriesActivity
 import com.ip_tv.ipsat.presentation.activities.TrailerActivity
 import com.ip_tv.ipsat.presentation.adapters.EpisodeAdapter
 import com.ip_tv.ipsat.presentation.adapters.SeriesDetailPageAdapter
@@ -30,6 +34,7 @@ import kotlinx.coroutines.withContext
 @AndroidEntryPoint
 class DetailSeriesScreen :
     BaseFragment<DetailSeriesScreenBinding>(DetailSeriesScreenBinding::inflate) {
+
     private val model by viewModels<DetailViewModel>()
     private lateinit var pageAdapter: SeriesDetailPageAdapter
     private lateinit var episodeAdapter: EpisodeAdapter
@@ -38,33 +43,36 @@ class DetailSeriesScreen :
         val series = requireArguments().getSerializable("movie") as Movie
         LocalData.detailSeriesImage = series.image
         model.loadDetail(series.id)
+
+        setupAdapters()
         observeModelData(series)
+
+
+        lifecycleScope.launch {
+            val castList = withContext(Dispatchers.IO) {
+                TrailerService().getCast(series.name)
+            }
+            pageAdapter.updateCast(castList)
+        }
+
+        pageAdapter.setSubTitleClick {
+            loadTrailer(series.name)
+        }
+    }
+
+    private fun setupAdapters() {
         pageAdapter = SeriesDetailPageAdapter(this, SeriesDetailItemBinding.inflate(layoutInflater))
         episodeAdapter = EpisodeAdapter(this)
         binding.seriesDetailPageRv.adapter = ConcatAdapter(pageAdapter, episodeAdapter)
-        pageAdapter.setSubTitleClick {
-            WaitDialog.show(requireActivity(),"Loading..")
-            val youtubeCrawler = TrailerService()
-            lifecycleScope.launch (Dispatchers.IO){
-                val youtubeId = youtubeCrawler.findMovie(series.name)
-                Log.d("GGG", "onViewCreate: $youtubeId")
-                val intent = Intent(requireActivity(), TrailerActivity::class.java)
-                intent.putExtra("apiKey", LocalData.youtube_key)
-                intent.putExtra("videoId", youtubeId)
-                startActivity(intent)
-                WaitDialog.dismiss(requireActivity())
-            }
-        }
-
     }
 
     private fun observeModelData(movie: Movie) {
-        model.seriesDetailResponse.observe(this) {
-            when (it) {
+        model.seriesDetailResponse.observe(viewLifecycleOwner) { resource ->
+            when (resource) {
                 is Resource.Error -> {
                     binding.container.gone()
                     binding.progress.gone()
-                    showSnack(binding.root, it.throwable.message.toString())
+                    showSnack(binding.root, resource.throwable.message.toString())
                 }
 
                 is Resource.Loading -> {
@@ -73,25 +81,60 @@ class DetailSeriesScreen :
                 }
 
                 is Resource.Success -> {
-                    val data = it.data
-
-                    lifecycleScope.launch (Dispatchers.IO){
-                        val  service = TrailerService()
-                        val list =service.getCast(movie.name)
-                        withContext(Dispatchers.Main){
-                            binding.progress.gone()
-                            binding.container.visible()
-                            episodeAdapter.submitList(data.seriesList.list)
-                            pageAdapter.manageUI(data, movie)
-                            pageAdapter.updateCast(list)
-                        }
-                    }
+                    val data = resource.data
+                    updateUI(movie, data)
                 }
 
-                else -> {
-
-                }
+                else -> {}
             }
+        }
+    }
+
+    private fun updateUI(movie: Movie, data: SeriesDetailResponse) {
+
+        pageAdapter.manageUI(data, movie)
+
+        episodeAdapter.submitList(data.seriesList.list)
+
+        episodeAdapter.setOnItemClickListener { item, position ->
+            launchPlayer(data, position - 1, )
+        }
+    }
+
+
+    private fun launchPlayer(
+        data: SeriesDetailResponse,
+        position: Int,
+    ) {
+        lifecycleScope.launch {
+            WaitDialog.show(requireActivity(), "Loading..")
+
+            PlayerSeriesActivity.currentEpIndex = position
+            PlayerSeriesActivity.epCount = data.seriesList.list.size
+            PlayerSeriesActivity.epList = data.seriesList.list as ArrayList<Item0>
+            PlayerSeriesActivity.movieInfo = data
+            PlayerSeriesActivity.pipStatus = true
+            Log.d("GGG", "position0 position: $position")
+
+            WaitDialog.dismiss()
+            startActivity(PlayerSeriesActivity.newIntent(requireContext()))
+        }
+    }
+
+    private fun loadTrailer(movieName: String) {
+        WaitDialog.show(requireActivity(), "Loading..")
+        lifecycleScope.launch(Dispatchers.IO) {
+            val youtubeId = TrailerService().findMovie(movieName)
+            Log.d("GGG", "YouTube ID: $youtubeId")
+
+            withContext(Dispatchers.Main) {
+                val intent = Intent(requireActivity(), TrailerActivity::class.java)
+                intent.putExtra("apiKey", LocalData.youtube_key)
+                intent.putExtra("videoId", youtubeId)
+                startActivity(intent)
+                WaitDialog.dismiss(requireActivity())
+            }
+
         }
     }
 
@@ -99,5 +142,4 @@ class DetailSeriesScreen :
         super.onDestroy()
         LocalData.detailSeriesImage = ""
     }
-
 }

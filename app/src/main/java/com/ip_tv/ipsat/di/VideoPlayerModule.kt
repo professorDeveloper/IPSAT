@@ -9,6 +9,7 @@
 package com.ip_tv.ipsat.di
 
 import android.app.Application
+import com.google.android.exoplayer2.DefaultRenderersFactory
 import com.google.android.exoplayer2.ExoPlayer
 import dagger.Module
 import dagger.Provides
@@ -23,9 +24,14 @@ object VideoPlayerModule {
     @Provides
     @ViewModelScoped
     fun provideVideoPlayer(app: Application): ExoPlayer {
-        return ExoPlayer.Builder(app)
+        val renderersFactory = DefaultRenderersFactory(app)
+            .setEnableDecoderFallback(true) // Enable fallback to software decoder
+
+
+        return ExoPlayer.Builder(app,renderersFactory)
             .setSeekForwardIncrementMs(10000)
             .setSeekBackIncrementMs(10000)
+
             .build()
     }
 

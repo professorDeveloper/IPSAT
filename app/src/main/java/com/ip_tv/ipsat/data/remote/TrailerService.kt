@@ -79,9 +79,3 @@ class TrailerService {
 
 
 }
-
-fun main(args: Array<String>) {
-    runBlocking {
-        TrailerService().getCast("Squid Game")
-    }
-}

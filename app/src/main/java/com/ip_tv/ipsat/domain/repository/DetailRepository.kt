@@ -7,5 +7,5 @@ import kotlinx.coroutines.flow.Flow
 interface DetailRepository {
     fun getSeriesContent(id: Int): Flow<Result<SeriesDetailResponse>>
     fun getMovieResponse(id: Int): Flow<Result<VodMovieResponse>>
-
+    fun getSeriesVod(id: Int): Flow<Result<VodMovieResponse>>
 }

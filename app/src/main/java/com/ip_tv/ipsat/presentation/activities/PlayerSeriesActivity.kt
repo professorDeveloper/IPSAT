@@ -6,21 +6,19 @@ import android.app.AlertDialog
 import android.app.AppOpsManager
 import android.app.Dialog
 import android.app.PictureInPictureParams
+import android.app.PictureInPictureUiState
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
-import android.graphics.Bitmap
-import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.Animatable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.util.AttributeSet
+import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.OrientationEventListener
@@ -51,20 +49,22 @@ import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.PlaybackParameters
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
-import com.google.android.exoplayer2.ui.DefaultTimeBar
 import com.google.android.material.slider.Slider
 import com.google.android.material.snackbar.Snackbar
 import com.ip_tv.ipsat.R
-import com.ip_tv.ipsat.databinding.ActivityPlayerBinding
-import com.ip_tv.ipsat.domain.model.Movie
+import com.ip_tv.ipsat.databinding.ActivityPlayerSeriesBinding
+import com.ip_tv.ipsat.domain.model.Item0
+import com.ip_tv.ipsat.domain.model.SeriesDetailResponse
 import com.ip_tv.ipsat.domain.model.VodMovieResponse
 import com.ip_tv.ipsat.presentation.adapters.CustomAdapter
 import com.ip_tv.ipsat.presentation.adapters.QualityAdapter
 import com.ip_tv.ipsat.presentation.adapters.QualityItem
 import com.ip_tv.ipsat.presentation.viewmodel.PlayerViewModel
 import com.ip_tv.ipsat.utils.DoubleTapPlayerView
+import com.ip_tv.ipsat.utils.dp
 import com.ip_tv.ipsat.utils.extractTarFile
 import com.ip_tv.ipsat.utils.hideSystemBars
+import com.ip_tv.ipsat.utils.px
 import com.ip_tv.ipsat.utils.readData
 import com.ip_tv.ipsat.utils.saveData
 import com.ip_tv.ipsat.utils.snackString
@@ -78,15 +78,15 @@ import java.util.concurrent.TimeUnit
 import kotlin.math.min
 
 @AndroidEntryPoint
-class PlayerActivity : AppCompatActivity(), Player.Listener {
+class PlayerSeriesActivity : AppCompatActivity(), Player.Listener {
     private var notchHeight: Int = 1
+    private var qualityIndex = 0
     private var epChanging = false
     private val model by viewModels<PlayerViewModel>()
-    private var quality: String = "Auto"
     private lateinit var animePlayingDetails: VodMovieResponse
     private var episodeLength: Float = 0f
     private var playbackPosition: Long = 0
-    private lateinit var binding: ActivityPlayerBinding
+    private lateinit var binding: ActivityPlayerSeriesBinding
     private var mBackstackLost = true
     private lateinit var exoTopControllers: LinearLayout
     private lateinit var exoMiddleControllers: LinearLayout
@@ -114,7 +114,7 @@ class PlayerActivity : AppCompatActivity(), Player.Listener {
     private lateinit var videoEpTextView: TextView
     private lateinit var exoPip: ImageButton
     private lateinit var exoSpeed: ImageButton
-    private lateinit var exoProgress: ExtendedTimeBar
+    private lateinit var exoProgress: PlayerActivity.ExtendedTimeBar
     private lateinit var exoLock: ImageButton
     private var isInit: Boolean = false
     private val mCookieManager = CookieManager()
@@ -126,7 +126,6 @@ class PlayerActivity : AppCompatActivity(), Player.Listener {
     private lateinit var videoName: TextView
     private lateinit var videoInfo: TextView
     private lateinit var serverInfo: TextView
-
     override fun onAttachedToWindow() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             val displayCutout = window.decorView.rootWindowInsets.displayCutout
@@ -143,6 +142,7 @@ class PlayerActivity : AppCompatActivity(), Player.Listener {
         super.onAttachedToWindow()
     }
 
+
     private fun checkNotch() {
         if (notchHeight != 0) {
             val orientation = resources.configuration.orientation
@@ -158,6 +158,8 @@ class PlayerActivity : AppCompatActivity(), Player.Listener {
                         marginEnd = 0
                     }
                 }
+            playerView.findViewById<View>(com.google.android.exoplayer2.R.id.exo_buffering).translationY =
+                (if (orientation == Configuration.ORIENTATION_LANDSCAPE) 0 else (notchHeight + 8f.px)).dp
             exoBrightnessCont.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 marginEnd =
                     if (orientation == Configuration.ORIENTATION_LANDSCAPE) notchHeight else 0
@@ -170,7 +172,6 @@ class PlayerActivity : AppCompatActivity(), Player.Listener {
     }
 
     @SuppressLint("DefaultLocale")
-    @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.setFlags(
@@ -184,9 +185,10 @@ class PlayerActivity : AppCompatActivity(), Player.Listener {
             window.attributes.layoutInDisplayCutoutMode =
                 WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
         }
-        parseExtra()
-        binding = ActivityPlayerBinding.inflate(layoutInflater)
+
+        binding = ActivityPlayerSeriesBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        model.isSeriesMode=true
         WindowCompat.setDecorFitsSystemWindows(window, false)
         WindowInsetsControllerCompat(window, binding.root).let { controller ->
             controller.hide(WindowInsetsCompat.Type.systemBars())
@@ -194,13 +196,12 @@ class PlayerActivity : AppCompatActivity(), Player.Listener {
                 WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         }
 
+
         //Initialize
         hideSystemBars()
         onBackPressedDispatcher.addCallback(this) {
             finish()
         }
-
-
 
         mCookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL)
         CookieHandler.setDefault(mCookieManager)
@@ -232,30 +233,16 @@ class PlayerActivity : AppCompatActivity(), Player.Listener {
         playerView.keepScreenOn = true
         playerView.player = model.player
         playerView.subtitleView?.visibility = View.VISIBLE
-        playerView.findViewById<ExtendedTimeBar>(com.google.android.exoplayer2.ui.R.id.exo_progress)
+        playerView.findViewById<PlayerActivity.ExtendedTimeBar>(com.google.android.exoplayer2.ui.R.id.exo_progress)
             .setKeyTimeIncrement(10000)
+
         prepareButtons()
-        videoEpTextView.text = movie!!.name
-        val outputDir = File(applicationContext.cacheDir, "${movie!!.name}thumbnails")
-        lifecycleScope.launch {
-            extractTarFile(animePlayingDetails.urlobj.get(currentEpIndex).thumbnailUrl, outputDir)
-            val thumbnailMap = mapThumbnails(outputDir)
-            setupPreviewThumbnails(thumbnailMap)
-        }
 
-//        model.downloadLink.observe(this) { link ->
-//            downloadBtn.show()
-//            downloadBtn.setOnClickListener {
-//                download(
-//                    this,
-//                    movieInfo!!,
-//                    link,
-//                    epListByName.get(currentEpIndex).first
-//                )
-//            }
-//        }
 
-        playbackPosition = readData("${movie?.name}_${currentEpIndex}", this) ?: 0
+        playbackPosition = readData(
+            "${PlayerSeriesActivity.movieInfo?.programName}_${PlayerSeriesActivity.currentEpIndex}",
+            this
+        ) ?: 0
 
         println("Position$playbackPosition")
         model.keepScreenOn.observe(this) { keepScreenOn ->
@@ -267,33 +254,29 @@ class PlayerActivity : AppCompatActivity(), Player.Listener {
                 finishAndRemoveTask()
             }
         }
+        model.playNextEp.observe(this) { playNextEp ->
+            if (playNextEp) setNewEpisode()
 
+
+        }
         model.isLoading.observe(this) { isLoading ->
             loadingLayout.isVisible = isLoading
             playerView.isVisible = !isLoading
-
-        }
-
-        if (!isInit) {
-            model.setAnimeLink(
-                epList[currentEpIndex].urlobj.get(0).playUrl
+            Log.d(
+                "GGG", "onCreate:FUCKING GGGG${isLoading} "
             )
-            playbackPosition = readData("${movie?.name}_${currentEpIndex}", this) ?: 0
-            prevEpBtn.setImageViewEnabled(PlayerActivity.currentEpIndex.toInt() >= 2)
-            nextEpBtn.setImageViewEnabled(currentEpIndex.toInt() + 1 != epCount.toInt())
+        }
+        if (!isInit) {
+            parseLoadData()
+            playbackPosition = readData(
+                "${PlayerSeriesActivity.movieInfo?.programName}_${PlayerSeriesActivity.currentEpIndex}",
+                this
+            ) ?: 0
+            prevEpBtn.setImageViewEnabled(PlayerSeriesActivity.currentEpIndex.toInt() >= 2)
+            nextEpBtn.setImageViewEnabled(currentEpIndex.toInt() != epCount.toInt())
         }
         isInit = true
-
-        if (movie == null) {
-            videoName.visibility = View.GONE
-            videoInfo.visibility = View.GONE
-            serverInfo.visibility = View.GONE
-        } else {
-            videoName.isSelected = true
-            videoName.text = animePlayingDetails.urlobj.get(currentEpIndex).hdtv
-            videoInfo.text = animePlayingDetails.urlobj.get(currentEpIndex).hdtv
-            serverInfo.text = animePlayingDetails.urlobj.get(currentEpIndex).typeName
-        }
+        updateEpisodeName()
 
 
         model.showSubsBtn.observe(this) {
@@ -331,16 +314,48 @@ class PlayerActivity : AppCompatActivity(), Player.Listener {
             }
         }
 
+
     }
 
 
-    private fun buildExoplayer() {
-        model.player.playWhenReady = true
-        model.player
-            .apply {
-                seekTo(playbackPosition)
-                play()
-            }
+    private fun setNewEpisode(increment: Int = 1) {
+        val newIndex = currentEpIndex + increment
+
+        if (newIndex < 0 || newIndex >= epCount) {
+            Log.d("PlayerSeriesActivity", "Invalid episode index: $newIndex")
+            return
+        }
+
+        epChanging = true
+        currentEpIndex = newIndex
+        Log.d("PlayerSeriesActivity", "Switching to episode: $currentEpIndex")
+
+        prevEpBtn.setImageViewEnabled(currentEpIndex > 0) //
+        nextEpBtn.setImageViewEnabled(currentEpIndex < epCount - 1)
+
+        qualityIndex=0
+        model.setAnimeLink(
+            vodList[currentEpIndex].urlobj.get(qualityIndex).playUrl,
+            true
+        )
+        updateEpisodeName()
+
+        lifecycleScope.launch {
+            model.player.stop()
+        }
+    }
+
+    private fun updateEpisodeName() {
+        if (epCount != 1) {
+            Log.d("GGG", "updateEpisodeName:${currentEpIndex} ")
+            videoEpTextView.isSelected = true
+            videoEpTextView.isSingleLine = true
+            videoName.text = animePlayingDetails.urlobj.get(qualityIndex).hdtv
+            videoInfo.text = animePlayingDetails.urlobj.get(qualityIndex).hdtv
+            serverInfo.text = animePlayingDetails.urlobj.get(qualityIndex).typeName
+            videoEpTextView.text = epList[currentEpIndex].name
+
+        }
     }
 
 
@@ -348,9 +363,6 @@ class PlayerActivity : AppCompatActivity(), Player.Listener {
     private fun changeVideoSpeed(byInt: Float) {
         model.player.playbackParameters = PlaybackParameters(byInt)
     }
-
-
-
 
     override fun onSaveInstanceState(outState: Bundle) {
         if (isInit) {
@@ -362,7 +374,6 @@ class PlayerActivity : AppCompatActivity(), Player.Listener {
         super.onSaveInstanceState(outState)
     }
 
-    @SuppressLint("WrongConstant")
     private fun prepareButtons() {
         // For Screen Rotation
         var flag = true
@@ -381,12 +392,10 @@ class PlayerActivity : AppCompatActivity(), Player.Listener {
         }
 
 
-
-
         exoQuality.setOnClickListener {
             initPopupQuality(
                 animePlayingDetails = animePlayingDetails,
-                currentEpIndex, model.player
+                qualityIndex, model.player
             ).show()
         }
 
@@ -395,27 +404,27 @@ class PlayerActivity : AppCompatActivity(), Player.Listener {
             if (currentSpeed == 1f && model.player.playWhenReady && isNormal) {
                 val params = PlaybackParameters(2f)
                 model.player.setPlaybackParameters(params)
-                snackString("Speed 2x", this@PlayerActivity)
+                snackString("Speed 2x", this@PlayerSeriesActivity)
             }
         }
-
-
-
 
         playerView.setActionUpListener {
             val currentSpeed = model.player.playbackParameters.speed
             if (currentSpeed == 2f && model.player.playWhenReady && isNormal) {
                 val params = PlaybackParameters(1f)
                 model.player.setPlaybackParameters(params)
-                snackString("Speed 1x", this@PlayerActivity)
+                snackString("Speed 1x", this@PlayerSeriesActivity)
             }
+
+
         }
 
         var locked = false
         val container = playerView.findViewById<View>(R.id.exo_controller_cont)
         val screen = playerView.findViewById<View>(R.id.exo_black_screen)
         val lockButton = playerView.findViewById<ImageButton>(R.id.exo_unlock)
-        val timeline = playerView.findViewById<ExtendedTimeBar>(com.google.android.exoplayer2.ui.R.id.exo_progress)
+        val timeline =
+            playerView.findViewById<PlayerActivity.ExtendedTimeBar>(com.google.android.exoplayer2.ui.R.id.exo_progress)
         playerView.findViewById<ImageButton>(R.id.exo_lock).setOnClickListener {
             locked = true
             screen.visibility = View.GONE
@@ -434,9 +443,6 @@ class PlayerActivity : AppCompatActivity(), Player.Listener {
         scaleBtn = playerView.findViewById(R.id.exo_screen)
         prevEpBtn = playerView.findViewById(R.id.exo_prev_ep)
         nextEpBtn = playerView.findViewById(R.id.exo_next_ep)
-
-
-//        model.player.playbackParameters =
 
 
         exoSpeed.setOnClickListener {
@@ -492,12 +498,7 @@ class PlayerActivity : AppCompatActivity(), Player.Listener {
                 }
             }
             hideSystemBars()
-
-            val dialog = builder.create()
-            dialog.show()
         }
-
-
 
 
         exoPip.setOnClickListener {
@@ -514,7 +515,7 @@ class PlayerActivity : AppCompatActivity(), Player.Listener {
                         PictureInPictureParams.Builder().build()
                     )
                     playerView.useController = false
-                    pipStatus = false
+                    PlayerSeriesActivity.pipStatus = false
                 } else {
                     val intent = Intent(
                         "android.settings.PICTURE_IN_PICTURE_SETTINGS",
@@ -582,7 +583,6 @@ class PlayerActivity : AppCompatActivity(), Player.Listener {
                 (exoPlay.drawable as Animatable?)?.start()
                 if (model.player.isPlaying) {
                     Glide.with(this).load(R.drawable.anim_pause_to_play).into(exoPlay)
-
                     pauseVideo()
                 } else {
                     Glide.with(this).load(R.drawable.anim_play_to_pause).into(exoPlay)
@@ -592,7 +592,6 @@ class PlayerActivity : AppCompatActivity(), Player.Listener {
             }
         }
 
-// Back Button
         playerView.findViewById<ImageButton>(R.id.exo_back).apply {
             setOnClickListener {
                 model.player.release()
@@ -600,7 +599,157 @@ class PlayerActivity : AppCompatActivity(), Player.Listener {
             }
         }
 
+        nextEpBtn.setOnClickListener {
+            setNewEpisode(1)
+        }
+        prevEpBtn.setOnClickListener {
+            setNewEpisode(-1)
+        }
+    }
 
+    @SuppressLint("MissingSuperCall")
+    override fun onUserLeaveHint() {
+        // Handle leaving PiP mode using the home button
+        this.enterPictureInPictureMode(
+            PictureInPictureParams.Builder().build()
+        )
+        playerView.useController = false
+        pipStatus = false
+        model.player.pause()
+    }
+
+    private fun onPiPChanged(isInPictureInPictureMode: Boolean) {
+        playerView.useController = !isInPictureInPictureMode
+        if (isInPictureInPictureMode) {
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+            orientationListener?.disable()
+        } else {
+            mBackstackLost = true;
+            orientationListener?.enable()
+        }
+        if (isInit) {
+            saveData(
+                "${movieInfo?.programName}_${currentEpIndex}",
+                model.player.currentPosition,
+                this
+            )
+            hideSystemBars()
+            model.player.play()
+        }
+    }
+
+
+    @Suppress("DEPRECATION")
+    @Deprecated("Deprecated in Java")
+    override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean) {
+        onPiPChanged(isInPictureInPictureMode)
+        super.onPictureInPictureModeChanged(isInPictureInPictureMode)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    override fun onPictureInPictureUiStateChanged(pipState: PictureInPictureUiState) {
+        onPiPChanged(isInPictureInPictureMode)
+        super.onPictureInPictureUiStateChanged(pipState)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onPictureInPictureModeChanged(
+        isInPictureInPictureMode: Boolean,
+        newConfig: Configuration
+    ) {
+        onPiPChanged(isInPictureInPictureMode)
+        super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
+    }
+
+    fun mapThumbnails(outputDir: File): Map<Long, File> {
+        val thumbnailMap = mutableMapOf<Long, File>()
+        outputDir.listFiles()?.forEach { file ->
+            val timestamp = file.nameWithoutExtension.toLongOrNull()
+            if (timestamp != null) {
+                thumbnailMap[timestamp] = file
+            }
+        }
+        return thumbnailMap
+    }
+
+
+    private fun setupPreviewThumbnails(thumbnailMap: Map<Long, File>) {
+        val previewImageView = findViewById<ImageView>(R.id.exo_thumbnail)
+        val timeBar =
+            findViewById<PlayerActivity.ExtendedTimeBar>(com.google.android.exoplayer2.R.id.exo_progress)
+
+        timeBar.addListener(object : com.google.android.exoplayer2.ui.TimeBar.OnScrubListener {
+            override fun onScrubStart(
+                timeBar: com.google.android.exoplayer2.ui.TimeBar,
+                position: Long
+            ) {
+                if (timeBar is PlayerActivity.ExtendedTimeBar) {
+                    previewImageView.visibility = View.VISIBLE
+
+                    updateThumbnail(previewImageView, timeBar, position, thumbnailMap)
+                }
+            }
+
+            override fun onScrubMove(
+                timeBar: com.google.android.exoplayer2.ui.TimeBar,
+                position: Long
+            ) {
+                if (timeBar is PlayerActivity.ExtendedTimeBar) {
+                    updateThumbnail(previewImageView, timeBar, position, thumbnailMap)
+                }
+            }
+
+            override fun onScrubStop(
+                timeBar: com.google.android.exoplayer2.ui.TimeBar,
+                position: Long,
+                canceled: Boolean
+            ) {
+                previewImageView.visibility = View.GONE
+
+            }
+        })
+    }
+
+    private fun updateThumbnail(
+        imageView: ImageView,
+        timeBar: PlayerActivity.ExtendedTimeBar,
+        position: Long,
+        thumbnailMap: Map<Long, File>
+    ) {
+        val interval = 30_000L
+        val previewSecond = (position / interval) * 30
+        val previewFile = thumbnailMap[previewSecond]
+
+        if (previewFile != null && previewFile.exists()) {
+            Glide.with(this)
+                .load(previewFile)
+                .into(imageView)
+        } else {
+            imageView.setImageResource(android.R.color.transparent)
+        }
+
+        val timeBarWidth = timeBar.width
+        var duration = model.player.duration.takeIf { it > 0 } ?: return
+
+        val scrubberPosition = (position.toFloat() / duration) * timeBarWidth
+
+        val thumbnailX = scrubberPosition - (imageView.width / 2)
+        imageView.translationX = thumbnailX.coerceIn(0f, (timeBarWidth - imageView.width).toFloat())
+
+        val timeBarHeight = timeBar.height
+        val targetTranslationY = timeBar.top.toFloat() - imageView.height - 8f // 8dp padding
+
+        // Animate vertical movement smoothly
+        ObjectAnimator.ofFloat(
+            imageView,
+            "translationY",
+            imageView.translationY,
+            targetTranslationY
+        ).apply {
+            duration = 150L
+            interpolator = DecelerateInterpolator()
+            start()
+        }
     }
 
 
@@ -617,7 +766,7 @@ class PlayerActivity : AppCompatActivity(), Player.Listener {
 
         val qualityList = animePlayingDetails.urlobj.map { QualityItem(it.hdtv, it.playUrl) }
 
-        val adapter = QualityAdapter(qualityList, currentEpIndex) { selectedQuality, index ->
+        val adapter = QualityAdapter(qualityList, qualityIndex) { selectedQuality, index ->
             changePlayerSource(selectedQuality.playUrl, exoPlayer, index)
             dialog.dismiss()
         }
@@ -641,52 +790,64 @@ class PlayerActivity : AppCompatActivity(), Player.Listener {
         model.updateQuality(
             playUrl
         )
-        currentEpIndex = epind
-        if (movie == null) {
+        updateEpisodeName()
+
+        PlayerSeriesActivity.currentEpIndex = epind
+        if (PlayerSeriesActivity.movieInfo == null) {
             videoName.visibility = View.GONE
             videoInfo.visibility = View.GONE
             serverInfo.visibility = View.GONE
         } else {
-            videoName.isSelected = true
-            videoName.text = animePlayingDetails.urlobj.get(currentEpIndex).hdtv
-            videoInfo.text = animePlayingDetails.urlobj.get(currentEpIndex).hdtv
-            serverInfo.text = animePlayingDetails.urlobj.get(currentEpIndex).typeName
+            updateEpisodeName()
+
+
         }
 
+    }
+
+
+    private fun buildExoplayer() {
+        model.player.playWhenReady = true
+        model.player
+            .apply {
+                seekTo(playbackPosition)
+                play()
+            }
+    }
+
+    private fun parseLoadData() {
+        animePlayingDetails = vodList[currentEpIndex]
+
+        lifecycleScope.launch {
+            val outputDir = File(
+                applicationContext.cacheDir,
+                "${PlayerSeriesActivity.movieInfo!!.programName}_${PlayerSeriesActivity.currentEpIndex}thumbnails"
+            )
+            extractTarFile(animePlayingDetails.urlobj.get(qualityIndex).thumbnailUrl, outputDir)
+            val thumbnailMap = mapThumbnails(outputDir)
+            setupPreviewThumbnails(thumbnailMap)
+        }
+    }
+
+    private fun ImageView.setImageViewEnabled(enabled: Boolean) = if (enabled) {
+        drawable.clearColorFilter()
+        isEnabled = true
+        isFocusable = true
+    } else {
+        drawable.colorFilter = PorterDuffColorFilter(Color.GRAY, PorterDuff.Mode.SRC_IN)
+        isEnabled = false
+        isFocusable = false
     }
 
     override fun onStop() {
         model.player.pause()
         saveData(
-            "${movie?.name}_${currentEpIndex}",
+            "${PlayerSeriesActivity.movieInfo?.programName}_${PlayerSeriesActivity.currentEpIndex}",
             model.player.currentPosition,
             this
         )
         super.onStop()
 
-    }
-
-    private fun parseExtra() {
-        animePlayingDetails =
-            intent.getSerializableExtra("EXTRA_EPISODE_DATA") as VodMovieResponse
-    }
-
-    companion object {
-        var sourceType = ""
-        var pipStatus: Boolean = false
-        var epCount: Int = 0
-        var movie: Movie? = null
-        var currentEpIndex = 0
-        var epList: ArrayList<VodMovieResponse> = arrayListOf()
-        private var isLocked: Boolean = false
-        fun newIntent(
-            context: Context,
-            episodeData: VodMovieResponse,
-        ): Intent {
-            val intent = Intent(context, PlayerActivity::class.java)
-            intent.putExtra("EXTRA_EPISODE_DATA", episodeData)
-            return intent
-        }
     }
 
     private fun playVideo() {
@@ -697,28 +858,13 @@ class PlayerActivity : AppCompatActivity(), Player.Listener {
         model.player.pause()
     }
 
-
-    public override fun onResume() {
-        super.onResume()
-        WindowCompat.setDecorFitsSystemWindows(window, false)
-        WindowInsetsControllerCompat(window, binding.root).let { controller ->
-            controller.hide(WindowInsetsCompat.Type.systemBars())
-            controller.systemBarsBehavior =
-                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-        }
-        hideSystemBars()
-
-        playerView.useController = true
-        model.player.prepare()
-    }
-
     public override fun onPause() {
         super.onPause()
-        if (pipStatus) pauseVideo()
+        if (PlayerSeriesActivity.pipStatus) pauseVideo()
         if (isInit) {
             playerView.player?.pause()
             saveData(
-                "${movie?.name}_${currentEpIndex}",
+                "${PlayerSeriesActivity.movieInfo?.programName}_${PlayerSeriesActivity.currentEpIndex}",
                 model.player.currentPosition,
                 this
             )
@@ -737,12 +883,12 @@ class PlayerActivity : AppCompatActivity(), Player.Listener {
     override fun onDestroy() {
         super.onDestroy()
 
-        pipStatus = false
+        PlayerSeriesActivity.pipStatus = false
         model.player.stop()
         model.player.release()
         finishAndRemoveTask()
         saveData(
-            "${movie?.name}_${currentEpIndex}",
+            "${PlayerSeriesActivity.movieInfo?.programName}_${PlayerSeriesActivity.currentEpIndex}",
             model.player.currentPosition,
             this
         )
@@ -803,130 +949,22 @@ class PlayerActivity : AppCompatActivity(), Player.Listener {
         }
     }
 
-    private fun ImageView.setImageViewEnabled(enabled: Boolean) = if (enabled) {
-        drawable.clearColorFilter()
-        isEnabled = true
-        isFocusable = true
-    } else {
-        drawable.colorFilter = PorterDuffColorFilter(Color.GRAY, PorterDuff.Mode.SRC_IN)
-        isEnabled = false
-        isFocusable = false
-    }
-
-    fun mapThumbnails(outputDir: File): Map<Long, File> {
-        val thumbnailMap = mutableMapOf<Long, File>()
-        outputDir.listFiles()?.forEach { file ->
-            val timestamp = file.nameWithoutExtension.toLongOrNull()
-            if (timestamp != null) {
-                thumbnailMap[timestamp] = file
-            }
-        }
-        return thumbnailMap
-    }
-
-
-    private fun setupPreviewThumbnails(thumbnailMap: Map<Long, File>) {
-        val previewImageView = findViewById<ImageView>(R.id.exo_thumbnail)
-        val timeBar = findViewById<ExtendedTimeBar>(com.google.android.exoplayer2.R.id.exo_progress)
-
-        timeBar.addListener(object : com.google.android.exoplayer2.ui.TimeBar.OnScrubListener {
-            override fun onScrubStart(timeBar: com.google.android.exoplayer2.ui.TimeBar, position: Long) {
-                if (timeBar is ExtendedTimeBar) {
-                    previewImageView.visibility = View.VISIBLE
-
-                    updateThumbnail(previewImageView, timeBar, position, thumbnailMap)
-                }
-            }
-
-            override fun onScrubMove(timeBar: com.google.android.exoplayer2.ui.TimeBar, position: Long) {
-                if (timeBar is ExtendedTimeBar) {
-                    updateThumbnail(previewImageView, timeBar, position, thumbnailMap)
-                }
-            }
-
-            override fun onScrubStop(timeBar: com.google.android.exoplayer2.ui.TimeBar, position: Long, canceled: Boolean) {
-                        previewImageView.visibility = View.GONE
-
-            }
-        })
-    }
-
-    private fun updateThumbnail(
-        imageView: ImageView,
-        timeBar: ExtendedTimeBar,
-        position: Long,
-        thumbnailMap: Map<Long, File>
-    ) {
-        val interval = 30_000L
-        val previewSecond = (position / interval) * 30
-        val previewFile = thumbnailMap[previewSecond]
-
-        if (previewFile != null && previewFile.exists()) {
-            Glide.with(this)
-                .load(previewFile)
-                .into(imageView)
-        } else {
-            imageView.setImageResource(android.R.color.transparent)
-        }
-
-        val timeBarWidth = timeBar.width
-        var duration = model.player.duration.takeIf { it > 0 } ?: return
-
-        val scrubberPosition = (position.toFloat() / duration) * timeBarWidth
-
-        val thumbnailX = scrubberPosition - (imageView.width / 2)
-        imageView.translationX = thumbnailX.coerceIn(0f, (timeBarWidth - imageView.width).toFloat())
-
-        val timeBarHeight = timeBar.height
-        val targetTranslationY = timeBar.top.toFloat() - imageView.height - 8f // 8dp padding
-
-        // Animate vertical movement smoothly
-        ObjectAnimator.ofFloat(imageView, "translationY", imageView.translationY, targetTranslationY).apply {
-            duration = 150L
-            interpolator = DecelerateInterpolator()
-            start()
+    companion object {
+        var sourceType = ""
+        var pipStatus: Boolean = false
+        var epCount: Int = 0
+        var movieInfo: SeriesDetailResponse? = null
+        var epList: ArrayList<Item0> = arrayListOf()
+        var vodList: ArrayList<VodMovieResponse> = arrayListOf()
+        var currentEpIndex = 0
+        private var isLocked: Boolean = false
+        fun newIntent(
+            context: Context,
+        ): Intent {
+            val intent = Intent(context, PlayerSeriesActivity::class.java)
+            return intent
         }
     }
 
-    @SuppressLint("ViewConstructor")
 
-    class ExtendedTimeBar(
-        context: Context,
-        attrs: AttributeSet?
-    ) : DefaultTimeBar(context, attrs) {
-
-        private var previewBitmap: Bitmap? = null
-        private val previewPaint = Paint().apply { isFilterBitmap = true }
-        private var videoDuration: Long = 0L
-        private var videoPosition: Long = 0L
-        private var enabled = false
-        private var forceDisabled = false
-        override fun setEnabled(enabled: Boolean) {
-            this.enabled = enabled
-            super.setEnabled(!forceDisabled && this.enabled)
-        }
-
-        fun setForceDisabled(forceDisabled: Boolean) {
-            this.forceDisabled = forceDisabled
-            isEnabled = enabled
-        }
-
-        override fun onDraw(canvas: Canvas) {
-            super.onDraw(canvas)
-
-            if (videoDuration > 0) {
-                val relativePos = videoPosition.toFloat() / videoDuration.toFloat()
-                val previewWidth = previewBitmap?.width ?: 100
-                val previewHeight = previewBitmap?.height ?: 60
-                val previewX = (relativePos * width - previewWidth / 2).toInt()
-                val previewY = height - previewHeight - 20 // Adjust for padding
-
-                previewBitmap?.let {
-                    canvas.drawBitmap(it, previewX.toFloat(), previewY.toFloat(), previewPaint)
-                }
-            }
-        }
-
-
-    }
 }

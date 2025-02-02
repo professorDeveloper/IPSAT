@@ -148,19 +148,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:gravity="center"
+                android:gravity="start"
                 android:orientation="horizontal"
-                android:paddingTop="8dp"
+                android:paddingTop="14dp"
 
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/mainContainer"
                 app:layout_constraintTop_toBottomOf="@+id/cardView2">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="55dp"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="24dp"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1.5"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_marginHorizontal="8dp"
                     android:gravity="center"
                     android:orientation="vertical">
 
@@ -182,11 +183,12 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="55dp"
-                    android:layout_gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:layout_gravity="start"
+                    android:layout_marginHorizontal="8dp"
 
-                    android:layout_marginHorizontal="34dp"
                     android:gravity="center"
                     android:orientation="vertical">
 
@@ -211,15 +213,17 @@
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/ep_card"
                     style="@style/Widget.Material3.CardView.Filled"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_gravity="start"
+                    android:layout_weight="1"
+                    android:layout_marginHorizontal="8dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="6dp"
                     android:clickable="true"
                     android:focusable="true"
                     app:cardBackgroundColor="@color/prem_bg">
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:orientation="vertical"
@@ -228,7 +232,7 @@
 
                         <RelativeLayout
                             android:layout_width="wrap_content"
-                            android:layout_height="30dp"
+                            android:layout_height="wrap_content"
                             android:gravity="center">
 
                             <ImageView
@@ -248,7 +252,7 @@
                                 android:layout_toEndOf="@+id/imageViewEp"
                                 android:fontFamily="sans-serif-condensed-medium"
                                 android:paddingHorizontal="6dp"
-                                android:textSize="@dimen/_14ssp"
+                                android:textSize="@dimen/_13ssp"
                                 android:text="Watch Trailer" />
                         </RelativeLayout>
 

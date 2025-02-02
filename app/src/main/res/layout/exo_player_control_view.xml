@@ -99,7 +99,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="48dp"
                         android:backgroundTint="#00FFFFFF"
-                        android:visibility="gone"
+                        android:visibility="visible"
                         app:srcCompat="@drawable/ic_round_screen_rotation_alt_24"
                         tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
 
@@ -260,7 +260,6 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/exo_top_cont"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clipToPadding="false"
@@ -268,6 +267,7 @@
                 android:padding="8dp">
 
                 <LinearLayout
+                    android:id="@+id/exo_top_cont"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
@@ -371,12 +371,13 @@
             android:orientation="vertical">
 
             <!-- Thumbnail ImageView -->
-            <ImageView
+            <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/exo_thumbnail"
                 android:layout_width="120dp"
                 android:layout_height="80dp"
                 android:layout_gravity="start"
-                android:layout_marginBottom="4dp"
+                app:shapeAppearanceOverlay="@style/roundedImageView"
+                android:layout_marginBottom="8dp"
                 android:scaleType="fitCenter"
                 android:visibility="visible"
                 app:cardCornerRadius="8dp"

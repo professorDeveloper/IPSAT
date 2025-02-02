@@ -18,4 +18,10 @@ interface DetailService {
         @Query("subscription_code") subscriptionCode: String,
         @Query("id") contentId: String,
     ): Response<VodMovieResponse>
+
+    @GET("get_series_terminal_state")
+    suspend fun getSeriesVod(
+        @Query("subscription_code") subscriptionCode: String,
+        @Query("id") contentId: String,
+    ): Response<VodMovieResponse>
 }

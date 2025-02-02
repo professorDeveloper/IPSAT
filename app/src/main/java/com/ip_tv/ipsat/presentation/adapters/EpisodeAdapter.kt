@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.ip_tv.ipsat.databinding.ItemEpisodeBinding
 import com.ip_tv.ipsat.domain.model.Item0
 import com.ip_tv.ipsat.utils.LocalData
@@ -13,6 +12,10 @@ import com.ip_tv.ipsat.utils.setAnimation
 
 class EpisodeAdapter(private val activity: Fragment) :RecyclerView.Adapter<EpisodeAdapter.EpisodeVh>() {
     private var list =ArrayList<Item0>()
+    private lateinit var itemClickListener: (Item0,Int) -> Unit
+    fun setOnItemClickListener(listener: (Item0,Int) -> Unit) {
+        itemClickListener = listener
+    }
     inner class EpisodeVh(private var binding:ItemEpisodeBinding) : RecyclerView.ViewHolder(binding.root) {
         fun onBind(item: Item0) {
             binding.apply {
@@ -20,7 +23,7 @@ class EpisodeAdapter(private val activity: Fragment) :RecyclerView.Adapter<Episo
                 itemEpisodeNumber.text =item.displayNumber
                 itemEpisodeTitle.text=item.name
                 itemEpisodeImage.loadImage(LocalData.detailSeriesImage)
-
+                root.setOnClickListener { itemClickListener.invoke(item,absoluteAdapterPosition) }
             }
         }
     }

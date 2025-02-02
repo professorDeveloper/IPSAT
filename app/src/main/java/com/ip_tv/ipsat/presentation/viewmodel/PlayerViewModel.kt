@@ -12,6 +12,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.exoplayer2.C
+import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.PlaybackException
@@ -67,6 +68,36 @@ class PlayerViewModel @Inject constructor(
         com.google.android.exoplayer2.database.StandaloneDatabaseProvider(app)
 
     private val savedDone = savedStateHandle.getStateFlow("done", false)
+    var isSeriesMode = false
+
+
+    fun updateQuality(newUrl: String) {
+        // Save the current playback position before changing quality
+        val currentPosition = player.currentPosition
+        val isPlaying = player.isPlaying
+
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                _animeStreamLink.postValue(newUrl)
+
+                withContext(Dispatchers.Main) {
+                    val mediaItem: MediaItem = MediaItem.fromUri(newUrl)
+                    player.setMediaItem(mediaItem)
+
+                    // Seek to the saved position
+                    player.prepare()
+                    player.seekTo(currentPosition)
+
+                    // Resume playback if it was playing
+                    if (isPlaying) {
+                        player.play()
+                    }
+
+                    isLoading.postValue(false)
+                }
+            }
+        }
+    }
 
     init {
         player.prepare()
@@ -82,7 +113,7 @@ class PlayerViewModel @Inject constructor(
                 error: IOException,
                 wasCanceled: Boolean
             ) {
-                Log.d("GGG", "onLoadError: ${error.message}")
+                Log.d("GGG", error.message.toString())
                 Log.d("GGG", "onLoadError: ${error.cause}")
             }
         })
@@ -99,35 +130,18 @@ class PlayerViewModel @Inject constructor(
             databaseProvider
         )
     }
-    fun updateQuality(newUrl: String) {
-        val currentPosition = player.currentPosition
-        val isPlaying = player.isPlaying
-        isLoading.postValue(true)
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                _animeStreamLink.postValue(newUrl)
-
-                withContext(Dispatchers.Main) {
-                    val mediaItem: MediaItem = MediaItem.fromUri(newUrl)
-                    player.setMediaItem(mediaItem)
-                    player.prepare()
-                    player.seekTo(currentPosition)
-                    if (isPlaying) {
-                        player.play()
-                    }
-                    isLoading.postValue(false)
-                }
-            }
-        }
-    }
 
     private fun getCustomPlayerListener(): Player.Listener {
         return object : Player.Listener {
+
             override fun onPlaybackStateChanged(playbackState: Int) {
-                if (playbackState == PlaybackState.STATE_NONE || playbackState == PlaybackState.STATE_CONNECTING || playbackState == PlaybackState.STATE_STOPPED)
+                if (playbackState == PlaybackState.STATE_NONE || playbackState == PlaybackState.STATE_CONNECTING || playbackState == PlaybackState.STATE_STOPPED) {
+                    Log.d("GGG", "onPlaybackStateChanged:${playbackState} TRUEEEE FUCK  ")
                     isLoading.postValue(true)
-                else
+                } else {
+                    Log.d("GGG", "onPlaybackStateChanged:${playbackState} FALSEEE FUCK  ")
                     isLoading.postValue(false)
+                }
                 super.onPlaybackStateChanged(playbackState)
             }
 
@@ -138,6 +152,14 @@ class PlayerViewModel @Inject constructor(
                     -> {
                         snackString("Source Exception : ${error.message}")
                     }
+
+                    ExoPlaybackException.ERROR_CODE_DECODING_FAILED -> {
+                        player.stop()
+                        player.prepare()
+                        player.play()
+                        isLoading.postValue(false)
+                    }
+
                     else
                     -> toast("Player Error ${error.errorCode} (${error.errorCodeName}) : ${error.message}")
                 }
@@ -148,12 +170,16 @@ class PlayerViewModel @Inject constructor(
                 super.onIsPlayingChanged(isPlaying)
                 keepScreenOn.postValue(isPlaying)
                 val progress = player.duration - player.currentPosition
-                if (progress <= 0 && isAutoPlayEnabled && !isPlaying)
+                if (progress <= 0 && isAutoPlayEnabled && !isPlaying) {
+                    isLoading.postValue(false)
                     playNextEp.postValue(true)
+                }
             }
 
             override fun onTracksChanged(tracks: com.google.android.exoplayer2.Tracks) {
+                // Update UI using current tracks.
                 for (trackGroup in tracks.groups) {
+                    // Group level information.
                     if (trackGroup.type == C.TRACK_TYPE_VIDEO) {
                         for (i in 0 until trackGroup.length) {
                             val trackFormat = trackGroup.getTrackFormat(i).height
@@ -173,30 +199,20 @@ class PlayerViewModel @Inject constructor(
 
     }
 
-    fun setAnimeLink(
-        animeUrl: String,
-        getNextEp: Boolean = false
-    ) {
+
+    fun setAnimeLink(animeUrl: String, getNextEp: Boolean = false) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                println(
-                    "STREAM GET LINK"
-                )
-                println(animeUrl)
-                animeUrl.apply {
-                    _animeStreamLink.postValue(this@apply)
-                    withContext(Dispatchers.Main) {
-                        if (!savedDone.value || getNextEp) {
-                            println("prepare Media Source")
-                            prepareMediaSource()
-                            downloadLink.value = this@apply
-                            savedStateHandle["done"] = true
-                        }
+                _animeStreamLink.postValue(animeUrl)
+                withContext(Dispatchers.Main) {
+                    if (!savedDone.value || getNextEp) {
+                        prepareMediaSource()
+                        savedStateHandle["done"] = true
                     }
+
                 }
             }
         }
-
     }
 
 
@@ -216,16 +232,6 @@ class PlayerViewModel @Inject constructor(
         player.setMediaSource(mediaSource)
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        releasePlayer()
-        releaseCache()
-    }
-
-    private fun releasePlayer() {
-        player.release()
-        mediaSession.release()
-    }
 
     private fun prepareMediaSource() {
         if (animeStreamLink.value == null) return
@@ -250,5 +256,17 @@ class PlayerViewModel @Inject constructor(
 
         setMediaSource(mediaSource)
     }
+
+    override fun onCleared() {
+        super.onCleared()
+        releasePlayer()
+        releaseCache()
+    }
+
+    private fun releasePlayer() {
+        player.release()
+        mediaSession.release()
+    }
+
 
 }
