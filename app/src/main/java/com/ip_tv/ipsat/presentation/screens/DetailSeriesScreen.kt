@@ -13,7 +13,6 @@ import com.ip_tv.ipsat.databinding.SeriesDetailItemBinding
 import com.ip_tv.ipsat.domain.model.Item0
 import com.ip_tv.ipsat.domain.model.Movie
 import com.ip_tv.ipsat.domain.model.SeriesDetailResponse
-import com.ip_tv.ipsat.domain.model.VodMovieResponse
 import com.ip_tv.ipsat.presentation.activities.PlayerSeriesActivity
 import com.ip_tv.ipsat.presentation.activities.TrailerActivity
 import com.ip_tv.ipsat.presentation.adapters.EpisodeAdapter
@@ -81,6 +80,8 @@ class DetailSeriesScreen :
                 }
 
                 is Resource.Success -> {
+                    binding.container.visible()
+                    binding.progress.gone()
                     val data = resource.data
                     updateUI(movie, data)
                 }

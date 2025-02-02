@@ -42,7 +42,7 @@ import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
-class PlayerViewModel @Inject constructor(
+class PlayerViewModelSeries @Inject constructor(
     private val app: Application,
     val player: ExoPlayer,
     private val repository: DetailRepository,
@@ -52,9 +52,10 @@ class PlayerViewModel @Inject constructor(
         MediaSessionCompat(app, "AnimeScrap Media Session")
     private val _animeStreamLink: MutableLiveData<String> = MutableLiveData()
     private val animeStreamLink: LiveData<String> = _animeStreamLink
-    private val vodData: MutableLiveData<VodMovieResponse> = MutableLiveData()
+    var vodData: MutableLiveData<VodMovieResponse> = MutableLiveData()
     private val isAutoPlayEnabled = true
     private val isVideoCacheEnabled = true
+    var vodMovieResponse: VodMovieResponse? = null
 
     val isLoading = MutableLiveData(true)
     val keepScreenOn = MutableLiveData(false)
@@ -65,6 +66,7 @@ class PlayerViewModel @Inject constructor(
     private var qualityMapUnsorted: MutableMap<String, Int> = mutableMapOf()
     var qualityMapSorted: MutableMap<String, Int> = mutableMapOf()
     var qualityTrackGroup: com.google.android.exoplayer2.Tracks.Group? = null
+    var nexEppVod: MutableLiveData<VodMovieResponse?> = MutableLiveData()
 
     private var mediaSessionConnector: MediaSessionConnector = MediaSessionConnector(mediaSession)
 
@@ -75,21 +77,37 @@ class PlayerViewModel @Inject constructor(
     private val savedDone = savedStateHandle.getStateFlow("done", false)
     var isSeriesMode = false
 
-    fun loadVod(id: Int) {
+    fun loadVod(id: Int, isNextEp: Boolean = false) {
         viewModelScope.launch {
-            repository.getSeriesVod(id = id).onEach {
-                it.onSuccess {
-                    vodData.postValue(it)
-                }
-                it.onFailure {
+            if (!isNextEp) {
+                repository.getSeriesVod(id = id).onEach {
+                    it.onSuccess {
+                        vodData.postValue(it)
+                    }
+                    it.onFailure {
 
-                }
-            }.launchIn(viewModelScope)
+                    }
+                }.launchIn(viewModelScope)
+            } else {
+                repository.getSeriesVod(id = id).onEach {
+                    it.onSuccess {
+                        Log.d("GGg", "loadVod: FUCKING TUSHDI ")
+                        nexEppVod.postValue(it)
+                        isLoading.postValue(false)
+                        setAnimeLink(
+                            it.urlobj[0].playUrl,
+                            true
+                        )
+                    }
+                    it.onFailure {
+
+                    }
+                }.launchIn(viewModelScope)
+            }
         }
     }
 
     fun updateQuality(newUrl: String) {
-        // Save the current playback position before changing quality
         val currentPosition = player.currentPosition
         val isPlaying = player.isPlaying
 
@@ -101,7 +119,6 @@ class PlayerViewModel @Inject constructor(
                     val mediaItem: MediaItem = MediaItem.fromUri(newUrl)
                     player.setMediaItem(mediaItem)
 
-                    // Seek to the saved position
                     player.prepare()
                     player.seekTo(currentPosition)
 

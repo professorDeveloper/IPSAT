@@ -59,7 +59,7 @@ import com.ip_tv.ipsat.domain.model.VodMovieResponse
 import com.ip_tv.ipsat.presentation.adapters.CustomAdapter
 import com.ip_tv.ipsat.presentation.adapters.QualityAdapter
 import com.ip_tv.ipsat.presentation.adapters.QualityItem
-import com.ip_tv.ipsat.presentation.viewmodel.PlayerViewModel
+import com.ip_tv.ipsat.presentation.viewmodel.PlayerViewModelSeries
 import com.ip_tv.ipsat.utils.DoubleTapPlayerView
 import com.ip_tv.ipsat.utils.dp
 import com.ip_tv.ipsat.utils.extractTarFile
@@ -82,8 +82,7 @@ class PlayerSeriesActivity : AppCompatActivity(), Player.Listener {
     private var notchHeight: Int = 1
     private var qualityIndex = 0
     private var epChanging = false
-    private val model by viewModels<PlayerViewModel>()
-    private lateinit var animePlayingDetails: VodMovieResponse
+    private val model by viewModels<PlayerViewModelSeries>()
     private var episodeLength: Float = 0f
     private var playbackPosition: Long = 0
     private lateinit var binding: ActivityPlayerSeriesBinding
@@ -188,7 +187,7 @@ class PlayerSeriesActivity : AppCompatActivity(), Player.Listener {
 
         binding = ActivityPlayerSeriesBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        model.isSeriesMode=true
+        model.isSeriesMode = true
         WindowCompat.setDecorFitsSystemWindows(window, false)
         WindowInsetsControllerCompat(window, binding.root).let { controller ->
             controller.hide(WindowInsetsCompat.Type.systemBars())
@@ -236,7 +235,6 @@ class PlayerSeriesActivity : AppCompatActivity(), Player.Listener {
         playerView.findViewById<PlayerActivity.ExtendedTimeBar>(com.google.android.exoplayer2.ui.R.id.exo_progress)
             .setKeyTimeIncrement(10000)
 
-        prepareButtons()
 
 
         playbackPosition = readData(
@@ -267,17 +265,23 @@ class PlayerSeriesActivity : AppCompatActivity(), Player.Listener {
             )
         }
         if (!isInit) {
-            parseLoadData()
+            model.loadVod(epList[currentEpIndex].id)
             playbackPosition = readData(
                 "${PlayerSeriesActivity.movieInfo?.programName}_${PlayerSeriesActivity.currentEpIndex}",
                 this
             ) ?: 0
-            prevEpBtn.setImageViewEnabled(PlayerSeriesActivity.currentEpIndex.toInt() >= 2)
+            prevEpBtn.setImageViewEnabled(PlayerSeriesActivity.currentEpIndex.toInt() >= 1)
             nextEpBtn.setImageViewEnabled(currentEpIndex.toInt() != epCount.toInt())
         }
         isInit = true
-        updateEpisodeName()
 
+        model.vodData.observe(this) {
+            model.vodMovieResponse = it
+            parseLoadData()
+            updateEpisodeName()
+            model.setAnimeLink(model.vodMovieResponse!!.urlobj.get(qualityIndex).playUrl)
+            prepareButtons()
+        }
 
         model.showSubsBtn.observe(this) {
             if (!it) {
@@ -314,7 +318,6 @@ class PlayerSeriesActivity : AppCompatActivity(), Player.Listener {
             }
         }
 
-
     }
 
 
@@ -325,7 +328,6 @@ class PlayerSeriesActivity : AppCompatActivity(), Player.Listener {
             Log.d("PlayerSeriesActivity", "Invalid episode index: $newIndex")
             return
         }
-
         epChanging = true
         currentEpIndex = newIndex
         Log.d("PlayerSeriesActivity", "Switching to episode: $currentEpIndex")
@@ -333,16 +335,20 @@ class PlayerSeriesActivity : AppCompatActivity(), Player.Listener {
         prevEpBtn.setImageViewEnabled(currentEpIndex > 0) //
         nextEpBtn.setImageViewEnabled(currentEpIndex < epCount - 1)
 
-        qualityIndex=0
-        model.setAnimeLink(
-            vodList[currentEpIndex].urlobj.get(qualityIndex).playUrl,
-            true
-        )
-        updateEpisodeName()
-
-        lifecycleScope.launch {
-            model.player.stop()
+        qualityIndex = 0
+        model.loadVod(epList[currentEpIndex].id, true)
+        model.player.stop()
+        model.nexEppVod.observe(this) {
+            model.vodMovieResponse = it
+            parseLoadData()
+            updateEpisodeName()
+            model.setAnimeLink(
+                model.vodMovieResponse!!.urlobj.get(qualityIndex).playUrl,
+                getNextEp = true
+            )
         }
+
+
     }
 
     private fun updateEpisodeName() {
@@ -350,9 +356,9 @@ class PlayerSeriesActivity : AppCompatActivity(), Player.Listener {
             Log.d("GGG", "updateEpisodeName:${currentEpIndex} ")
             videoEpTextView.isSelected = true
             videoEpTextView.isSingleLine = true
-            videoName.text = animePlayingDetails.urlobj.get(qualityIndex).hdtv
-            videoInfo.text = animePlayingDetails.urlobj.get(qualityIndex).hdtv
-            serverInfo.text = animePlayingDetails.urlobj.get(qualityIndex).typeName
+            videoName.text = model.vodMovieResponse!!.urlobj.get(qualityIndex).hdtv
+            videoInfo.text = model.vodMovieResponse!!.urlobj.get(qualityIndex).hdtv
+            serverInfo.text = model.vodMovieResponse!!.urlobj.get(qualityIndex).typeName
             videoEpTextView.text = epList[currentEpIndex].name
 
         }
@@ -394,7 +400,7 @@ class PlayerSeriesActivity : AppCompatActivity(), Player.Listener {
 
         exoQuality.setOnClickListener {
             initPopupQuality(
-                animePlayingDetails = animePlayingDetails,
+                animePlayingDetails = model.vodMovieResponse!!,
                 qualityIndex, model.player
             ).show()
         }
@@ -770,12 +776,10 @@ class PlayerSeriesActivity : AppCompatActivity(), Player.Listener {
             changePlayerSource(selectedQuality.playUrl, exoPlayer, index)
             dialog.dismiss()
         }
-
         recyclerView.adapter = adapter
         val wasPlaying = model.player.isPlaying
         model.player.pause()
 
-        // Resume playback when the dialog is dismissed
         dialog.setOnDismissListener {
             if (wasPlaying) {
                 model.player.play()
@@ -790,17 +794,13 @@ class PlayerSeriesActivity : AppCompatActivity(), Player.Listener {
         model.updateQuality(
             playUrl
         )
-        updateEpisodeName()
-
-        PlayerSeriesActivity.currentEpIndex = epind
+        qualityIndex = epind
         if (PlayerSeriesActivity.movieInfo == null) {
             videoName.visibility = View.GONE
             videoInfo.visibility = View.GONE
             serverInfo.visibility = View.GONE
         } else {
             updateEpisodeName()
-
-
         }
 
     }
@@ -816,14 +816,15 @@ class PlayerSeriesActivity : AppCompatActivity(), Player.Listener {
     }
 
     private fun parseLoadData() {
-        animePlayingDetails = vodList[currentEpIndex]
-
         lifecycleScope.launch {
             val outputDir = File(
                 applicationContext.cacheDir,
-                "${PlayerSeriesActivity.movieInfo!!.programName}_${PlayerSeriesActivity.currentEpIndex}thumbnails"
+                "${epList.get(currentEpIndex).name}_${epList.get(currentEpIndex).number}thumbnails`"
             )
-            extractTarFile(animePlayingDetails.urlobj.get(qualityIndex).thumbnailUrl, outputDir)
+            extractTarFile(
+                model.vodMovieResponse!!.urlobj.get(qualityIndex).thumbnailUrl,
+                outputDir
+            )
             val thumbnailMap = mapThumbnails(outputDir)
             setupPreviewThumbnails(thumbnailMap)
         }
@@ -955,7 +956,6 @@ class PlayerSeriesActivity : AppCompatActivity(), Player.Listener {
         var epCount: Int = 0
         var movieInfo: SeriesDetailResponse? = null
         var epList: ArrayList<Item0> = arrayListOf()
-        var vodList: ArrayList<VodMovieResponse> = arrayListOf()
         var currentEpIndex = 0
         private var isLocked: Boolean = false
         fun newIntent(
