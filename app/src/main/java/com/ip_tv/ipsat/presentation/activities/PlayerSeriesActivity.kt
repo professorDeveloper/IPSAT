@@ -238,7 +238,7 @@ class PlayerSeriesActivity : AppCompatActivity(), Player.Listener {
 
 
         playbackPosition = readData(
-            "${PlayerSeriesActivity.movieInfo?.programName}_${PlayerSeriesActivity.currentEpIndex}",
+            "${epList.get(currentEpIndex).name}_${PlayerSeriesActivity.currentEpIndex}",
             this
         ) ?: 0
 
@@ -267,7 +267,7 @@ class PlayerSeriesActivity : AppCompatActivity(), Player.Listener {
         if (!isInit) {
             model.loadVod(epList[currentEpIndex].id)
             playbackPosition = readData(
-                "${PlayerSeriesActivity.movieInfo?.programName}_${PlayerSeriesActivity.currentEpIndex}",
+                "${epList.get(currentEpIndex).name}_${PlayerSeriesActivity.currentEpIndex}",
                 this
             ) ?: 0
             prevEpBtn.setImageViewEnabled(PlayerSeriesActivity.currentEpIndex.toInt() >= 1)
@@ -635,7 +635,7 @@ class PlayerSeriesActivity : AppCompatActivity(), Player.Listener {
         }
         if (isInit) {
             saveData(
-                "${movieInfo?.programName}_${currentEpIndex}",
+                "${epList.get(currentEpIndex).name}_${PlayerSeriesActivity.currentEpIndex}",
                 model.player.currentPosition,
                 this
             )
@@ -843,7 +843,7 @@ class PlayerSeriesActivity : AppCompatActivity(), Player.Listener {
     override fun onStop() {
         model.player.pause()
         saveData(
-            "${PlayerSeriesActivity.movieInfo?.programName}_${PlayerSeriesActivity.currentEpIndex}",
+            "${epList.get(currentEpIndex).name}_${PlayerSeriesActivity.currentEpIndex}",
             model.player.currentPosition,
             this
         )
@@ -865,7 +865,7 @@ class PlayerSeriesActivity : AppCompatActivity(), Player.Listener {
         if (isInit) {
             playerView.player?.pause()
             saveData(
-                "${PlayerSeriesActivity.movieInfo?.programName}_${PlayerSeriesActivity.currentEpIndex}",
+                "${epList.get(currentEpIndex).name}_${PlayerSeriesActivity.currentEpIndex}",
                 model.player.currentPosition,
                 this
             )
@@ -889,7 +889,7 @@ class PlayerSeriesActivity : AppCompatActivity(), Player.Listener {
         model.player.release()
         finishAndRemoveTask()
         saveData(
-            "${PlayerSeriesActivity.movieInfo?.programName}_${PlayerSeriesActivity.currentEpIndex}",
+            "${epList.get(currentEpIndex).name}_${PlayerSeriesActivity.currentEpIndex}",
             model.player.currentPosition,
             this
         )
