@@ -50,6 +50,7 @@ import com.bumptech.glide.Glide
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.PlaybackParameters
 import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
 import com.google.android.exoplayer2.ui.DefaultTimeBar
 import com.google.android.material.slider.Slider
@@ -615,10 +616,20 @@ class PlayerActivity : AppCompatActivity(), Player.Listener {
         val recyclerView: RecyclerView = view.findViewById(R.id.recyclerViewQualities)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        val qualityList = animePlayingDetails.urlobj.map { QualityItem(it.hdtv, it.playUrl) }
+        val qualityList = mutableListOf(QualityItem("Auto", ""))
+        qualityList.addAll(animePlayingDetails.urlobj.map { QualityItem(it.hdtv, it.playUrl) })
 
         val adapter = QualityAdapter(qualityList, currentEpIndex) { selectedQuality, index ->
-            changePlayerSource(selectedQuality.playUrl, exoPlayer, index)
+            if (selectedQuality.playUrl.isEmpty()) {
+                val trackSelector = DefaultTrackSelector(this).apply {
+                    parameters = buildUponParameters()
+                        .setMaxVideoBitrate(Int.MAX_VALUE)
+                        .setMinVideoBitrate(500000)
+                        .build()
+                }
+                model.player.trackSelectionParameters = trackSelector.parameters
+                changePlayerSource(selectedQuality.playUrl, exoPlayer, index)
+            }
             dialog.dismiss()
         }
 
@@ -626,7 +637,6 @@ class PlayerActivity : AppCompatActivity(), Player.Listener {
         val wasPlaying = model.player.isPlaying
         model.player.pause()
 
-        // Resume playback when the dialog is dismissed
         dialog.setOnDismissListener {
             if (wasPlaying) {
                 model.player.play()
@@ -636,6 +646,7 @@ class PlayerActivity : AppCompatActivity(), Player.Listener {
         dialog.show()
         return dialog
     }
+
 
     private fun changePlayerSource(playUrl: String, exoPlayer: ExoPlayer, epind: Int) {
         model.updateQuality(
