@@ -34,8 +34,15 @@ class QualityAdapter(
 
             itemView.setOnClickListener {
                 selectedIndex = position
-                onQualitySelected(qualityItem,absoluteAdapterPosition)
-                notifyDataSetChanged() // Update selection UI
+                if (position == 0) {
+
+                    onQualitySelected(qualityItem,-1)
+                    notifyDataSetChanged() // Update selection UI
+                }else {
+
+                    onQualitySelected(qualityItem,absoluteAdapterPosition)
+                    notifyDataSetChanged() // Update selection UI
+                }
             }
         }
     }

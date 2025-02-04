@@ -48,6 +48,7 @@ import com.bumptech.glide.Glide
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.PlaybackParameters
 import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
 import com.google.android.material.slider.Slider
 import com.google.android.material.snackbar.Snackbar
@@ -278,6 +279,19 @@ class PlayerSeriesActivity : AppCompatActivity(), Player.Listener {
         model.vodData.observe(this) {
             model.vodMovieResponse = it
             parseLoadData()
+            if (qualityIndex==0){
+                videoName.text ="Auto"
+                videoInfo.text = "Bitrate Auto"
+                serverInfo.text = "Auto"
+                val trackSelector = DefaultTrackSelector(this).apply {
+                    parameters = buildUponParameters()
+                        .setMaxVideoBitrate(Int.MAX_VALUE)
+                        .setMinVideoBitrate(500000)
+                        .build()
+                }
+                model.player.trackSelectionParameters = trackSelector.parameters
+
+            }
             updateEpisodeName()
             model.setAnimeLink(model.vodMovieResponse!!.urlobj.get(qualityIndex).playUrl)
             prepareButtons()
@@ -770,10 +784,25 @@ class PlayerSeriesActivity : AppCompatActivity(), Player.Listener {
         val recyclerView: RecyclerView = view.findViewById(R.id.recyclerViewQualities)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        val qualityList = animePlayingDetails.urlobj.map { QualityItem(it.hdtv, it.playUrl) }
+        val qualityList = mutableListOf(QualityItem("Auto", ""))
+        qualityList.addAll(animePlayingDetails.urlobj.map { QualityItem(it.hdtv, it.playUrl) })
 
         val adapter = QualityAdapter(qualityList, qualityIndex) { selectedQuality, index ->
-            changePlayerSource(selectedQuality.playUrl, exoPlayer, index)
+            if (selectedQuality.playUrl.isEmpty() && index == -1) {
+                videoName.isSelected = true
+                videoName.text = "Auto"
+                videoInfo.text = "Bitrate Auto"
+                serverInfo.text = "Auto"
+                val trackSelector = DefaultTrackSelector(this).apply {
+                    parameters = buildUponParameters()
+                        .setMaxVideoBitrate(Int.MAX_VALUE)
+                        .setMinVideoBitrate(500000)
+                        .build()
+                }
+                model.player.trackSelectionParameters = trackSelector.parameters
+            }else {
+                changePlayerSource(selectedQuality.playUrl, exoPlayer, index-1)
+            }
             dialog.dismiss()
         }
         recyclerView.adapter = adapter

@@ -279,6 +279,18 @@ class PlayerActivity : AppCompatActivity(), Player.Listener {
             model.setAnimeLink(
                 epList[currentEpIndex].urlobj.get(0).playUrl
             )
+            model.player.trackSelectionParameters =
+                DefaultTrackSelector.ParametersBuilder(this)
+                    .apply {
+                        setMinVideoBitrate(4000)
+                        setMaxVideoBitrate(1000000)
+                        setForceLowestBitrate(true)
+                        setForceHighestSupportedBitrate(true)
+                    }
+                    .build()
+            videoName.text = "Auto"
+            videoInfo.text = "Bitrate Auto"
+            serverInfo.text = "Auto"
             playbackPosition = readData("${movie?.name}_${currentEpIndex}", this) ?: 0
             prevEpBtn.setImageViewEnabled(PlayerActivity.currentEpIndex.toInt() >= 2)
             nextEpBtn.setImageViewEnabled(currentEpIndex.toInt() + 1 != epCount.toInt())
@@ -621,6 +633,10 @@ class PlayerActivity : AppCompatActivity(), Player.Listener {
 
         val adapter = QualityAdapter(qualityList, currentEpIndex) { selectedQuality, index ->
             if (selectedQuality.playUrl.isEmpty()) {
+                videoName.isSelected = true
+                videoName.text = "Auto"
+                videoInfo.text = "Bitrate Auto"
+                serverInfo.text = "Auto"
                 val trackSelector = DefaultTrackSelector(this).apply {
                     parameters = buildUponParameters()
                         .setMaxVideoBitrate(Int.MAX_VALUE)
@@ -628,7 +644,8 @@ class PlayerActivity : AppCompatActivity(), Player.Listener {
                         .build()
                 }
                 model.player.trackSelectionParameters = trackSelector.parameters
-                changePlayerSource(selectedQuality.playUrl, exoPlayer, index)
+            }else {
+                changePlayerSource(selectedQuality.playUrl, exoPlayer, index-1)
             }
             dialog.dismiss()
         }
