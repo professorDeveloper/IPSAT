@@ -11,6 +11,7 @@ package com.ip_tv.ipsat.di
 import android.app.Application
 import com.google.android.exoplayer2.DefaultRenderersFactory
 import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,12 +27,15 @@ object VideoPlayerModule {
     fun provideVideoPlayer(app: Application): ExoPlayer {
         val renderersFactory = DefaultRenderersFactory(app)
             .setEnableDecoderFallback(true) // Enable fallback to software decoder
+        val trackSelector = DefaultTrackSelector(app).apply {
+            parameters = buildUponParameters().setMaxVideoBitrate(5000000).build()
+        }
 
 
-        return ExoPlayer.Builder(app,renderersFactory)
+        return ExoPlayer.Builder(app, renderersFactory)
             .setSeekForwardIncrementMs(10000)
             .setSeekBackIncrementMs(10000)
-
+            .setTrackSelector(trackSelector)
             .build()
     }
 

@@ -24,6 +24,7 @@ import com.google.android.exoplayer2.source.LoadEventInfo
 import com.google.android.exoplayer2.source.MediaLoadData
 import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource
 import com.google.android.exoplayer2.upstream.cache.CacheDataSource
 import com.google.android.exoplayer2.upstream.cache.SimpleCache
@@ -268,6 +269,8 @@ class PlayerViewModelSeries @Inject constructor(
 
 
     private fun prepareMediaSource() {
+
+
         if (animeStreamLink.value == null) return
         val dataSourceFactory = DefaultHttpDataSource.Factory()
             .setReadTimeoutMs(20000)
