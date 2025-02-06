@@ -74,7 +74,7 @@ fun ArrayList<SubCategoryItem>.filterChannelsByCategory(
 }
 
 fun ArrayList<ChannelResponseItem>.filterByKeywords(
-    keywords: List<SubCategoryItem>           // Filtr so‘zlari
+    keywords: List<SubCategoryItem>
 ): List<ChannelResponseItem> {
     Log.d("GG", "filterByKeywords:${keywords} ")
     Log.d("GG", "filterByKeywords:${this} ")
