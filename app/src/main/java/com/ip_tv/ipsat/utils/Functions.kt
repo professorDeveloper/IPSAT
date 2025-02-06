@@ -12,6 +12,7 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
 import android.util.AttributeSet
+import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
@@ -37,6 +38,8 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.google.gson.Gson
 import com.ip_tv.ipsat.R
 import com.ip_tv.ipsat.app.App
+import com.ip_tv.ipsat.domain.model.ChannelResponseItem
+import com.ip_tv.ipsat.domain.model.SubCategoryItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry
@@ -64,6 +67,24 @@ var navBarHeight = 0
 val Int.dp: Float get() = (this / getSystem().displayMetrics.density)
 val Float.px: Int get() = (this * getSystem().displayMetrics.density).toInt()
 
+fun ArrayList<SubCategoryItem>.filterChannelsByCategory(
+    categoryId: Int
+): ArrayList<SubCategoryItem> {
+    return this.filter { it.category.toInt() == categoryId } as ArrayList<SubCategoryItem>
+}
+
+fun ArrayList<ChannelResponseItem>.filterByKeywords(
+    keywords: List<SubCategoryItem>           // Filtr so‘zlari
+): List<ChannelResponseItem> {
+    Log.d("GG", "filterByKeywords:${keywords} ")
+    Log.d("GG", "filterByKeywords:${this} ")
+    return this.filter { item ->
+        keywords.any { keyword ->
+            if (item.categoryProperty == null) false else item.categoryProperty.contains(keyword.property_name, ignoreCase = true)
+        }
+    }
+}
+
 
 fun String.toReadableDateTime(): String {
     return try {
@@ -74,6 +95,7 @@ fun String.toReadableDateTime(): String {
         "Wrong format"
     }
 }
+
 fun String.toYear(): String {
     val year = this.substringBefore("-")
     return year
@@ -439,8 +461,8 @@ inline fun <reified T> String.toDataClass(): T {
 }
 
 
-
-open class NoPaddingArrayAdapter<T>(context: Context, layoutId: Int, items: List<T>) : ArrayAdapter<T>(context, layoutId, items) {
+open class NoPaddingArrayAdapter<T>(context: Context, layoutId: Int, items: List<T>) :
+    ArrayAdapter<T>(context, layoutId, items) {
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val view = super.getView(position, convertView, parent)
         view.setPadding(0, view.paddingTop, view.paddingRight, view.paddingBottom)
@@ -461,16 +483,21 @@ class SpinnerNoSwipe : androidx.appcompat.widget.AppCompatSpinner {
         setup()
     }
 
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    ) {
         setup()
     }
 
     private fun setup() {
-        mGestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
-            override fun onSingleTapUp(e: MotionEvent): Boolean {
-                return performClick()
-            }
-        })
+        mGestureDetector =
+            GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
+                override fun onSingleTapUp(e: MotionEvent): Boolean {
+                    return performClick()
+                }
+            })
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {

@@ -8,7 +8,7 @@
 
     android:layout_gravity="center"
     android:layout_marginHorizontal="@dimen/_2sdp"
-    android:background="@drawable/category_bg">
+    android:background="@drawable/tab_selected">
 
     <TextView
         android:id="@+id/category_title"
@@ -20,7 +20,7 @@
         android:fontFamily="@font/inter_bold"
         android:gravity="center"
         tools:text="All"
-        android:textSize="14sp"
+        android:textSize="13sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

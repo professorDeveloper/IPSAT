@@ -5,4 +5,6 @@ import javax.inject.Inject
 
 class LiveTvScreenUseCase @Inject constructor(private val repo: LiveTvRepositoryImpl) {
     fun loadCategory() = repo.getLiveTvCategories()
+    fun loadSubCategory() = repo.loadAllSubCategory()
+    fun loadChannelByCategory(categoryId: Int) = repo.loadChannelByCategory(categoryId)
 }

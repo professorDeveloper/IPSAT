@@ -2,6 +2,7 @@ package com.ip_tv.ipsat.data.repository
 
 import com.ip_tv.ipsat.data.remote.LiveTvService
 import com.ip_tv.ipsat.domain.model.ChannelCategory
+import com.ip_tv.ipsat.domain.model.ChannelResponse
 import com.ip_tv.ipsat.domain.model.ErrorResponse
 import com.ip_tv.ipsat.domain.model.SubCategory
 import com.ip_tv.ipsat.domain.preference.UserPreferenceManager
@@ -31,6 +32,21 @@ class LiveTvRepositoryImpl @Inject constructor(
     override fun loadAllSubCategory() = flow<Result<SubCategory>> {
         val response =
             liveTvService.getSubCategories(subscriptionCode = userPreferenceManager.subCode)
+        if (response.isSuccessful) {
+            emit(Result.success(response.body()!!))
+        } else {
+            val errorResponse =
+                response.errorBody()?.string().toString().toDataClass<ErrorResponse>()
+            emit(Result.failure(Exception(errorResponse.message)))
+        }
+    }.flowOn(Dispatchers.IO)
+
+    override fun loadChannelByCategory(categoryId: Int) = flow<Result<ChannelResponse>> {
+        val response =
+            liveTvService.getChannels(
+                categoryId = categoryId,
+                subscriptionCode = userPreferenceManager.subCode
+            )
         if (response.isSuccessful) {
             emit(Result.success(response.body()!!))
         } else {

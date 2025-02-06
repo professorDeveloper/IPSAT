@@ -1,6 +1,7 @@
 package com.ip_tv.ipsat.data.remote
 
 import com.ip_tv.ipsat.domain.model.ChannelCategory
+import com.ip_tv.ipsat.domain.model.ChannelResponse
 import com.ip_tv.ipsat.domain.model.SubCategory
 import retrofit2.Response
 import retrofit2.http.GET
@@ -17,4 +18,11 @@ interface LiveTvService {
     suspend fun getSubCategories(
         @Query("subscription_code") subscriptionCode: String,
     ): Response<SubCategory>
+
+
+    @GET("Channels/")
+    suspend fun getChannels(
+        @Query("category_id") categoryId: Int,
+        @Query("subscription_code") subscriptionCode: String
+    ): Response<ChannelResponse>
 }

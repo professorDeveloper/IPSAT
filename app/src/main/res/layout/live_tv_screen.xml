@@ -30,6 +30,7 @@
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_4sdp"
             app:tabGravity="start"
             app:tabIndicatorAnimationMode="elastic"
             app:tabIndicatorColor="@color/colorPrimary"
