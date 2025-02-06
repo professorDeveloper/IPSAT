@@ -3,6 +3,7 @@ package com.ip_tv.ipsat.di
 import android.content.Context
 import com.ip_tv.ipsat.data.remote.AuthService
 import com.ip_tv.ipsat.data.remote.DetailService
+import com.ip_tv.ipsat.data.remote.LiveTvService
 import com.ip_tv.ipsat.data.remote.MovieService
 import com.ip_tv.ipsat.domain.preference.UserPreferenceManager
 import dagger.Module
@@ -27,7 +28,7 @@ object NetworkModule {
         @ApplicationContext context: Context,
         appReference: UserPreferenceManager,
     ): OkHttpClient {
-        return  OkHttpClient.Builder()
+        return OkHttpClient.Builder()
             .retryOnConnectionFailure(true) // Agar bog‘lanish uzilsa, qayta urinish
             .connectTimeout(30, TimeUnit.SECONDS) // Bog‘lanish timeout 30s
             .readTimeout(30, TimeUnit.SECONDS) // O‘qish timeout 30s
@@ -35,7 +36,7 @@ object NetworkModule {
             .build()
     }
 
-    @[Provides Singleton ]
+    @[Provides Singleton]
     fun provideRetrofit(client: OkHttpClient): Retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .client(client)
@@ -45,6 +46,10 @@ object NetworkModule {
     @[Provides Singleton]
     fun provideAuthApi(retrofit: Retrofit): AuthService =
         retrofit.create(AuthService::class.java)
+
+    @[Provides Singleton]
+    fun provideLiveTvApi(retrofit: Retrofit): LiveTvService =
+        retrofit.create(LiveTvService::class.java)
 
 
     @[Provides Singleton]
