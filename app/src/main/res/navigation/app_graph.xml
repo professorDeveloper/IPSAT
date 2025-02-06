@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/app_graph"
+    app:startDestination="@id/button_live_tv">
+
+    <fragment
+        android:id="@+id/button_profile_page"
+        android:name="com.ip_tv.ipsat.presentation.screens.ProfileScreen"
+        android:label="profile_screen"
+        tools:layout="@layout/profile_screen" />
+    <fragment
+        android:id="@+id/button_live_tv"
+        android:name="com.ip_tv.ipsat.presentation.screens.LiveTvScreen"
+        android:label="live_tv_screen"
+        tools:layout="@layout/live_tv_screen" />
+    <fragment
+        android:id="@+id/movieVodScreen"
+        android:name="com.ip_tv.ipsat.presentation.screens.MovieVodScreen"
+        android:label="movie_vod_screen"
+        tools:layout="@layout/movie_vod_screen" />
+    <fragment
+        android:id="@+id/updateInfoScreen"
+        android:name="com.ip_tv.ipsat.presentation.screens.UpdateInfoScreen"
+        android:label="update_info_screen"
+        tools:layout="@layout/update_info_screen" />
+    <fragment
+        android:id="@+id/showMoreMoviesScreen"
+        tools:layout="@layout/show_more_movies_screen"
+        android:name="com.ip_tv.ipsat.presentation.screens.show_more.ShowMoreMoviesScreen"
+        android:label="ShowMoreMoviesScreen" />
+    <fragment
+        android:id="@+id/showMoreKidsScreen"
+        android:name="com.ip_tv.ipsat.presentation.screens.show_more.ShowMoreKidsScreen"
+        android:label="ShowMoreKidsScreen" />
+    <fragment
+        android:id="@+id/showMoreDocumentaryScreen"
+        android:name="com.ip_tv.ipsat.presentation.screens.show_more.ShowMoreDocumentaryScreen"
+        android:label="ShowMoreDocumentaryScreen" />
+    <fragment
+        android:id="@+id/showMoreSeriesScreen"
+        android:name="com.ip_tv.ipsat.presentation.screens.show_more.ShowMoreSeriesScreen"
+        android:label="ShowMoreSeriesScreen" />
+    <fragment
+        android:id="@+id/searchScreen"
+        android:name="com.ip_tv.ipsat.presentation.screens.SearchScreen"
+        android:label="search_screen"
+        tools:layout="@layout/search_screen" />
+    <fragment
+        android:id="@+id/detailScreen"
+        android:name="com.ip_tv.ipsat.presentation.screens.DetailScreen"
+        android:label="DetailScreen" />
+    <fragment
+        android:id="@+id/detailSeriesScreen"
+        android:name="com.ip_tv.ipsat.presentation.screens.DetailSeriesScreen"
+        android:label="detail_series_screen"
+        tools:layout="@layout/detail_series_screen" />
+</navigation>

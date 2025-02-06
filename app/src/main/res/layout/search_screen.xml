@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/_20sdp"
+    android:background="@color/card_background">
+
+    <LinearLayout
+        android:visibility="visible"
+        android:id="@+id/mainContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.mancj.materialsearchbar.MaterialSearchBar
+            android:layout_width="match_parent"
+            android:id="@+id/searchBar"
+            app:mt_backIconTint="@color/white_and_black"
+            android:padding="@dimen/_2sdp"
+            app:mt_clearIconTint="@color/white_and_black"
+            app:mt_textColor="@color/white_and_black"
+            app:mt_hintColor="@color/white_and_black"
+            app:mt_hint="Search Movie"
+            app:mt_placeholder="Search Screen"
+            android:elevation="@dimen/_4sdp"
+            android:background="@color/card_background"
+            app:mt_placeholderColor="@color/white_and_black"
+            app:mt_searchIconTint="@color/white_and_black"
+            app:mt_searchBarColor="@color/card_background"
+            android:backgroundTint="@color/card_background"
+            android:layout_height="wrap_content"/>
+
+
+
+            <com.ip_tv.ipsat.utils.FadingEdgeRecyclerView
+                android:id="@+id/movieListRv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="@dimen/_14sdp"
+                android:layout_marginTop="@dimen/_6sdp"
+                app:spanCount="3"
+                android:layout_marginBottom="0dp"
+                android:visibility="visible"
+                tools:visibility="visible"
+                android:orientation="vertical"
+                android:scrollbars="vertical"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                tools:listitem="@layout/item_movie" />
+
+    </LinearLayout>
+
+
+    <ProgressBar
+        android:visibility="gone"
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
+
+</FrameLayout>

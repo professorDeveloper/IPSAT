@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:paddingBottom="@dimen/_25sdp"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:paddingTop="@dimen/_20sdp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/top_bg"
+        android:clipToPadding="false"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:padding="@dimen/_4sdp"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/sfpro"
+                android:text="Documentary to watch"
+                android:textSize="18sp" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/searchFilter"
+                android:layout_width="@dimen/_35sdp"
+                android:insetBottom="0dp"
+                android:insetRight="0dp"
+                android:insetLeft="0dp"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:insetTop="0dp"
+                app:cardCornerRadius="@dimen/_12ssp"
+                android:layout_height="@dimen/_35sdp"
+                android:layout_marginEnd="@dimen/_8sdp"
+                app:cardBackgroundColor="?attr/colorOnBackground"
+                app:rippleColor="#16100E0E"
+                tools:ignore="ContentDescription,TextContrastCheck" >
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:layout_width="@dimen/_14sdp"
+                    android:layout_height="@dimen/_14sdp"
+                    app:tint="@color/card_background"
+                    android:layout_gravity="center"
+                    app:srcCompat="@drawable/ic_filter"/>
+            </androidx.cardview.widget.CardView>
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+    <com.ip_tv.ipsat.utils.FadingEdgeRecyclerView
+        android:id="@+id/moviesShowMoreRv"
+        android:layout_width="match_parent"
+        android:paddingTop="@dimen/_4sdp"
+        android:layout_marginStart="@dimen/_4sdp"
+        tools:listitem="@layout/item_movie"
+        app:spanCount="3"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        android:layout_height="wrap_content"/>
+
+
+
+</LinearLayout>

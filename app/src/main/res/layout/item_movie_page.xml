@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/animeContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="-16dp"
+    android:layout_marginEnd="-16dp"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/animeTrendingContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/bannerViewPager"
+            android:layout_width="match_parent"
+            android:layout_height="464dp" />
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/searchIcon"
+            android:layout_width="@dimen/_20sdp"
+            app:srcCompat="@drawable/ic_search"
+            android:layout_gravity="end"
+
+            android:layout_marginTop="@dimen/_30sdp"
+            android:layout_marginEnd="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"/>
+
+        <ProgressBar
+            android:id="@+id/animeTrendingProgressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="64dp" />
+
+    </FrameLayout>
+
+
+
+
+  <LinearLayout
+      android:id="@+id/moviesShowMore"
+      android:layout_marginStart="@dimen/_6sdp"
+      android:layout_width="match_parent"
+      android:clickable="true"
+      android:background="?selectableItemBackground"
+      android:layout_marginEnd="@dimen/_14sdp"
+      android:orientation="horizontal"
+      android:layout_height="wrap_content">
+      <TextView
+          android:id="@+id/animeRecently"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:fontFamily="@font/inter_bold"
+          android:padding="8dp"
+          android:layout_weight="2"
+          android:layout_marginStart="@dimen/_2sdp"
+          android:text="Movies "
+          android:textSize="@dimen/_14ssp"
+          android:visibility="invisible"
+          tools:visibility="visible" />
+      <com.google.android.material.imageview.ShapeableImageView
+          android:id="@+id/recentlyMore"
+          android:layout_width="@dimen/_14sdp"
+          android:layout_height="@dimen/_14sdp"
+          tools:visibility="visible"
+          app:tint="@color/white_and_black"
+          android:visibility="gone"
+          android:layout_gravity="center"
+          app:srcCompat="@drawable/ic_baseline_arrow_forward_ios_24"/>
+
+  </LinearLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/animeUpdatedRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:nestedScrollingEnabled="true"
+            android:requiresFadingEdge="horizontal"
+            tools:itemCount="4"
+            tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_movie"
+            tools:orientation="horizontal" />
+
+    </FrameLayout>
+
+
+    <LinearLayout
+        android:id="@+id/seriesShowMore"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_width="match_parent"
+        android:clickable="true"
+        android:background="?selectableItemBackground"
+        android:layout_marginEnd="@dimen/_14sdp"
+        android:layout_marginTop="@dimen/_4sdp"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/animeTopStars"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_2sdp"
+            android:fontFamily="@font/inter_bold"
+            android:text="Series"
+            android:textSize="@dimen/_14ssp"
+            android:layout_weight="@integer/material_motion_duration_long_1"
+            android:visibility="invisible"
+            tools:visibility="visible" />
+        <com.google.android.material.imageview.ShapeableImageView
+            android:layout_width="@dimen/_14sdp"
+            android:layout_height="@dimen/_14sdp"
+            android:id="@+id/topSeriesMore"
+            app:tint="@color/white_and_black"
+            tools:visibility="visible"
+            android:visibility="gone"
+            android:layout_gravity="center"
+            app:srcCompat="@drawable/ic_baseline_arrow_forward_ios_24"/>
+
+
+    </LinearLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:paddingStart="@dimen/_2sdp"
+        android:layout_height="wrap_content"
+        tools:ignore="RtlSymmetry">
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/animeTopStarsRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:nestedScrollingEnabled="true"
+            android:requiresFadingEdge="horizontal"
+            tools:itemCount="4"
+            tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_movie"
+            tools:orientation="horizontal" />
+
+    </FrameLayout>
+
+
+    <LinearLayout
+        android:id="@+id/documentaryShowMore"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_width="match_parent"
+        android:layout_marginEnd="@dimen/_14sdp"
+        android:clickable="true"
+        android:background="?selectableItemBackground"
+        android:layout_marginTop="@dimen/_4sdp"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/documentaryTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/inter_bold"
+            android:layout_marginStart="@dimen/_2sdp"
+            android:text="Documentary"
+            android:textSize="@dimen/_14ssp"
+            android:layout_weight="@integer/material_motion_duration_long_1"
+            android:visibility="invisible"
+            tools:visibility="visible" />
+        <com.google.android.material.imageview.ShapeableImageView
+            android:layout_width="@dimen/_14sdp"
+            android:layout_height="@dimen/_14sdp"
+            android:id="@+id/documentaryMore"
+            app:tint="@color/white_and_black"
+            tools:visibility="visible"
+            android:visibility="gone"
+            android:layout_gravity="center"
+            app:srcCompat="@drawable/ic_baseline_arrow_forward_ios_24"/>
+
+
+    </LinearLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:paddingStart="@dimen/_2sdp"
+        android:layout_height="wrap_content"
+        tools:ignore="RtlSymmetry">
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/documentaryRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:nestedScrollingEnabled="true"
+            android:requiresFadingEdge="horizontal"
+            tools:itemCount="4"
+            tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_movie"
+            tools:orientation="horizontal" />
+
+    </FrameLayout>
+
+
+
+    <LinearLayout
+        android:id="@+id/kidsShowMore"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_width="match_parent"
+        android:layout_marginEnd="@dimen/_14sdp"
+        android:clickable="true"
+        android:background="?selectableItemBackground"
+        android:layout_marginTop="@dimen/_4sdp"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/kidsTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_2sdp"
+            android:fontFamily="@font/inter_bold"
+            android:text="Kids"
+            android:textSize="@dimen/_14ssp"
+            android:layout_weight="@integer/material_motion_duration_long_1"
+            android:visibility="invisible"
+            tools:visibility="visible" />
+        <com.google.android.material.imageview.ShapeableImageView
+            android:layout_width="@dimen/_14sdp"
+            android:layout_height="@dimen/_14sdp"
+            android:id="@+id/kidsMore"
+            app:tint="@color/white_and_black"
+            tools:visibility="visible"
+            android:visibility="gone"
+            android:layout_gravity="center"
+            app:srcCompat="@drawable/ic_baseline_arrow_forward_ios_24"/>
+
+
+    </LinearLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:paddingStart="@dimen/_2sdp"
+        android:layout_height="wrap_content"
+        tools:ignore="RtlSymmetry">
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/kidsRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:nestedScrollingEnabled="true"
+            android:requiresFadingEdge="horizontal"
+            tools:itemCount="4"
+            tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_movie"
+            tools:orientation="horizontal" />
+
+    </FrameLayout>
+
+
+    <LinearLayout
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_width="match_parent"
+        android:layout_marginEnd="@dimen/_14sdp"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/movieVertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/inter_bold"
+            android:text="Recently Updated"
+            android:textSize="@dimen/_15ssp"
+            android:layout_weight="@integer/material_motion_duration_long_1"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+
+    </LinearLayout>
+
+
+</LinearLayout>
