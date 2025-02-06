@@ -1,7 +1,0 @@
-<!-- res/drawable/background_card.xml -->
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="rectangle">
-    <solid android:color="@color/card_background"/>
-    <corners android:radius="8dp"/>
-    <stroke android:width="0.5dp" android:color="@android:color/darker_gray"/>
-</shape>

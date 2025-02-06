@@ -1,9 +1,0 @@
-<shape
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:aapt="http://schemas.android.com/aapt"
-    >
-    <stroke android:width="1.2dp"
-        android:color="?attr/colorOnSurfaceVariant"/>
-    <corners android:radius="6dp"/>
-
-</shape>
