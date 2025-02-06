@@ -8,12 +8,14 @@ import com.ip_tv.ipsat.databinding.CategoryItemBinding
 import com.ip_tv.ipsat.domain.model.SubCategoryItem
 
 class CategoryAdapter(
-    private val onSelectionChanged: (List<SubCategoryItem>) -> Unit
 ) : RecyclerView.Adapter<CategoryAdapter.CategoryVh>() {
 
     private val list = ArrayList<SubCategoryItem>()
     private val selectedItems = mutableSetOf<SubCategoryItem>()
-
+    private lateinit var onSelectionChanged: (List<SubCategoryItem>) -> Unit
+    fun setItemCLickListener(listener: (List<SubCategoryItem>) -> Unit) {
+        onSelectionChanged = listener
+    }
     inner class CategoryVh(private val binding: CategoryItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun onBind(data: SubCategoryItem) {

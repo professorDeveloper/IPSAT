@@ -39,8 +39,9 @@ class ChannelCategoryScreen :
 
         if (!isBannerLoaded) {
             model.loadChannelsByCategory(bundleData.id)
+            model.loadSubCategory()
         }
-
+        categoryAdapter = CategoryAdapter()
         observeModel()
         observeChannelData()
     }
@@ -63,7 +64,6 @@ class ChannelCategoryScreen :
 
     private fun observeModel() {
         if (isBannerLoaded) return
-
         lifecycleScope.launch {
             model.subCategoryData.flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
                 .collect { resource ->
@@ -103,7 +103,6 @@ class ChannelCategoryScreen :
         model.channelsData.observe(viewLifecycleOwner) { resource ->
             when (resource) {
                 is Resource.Success -> {
-                    model.loadSubCategory()
                     binding.progressBar.gone()
                     binding.channelRv.visible()
 
@@ -112,7 +111,7 @@ class ChannelCategoryScreen :
                         channelResponseList.clear()
                         channelResponseList.addAll(resource.data)
                         channelAdapter.submitList(resource.data)
-                        categoryAdapter = CategoryAdapter { selectedItems ->
+                        categoryAdapter.setItemCLickListener { selectedItems ->
                             val filteredList = resource.data.filterByKeywords(selectedItems)
                             if (selectedItems.isNotEmpty() && filteredList.isNotEmpty()) {
                                 channelAdapter.submitList(
