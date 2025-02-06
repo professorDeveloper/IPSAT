@@ -118,6 +118,8 @@ class ChannelCategoryScreen :
                                 channelAdapter.submitList(
                                     filteredList
                                 )
+                            } else if (selectedItems.isEmpty()) {
+                                channelAdapter.submitList(resource.data)
                             }
                         }
                         setupAdapters()
