@@ -113,6 +113,8 @@ class ChannelCategoryScreen :
                         channelAdapter.submitList(resource.data)
                         categoryAdapter.setItemCLickListener { selectedItems ->
                             val filteredList = resource.data.filterByKeywords(selectedItems)
+//                            Log.d("GGG", "observeChannelData:${filteredList} ")
+//                            Log.d("GGG", "observeChannelData:${resource.data} ")
                             if (selectedItems.isNotEmpty() && filteredList.isNotEmpty()) {
                                 channelAdapter.submitList(
                                     filteredList

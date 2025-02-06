@@ -43,6 +43,7 @@ class LiveTvScreen : BaseFragment<LiveTvScreenBinding>(LiveTvScreenBinding::infl
                         binding.progressBar.gone()
                         if (binding.mainViewPager2.adapter == null) {
                             binding.mainViewPager2.adapter = TabAdapter(it.data, requireActivity())
+                            binding.mainViewPager2.isUserInputEnabled=false
                             TabLayoutMediator(binding.tabLayout, binding.mainViewPager2) { _, _ ->
                             }.attach()
                             setTab(it.data)
