@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.button.MaterialButton xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="@dimen/_34sdp"
+    android:layout_marginEnd="8dp"
+    android:backgroundTint="@color/whiteGray"
+    android:fontFamily="@font/inter_regular"
+    android:textColor="@color/textLightColor"
+    android:textSize="@dimen/_10ssp"
+    app:cornerRadius="@dimen/_4sdp"
+    tools:text="Arabic" />

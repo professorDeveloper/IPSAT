@@ -2,7 +2,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:paddingTop="@dimen/_18sdp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".presentation.screens.ProfileScreen">
@@ -10,7 +9,7 @@
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="?actionBarSize"
+        android:layout_height="@dimen/_80sdp"
         android:background="@color/prem_bg"
 
         android:gravity="center"
@@ -22,15 +21,18 @@
 
         <LinearLayout
             android:id="@+id/subscriptionBtn"
+            android:layout_marginTop="@dimen/_4sdp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <com.google.android.material.imageview.ShapeableImageView
                 android:layout_width="@dimen/_18sdp"
+                android:layout_height="@dimen/_18sdp"
                 android:layout_gravity="center"
                 android:scaleType="centerCrop"
-                android:layout_height="@dimen/_18sdp"
-                app:srcCompat="@drawable/refund"/>
+                app:srcCompat="@drawable/refund" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -40,37 +42,43 @@
 
         </LinearLayout>
 
-   <LinearLayout
-       android:id="@+id/subscriptionUpdateInfo"
-       android:orientation="vertical"
-       android:layout_marginHorizontal="@dimen/_24sdp"
-       android:layout_gravity="center"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content">
-       <com.google.android.material.imageview.ShapeableImageView
-           android:layout_width="@dimen/_18sdp"
-           android:layout_height="@dimen/_18sdp"
-           android:layout_gravity="center"
-           app:srcCompat="@drawable/info"/>
-       <TextView
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:text="Update Info"
-           android:textColor="@color/white_and_black"
-           android:textSize="@dimen/_10ssp" />
-   </LinearLayout>
-
         <LinearLayout
-            android:id="@+id/subscriptionSettings"
+            android:id="@+id/subscriptionUpdateInfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:layout_marginHorizontal="@dimen/_24sdp"
             android:orientation="vertical">
+
             <com.google.android.material.imageview.ShapeableImageView
                 android:layout_width="@dimen/_18sdp"
                 android:layout_height="@dimen/_18sdp"
                 android:layout_gravity="center"
-                app:tint="@color/white_and_black"
-                app:srcCompat="@drawable/settings"/>
+                app:srcCompat="@drawable/info" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Update Info"
+                android:textColor="@color/white_and_black"
+                android:textSize="@dimen/_10ssp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/subscriptionSettings"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:layout_width="@dimen/_18sdp"
+                android:layout_height="@dimen/_18sdp"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/settings"
+                app:tint="@color/white_and_black" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -86,17 +94,17 @@
     <TableLayout
         android:id="@+id/tableLayout"
         android:layout_width="match_parent"
-        android:visibility="gone"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_14sdp"
-        android:elevation="4dp"
+        android:clipToPadding="false"
         android:divider="@drawable/table_row_divider"
-        android:showDividers="middle"
+        android:elevation="4dp"
         android:padding="@dimen/_4sdp"
+        android:showDividers="middle"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        android:clipToPadding="false">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
         <TableRow
             android:layout_width="match_parent"
@@ -107,28 +115,27 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Code:"
                 android:fontFamily="@font/inter_regular"
+                android:gravity="start"
+                android:text="Code:"
                 android:textColor="@color/white_and_black"
-                android:textSize="@dimen/_12ssp"
-                android:gravity="start" />
+                android:textSize="@dimen/_12ssp" />
 
             <TextView
                 android:id="@+id/subscriptionCodeTxt"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
                 android:layout_marginStart="@dimen/_10sdp"
-                android:ellipsize="end"
-                android:singleLine="true"
+                android:layout_weight="2"
                 android:clickable="true"
+                android:ellipsize="end"
                 android:focusable="true"
-                android:text="886601525947"
                 android:fontFamily="@font/inter_regular"
-                android:textStyle="italic"
+                android:singleLine="true"
+                android:text="886601525947"
                 android:textColor="@color/white_and_black"
                 android:textSize="@dimen/_13ssp"
-                />
+                android:textStyle="italic" />
         </TableRow>
 
         <TableRow
@@ -140,26 +147,27 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Status:"
                 android:fontFamily="@font/inter_regular"
+                android:gravity="start"
+                android:text="Status:"
                 android:textColor="@color/white_and_black"
-                android:textSize="@dimen/_12ssp"
-                android:gravity="start" />
+                android:textSize="@dimen/_12ssp" />
 
             <TextView
                 android:id="@+id/subscriptionStatusTxt"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
                 android:layout_marginStart="@dimen/_10sdp"
-                android:text="Active"
+                android:layout_weight="2"
+                android:ellipsize="end"
                 android:fontFamily="@font/inter_regular"
-                android:textStyle="normal"
+                android:singleLine="true"
+                android:text="Active"
                 android:textColor="@color/map_green"
                 android:textSize="@dimen/_13ssp"
-                android:ellipsize="end"
-                android:singleLine="true" />
+                android:textStyle="normal" />
         </TableRow>
+
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -169,26 +177,27 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Activated Date:"
                 android:fontFamily="@font/inter_regular"
+                android:gravity="start"
+                android:text="Activated Date:"
                 android:textColor="@color/white_and_black"
-                android:textSize="@dimen/_12ssp"
-                android:gravity="start" />
+                android:textSize="@dimen/_12ssp" />
 
             <TextView
                 android:id="@+id/subscriptionActivatedDateTxt"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
                 android:layout_marginStart="@dimen/_10sdp"
-                android:text="2024-12-18"
+                android:layout_weight="2"
+                android:ellipsize="end"
                 android:fontFamily="@font/inter_regular"
-                android:textStyle="normal"
+                android:singleLine="true"
+                android:text="2024-12-18"
                 android:textColor="@color/map_green"
                 android:textSize="@dimen/_13ssp"
-                android:ellipsize="end"
-                android:singleLine="true" />
+                android:textStyle="normal" />
         </TableRow>
+
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -198,25 +207,25 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="End Date:"
                 android:fontFamily="@font/inter_regular"
+                android:gravity="start"
+                android:text="End Date:"
                 android:textColor="@color/white_and_black"
-                android:textSize="@dimen/_12ssp"
-                android:gravity="start" />
+                android:textSize="@dimen/_12ssp" />
 
             <TextView
                 android:id="@+id/subscriptionEndDateTxt"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
                 android:layout_marginStart="@dimen/_10sdp"
-                android:text="2024-12-19"
+                android:layout_weight="2"
+                android:ellipsize="end"
                 android:fontFamily="@font/inter_regular"
-                android:textStyle="normal"
+                android:singleLine="true"
+                android:text="2024-12-19"
                 android:textColor="@color/map_red"
                 android:textSize="@dimen/_13ssp"
-                android:ellipsize="end"
-                android:singleLine="true" />
+                android:textStyle="normal" />
         </TableRow>
 
         <TableRow
@@ -228,24 +237,24 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Mac Address:"
                 android:fontFamily="@font/inter_regular"
+                android:gravity="start"
+                android:text="Mac Address:"
                 android:textColor="@color/white_and_black"
-                android:textSize="@dimen/_12ssp"
-                android:gravity="start" />
+                android:textSize="@dimen/_12ssp" />
 
             <TextView
                 android:id="@+id/macAddressTxt"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
                 android:layout_marginStart="@dimen/_10sdp"
-                android:text="a8:25:28:b9:dd:74"
-                android:fontFamily="@font/inter_regular"
-                android:textStyle="normal"
-                android:textSize="@dimen/_13ssp"
+                android:layout_weight="2"
                 android:ellipsize="end"
-                android:singleLine="true" />
+                android:fontFamily="@font/inter_regular"
+                android:singleLine="true"
+                android:text="a8:25:28:b9:dd:74"
+                android:textSize="@dimen/_13ssp"
+                android:textStyle="normal" />
         </TableRow>
 
 
@@ -256,15 +265,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_14sdp"
-        android:visibility="visible"
-        android:elevation="4dp"
+        android:clipToPadding="false"
         android:divider="@drawable/table_row_divider"
-        android:showDividers="middle"
+        android:elevation="4dp"
         android:padding="@dimen/_4sdp"
+        android:showDividers="middle"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        android:clipToPadding="false">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
         <TableRow
             android:layout_width="match_parent"
@@ -276,26 +285,27 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Code:"
                 android:fontFamily="@font/inter_regular"
+                android:gravity="start"
+                android:text="Code:"
                 android:textColor="@color/white_and_black"
-                android:textSize="@dimen/_12ssp"
-                android:gravity="start" />
+                android:textSize="@dimen/_12ssp" />
 
             <com.facebook.shimmer.ShimmerFrameLayout
                 android:id="@+id/shimmerCode"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="CODE Loading"
                     android:fontFamily="@font/inter_regular"
+                    android:gravity="start"
+                    android:text="CODE Loading"
                     android:textColor="@color/white_and_black"
-                    android:textSize="@dimen/_12ssp"
-                    android:gravity="start" />
+                    android:textSize="@dimen/_12ssp" />
             </com.facebook.shimmer.ShimmerFrameLayout>
         </TableRow>
 
@@ -308,28 +318,30 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Status:"
                 android:fontFamily="@font/inter_regular"
+                android:gravity="start"
+                android:text="Status:"
                 android:textColor="@color/white_and_black"
-                android:textSize="@dimen/_12ssp"
-                android:gravity="start" />
+                android:textSize="@dimen/_12ssp" />
 
             <com.facebook.shimmer.ShimmerFrameLayout
                 android:id="@+id/shimmerStatus"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="STATUS Loading"
                     android:fontFamily="@font/inter_regular"
+                    android:gravity="start"
+                    android:text="STATUS Loading"
                     android:textColor="@color/white_and_black"
-                    android:textSize="@dimen/_12ssp"
-                    android:gravity="start" />
+                    android:textSize="@dimen/_12ssp" />
             </com.facebook.shimmer.ShimmerFrameLayout>
         </TableRow>
+
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -339,28 +351,30 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Activated Date:"
                 android:fontFamily="@font/inter_regular"
+                android:gravity="start"
+                android:text="Activated Date:"
                 android:textColor="@color/white_and_black"
-                android:textSize="@dimen/_12ssp"
-                android:gravity="start" />
+                android:textSize="@dimen/_12ssp" />
 
             <com.facebook.shimmer.ShimmerFrameLayout
                 android:id="@+id/activatedDateShimmer"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="DATE Loading"
                     android:fontFamily="@font/inter_regular"
+                    android:gravity="start"
+                    android:text="DATE Loading"
                     android:textColor="@color/white_and_black"
-                    android:textSize="@dimen/_12ssp"
-                    android:gravity="start" />
+                    android:textSize="@dimen/_12ssp" />
             </com.facebook.shimmer.ShimmerFrameLayout>
         </TableRow>
+
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -370,26 +384,27 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="End Date:"
                 android:fontFamily="@font/inter_regular"
+                android:gravity="start"
+                android:text="End Date:"
                 android:textColor="@color/white_and_black"
-                android:textSize="@dimen/_12ssp"
-                android:gravity="start" />
+                android:textSize="@dimen/_12ssp" />
 
             <com.facebook.shimmer.ShimmerFrameLayout
                 android:id="@+id/endDateShimmer"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="END DATE Loading"
                     android:fontFamily="@font/inter_regular"
+                    android:gravity="start"
+                    android:text="END DATE Loading"
                     android:textColor="@color/white_and_black"
-                    android:textSize="@dimen/_12ssp"
-                    android:gravity="start" />
+                    android:textSize="@dimen/_12ssp" />
             </com.facebook.shimmer.ShimmerFrameLayout>
         </TableRow>
 
@@ -402,26 +417,27 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Mac Address:"
                 android:fontFamily="@font/inter_regular"
+                android:gravity="start"
+                android:text="Mac Address:"
                 android:textColor="@color/white_and_black"
-                android:textSize="@dimen/_12ssp"
-                android:gravity="start" />
+                android:textSize="@dimen/_12ssp" />
 
             <com.facebook.shimmer.ShimmerFrameLayout
                 android:id="@+id/macAddressShimmer"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Mac Address Loading"
                     android:fontFamily="@font/inter_regular"
+                    android:gravity="start"
+                    android:text="Mac Address Loading"
                     android:textColor="@color/white_and_black"
-                    android:textSize="@dimen/_12ssp"
-                    android:gravity="start" />
+                    android:textSize="@dimen/_12ssp" />
             </com.facebook.shimmer.ShimmerFrameLayout>
         </TableRow>
 

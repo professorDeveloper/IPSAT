@@ -8,8 +8,10 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.ip_tv.ipsat.databinding.ChannelCategoryScreenBinding
+import com.ip_tv.ipsat.domain.model.ChannelCategory
 import com.ip_tv.ipsat.domain.model.ChannelCategoryItem
 import com.ip_tv.ipsat.domain.model.ChannelResponseItem
+import com.ip_tv.ipsat.presentation.activities.LiveTvActivity
 import com.ip_tv.ipsat.presentation.adapters.CategoryAdapter
 import com.ip_tv.ipsat.presentation.adapters.ChannelAdapter
 import com.ip_tv.ipsat.presentation.viewmodel.LiveTvScreenViewModel
@@ -28,7 +30,7 @@ class ChannelCategoryScreen :
     private lateinit var bundleData: ChannelCategoryItem
     private val model by viewModels<LiveTvScreenViewModel>()
     private var isBannerLoaded = false
-
+    private var categoryList = ArrayList<ChannelCategoryItem>()
     private val channelResponseList = ArrayList<ChannelResponseItem>()
     private val channelAdapter by lazy { ChannelAdapter() }
 
@@ -47,6 +49,12 @@ class ChannelCategoryScreen :
     }
 
     private fun loadParsedData() {
+        arguments?.getSerializable("listData")?.let {
+            categoryList =it as ChannelCategory
+        }?: run {
+            Log.e("ChannelCategoryScreen", "Error: bundleData is null")
+            return
+        }
         arguments?.getSerializable("data")?.let {
             bundleData = it as ChannelCategoryItem
         } ?: run {
@@ -57,9 +65,15 @@ class ChannelCategoryScreen :
 
     private fun setupAdapters() {
         binding.channelRv.adapter = channelAdapter
-
-
         binding.subCategoryRv.adapter = categoryAdapter
+        channelAdapter.setChannelItemClickListener {
+            LiveTvActivity.currentCategory = bundleData
+            LiveTvActivity.categoryList =categoryList
+            val intent = LiveTvActivity.newIntent(requireActivity(), it)
+            requireActivity().startActivity(
+                intent
+            )
+        }
     }
 
     private fun observeModel() {

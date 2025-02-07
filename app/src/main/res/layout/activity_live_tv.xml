@@ -1,0 +1,97 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Main Player View -->
+    <RelativeLayout
+        android:id="@+id/playerContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.exoplayer2.ui.PlayerView
+            android:id="@+id/player"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:controller_layout_id="@layout/custom_live_tv_controller"
+            app:use_controller="true" />
+
+
+    </RelativeLayout>
+
+    <!-- Sidebar Container (Animated) -->
+    <LinearLayout
+        android:id="@+id/sidebar"
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:translationX="-380dp"
+        android:background="@drawable/sidebar_background"
+        android:elevation="8dp"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_4sdp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:text="Channels List"
+                android:textColor="#FFFFFF"
+                android:textSize="@dimen/_14ssp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/btn_hide_menu"
+                android:layout_width="@dimen/_24sdp"
+                android:layout_height="@dimen/_24sdp"
+                android:layout_gravity="end"
+                android:layout_margin="@dimen/_4sdp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_close_black_24dp"
+                app:tint="#FFFFFF" />
+        </FrameLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_categories"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/_3sdp"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/_6sdp"
+            tools:listitem="@layout/player_category_item" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_channels"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                tools:listitem="@layout/channel_middle_item" />
+
+            <TextView
+                android:id="@+id/placeHolder"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textColor="@color/whiteMain"
+                android:textAlignment="center"
+                android:fontFamily="@font/inter_bold"
+                android:text="Channels Dose`n't exist"
+                android:textSize="@dimen/_18ssp"
+                android:visibility="gone"/>
+
+            <ProgressBar
+                android:id="@+id/progressChannel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/_50sdp" />
+        </FrameLayout>
+    </LinearLayout>
+</FrameLayout>

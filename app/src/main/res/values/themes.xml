@@ -8,7 +8,7 @@
 
     <style name="Theme.Intro" parent="Theme.IPSAT">
         <item name="android:navigationBarColor">#00656464</item>
-        <item name="android:statusBarColor">#00656464</item>
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
         <item name="android:windowLightStatusBar">true</item>
     </style>
 

@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?><!-- Main Player Container -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/player_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <View
+        android:id="@+id/exo_black_screen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#A8000000" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:orientation="vertical"
+        android:padding="@dimen/_8sdp">
+
+        <LinearLayout
+            android:id="@+id/exo_top_cont"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/exo_back"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:backgroundTint="#00FFFFFF"
+                android:src="@drawable/ic_round_arrow_back_ios_new_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:id="@+id/exo_anime_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="48dp"
+                    android:alpha="0.66"
+                    android:fontFamily="@font/inter_bold"
+                    android:singleLine="false"
+                    android:textColor="@color/bg_white"
+                    android:textSize="@dimen/_15ssp"
+                    tools:ignore="TextContrastCheck"
+                    tools:text="Popular" />
+
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/exo_lock"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:backgroundTint="#00FFFFFF"
+                app:srcCompat="@drawable/ic_round_lock_open_24"
+                app:tint="@color/bg_white"
+                tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/exo_video_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:alpha="0.58"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:textAlignment="textEnd"
+            android:textColor="@color/bg_white"
+            android:textSize="12sp"
+            tools:ignore="TextContrastCheck"
+            tools:text="720x1080" />
+
+        <TextView
+            android:id="@+id/exo_server_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:alpha="0.58"
+            android:fontFamily="@font/inter_bold"
+            android:textAlignment="textEnd"
+            android:textColor="@color/bg_white"
+            android:textSize="12sp"
+            tools:ignore="TextContrastCheck"
+            tools:text="Server" />
+
+        <TextView
+            android:id="@+id/exo_video_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:alpha="0.58"
+            android:textAlignment="textEnd"
+            android:textColor="@color/bg_white"
+            android:textSize="12sp"
+            tools:ignore="TextContrastCheck"
+            tools:text="720x1080" />
+
+    </LinearLayout>
+
+
+    <!-- Sidebar Toggle Button -->
+    <ImageView
+        android:id="@+id/btn_toggle_sidebar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/rounded_button"
+        android:padding="8dp"
+        android:src="@drawable/ic_menu_vector"
+        app:tint="#FFFFFF" />
+
+    <ImageView
+        android:id="@+id/playBtn"
+        style="@style/ExoMediaButton.Play"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_centerInParent="true"
+        android:padding="@dimen/_8sdp"
+        android:src="@drawable/anim_pause_to_play"
+        tools:ignore="ContentDescription" />
+
+    <LinearLayout
+        android:id="@+id/exo_timeline_cont"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="@dimen/_8sdp"
+        android:orientation="vertical">
+
+        <view
+            android:id="@id/exo_progress"
+            class="com.ip_tv.ipsat.presentation.activities.PlayerActivity$ExtendedTimeBar"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:layout_marginVertical="8dp"
+            app:ad_marker_color="#A9FFFFFF"
+            app:bar_height="2dp"
+            app:played_color="?attr/colorPrimary"
+            app:scrubber_color="?attr/colorAccent"
+            tools:ignore="SpeakableTextPresentCheck" />
+
+    </LinearLayout>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginTop="8dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="8dp"
+        app:cardBackgroundColor="#A8000000"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="0dp">
+
+        <ImageButton
+            android:id="@+id/exo_unlock"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:backgroundTint="#00FFFFFF"
+            android:visibility="gone"
+            app:srcCompat="@drawable/ic_round_lock_24"
+            tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
+    </androidx.cardview.widget.CardView>
+
+
+</RelativeLayout>

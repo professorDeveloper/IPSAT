@@ -9,7 +9,6 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/_16ssp"
         android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -18,7 +17,7 @@
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="@dimen/_60sdp"
             android:background="?attr/colorPrimary"
             android:theme="@style/ThemeOverlay.MaterialComponents.ActionBar"
             app:layout_scrollEffect="compress"

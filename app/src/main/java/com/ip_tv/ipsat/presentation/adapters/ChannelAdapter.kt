@@ -13,7 +13,14 @@ import com.ip_tv.ipsat.databinding.ItemChannelBinding
 import com.ip_tv.ipsat.domain.model.ChannelResponseItem
 import com.ip_tv.ipsat.utils.loadImage
 
-class ChannelAdapter : ListAdapter<ChannelResponseItem, ChannelAdapter.ChannelVh>(ChannelDiffUtil()) {
+class ChannelAdapter :
+    ListAdapter<ChannelResponseItem, ChannelAdapter.ChannelVh>(ChannelDiffUtil()) {
+
+    private lateinit var channelItemClickListener: (ChannelResponseItem) -> Unit
+
+    fun setChannelItemClickListener(listener: (ChannelResponseItem) -> Unit) {
+        channelItemClickListener = listener
+    }
 
     inner class ChannelVh(private val binding: ItemChannelBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -22,7 +29,9 @@ class ChannelAdapter : ListAdapter<ChannelResponseItem, ChannelAdapter.ChannelVh
             binding.apply {
                 coverImage.loadImage(item.image)
                 title.text = item.name
-
+                binding.root.setOnClickListener {
+                    channelItemClickListener.invoke(item)
+                }
                 setAnimation(binding.root)
             }
         }
@@ -43,11 +52,17 @@ class ChannelAdapter : ListAdapter<ChannelResponseItem, ChannelAdapter.ChannelVh
     }
 
     class ChannelDiffUtil : DiffUtil.ItemCallback<ChannelResponseItem>() {
-        override fun areItemsTheSame(oldItem: ChannelResponseItem, newItem: ChannelResponseItem): Boolean {
+        override fun areItemsTheSame(
+            oldItem: ChannelResponseItem,
+            newItem: ChannelResponseItem
+        ): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: ChannelResponseItem, newItem: ChannelResponseItem): Boolean {
+        override fun areContentsTheSame(
+            oldItem: ChannelResponseItem,
+            newItem: ChannelResponseItem
+        ): Boolean {
             return oldItem == newItem
         }
     }

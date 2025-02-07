@@ -29,6 +29,17 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".presentation.activities.LiveTvActivity"
+            android:autoRemoveFromRecents="true"
+            android:configChanges="uiMode|orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:noHistory="true"
+            android:resizeableActivity="true"
+            android:screenOrientation="sensorLandscape"
+            android:supportsPictureInPicture="true"
+            android:exported="false" />
+        <activity
             android:name=".presentation.activities.PlayerSeriesActivity"
             android:autoRemoveFromRecents="true"
             android:configChanges="uiMode|orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden"
@@ -38,7 +49,7 @@
             android:noHistory="true"
             android:resizeableActivity="true"
             android:screenOrientation="sensorLandscape"
-            android:supportsPictureInPicture="true"  />
+            android:supportsPictureInPicture="true" />
         <activity
             android:name=".presentation.activities.PlayerActivity"
             android:autoRemoveFromRecents="true"
