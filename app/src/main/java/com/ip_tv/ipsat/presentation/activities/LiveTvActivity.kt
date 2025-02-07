@@ -49,7 +49,6 @@ class LiveTvActivity : AppCompatActivity() {
     private var isNewChannelSelected = false
 
     private lateinit var categoryAdapter: PlayerCategoryAdapter
-    private lateinit var currentCategoryy: ChannelCategoryItem
     private lateinit var channelAdapter: PlayerChannelAdapter
 
     private lateinit var selectedChannel: ChannelResponseItem
@@ -63,7 +62,6 @@ class LiveTvActivity : AppCompatActivity() {
         parseIntentData()
         setupPlayer()
         setupUI()
-        currentCategoryy = currentCategory!!
         viewModel.loadChannelsByCategory(currentCategory!!.id)
         setupRecyclerViews()
         observeViewModel()
@@ -127,7 +125,6 @@ class LiveTvActivity : AppCompatActivity() {
 
     private fun setupRecyclerViews() {
         categoryAdapter = PlayerCategoryAdapter { category ->
-            currentCategoryy = category
             viewModel.loadChannelsByCategory(category.id)
         }
 
@@ -171,7 +168,6 @@ class LiveTvActivity : AppCompatActivity() {
         binding.progressChannel.gone()
         binding.placeHolder.visibility = if (channels.isEmpty()) View.VISIBLE else View.GONE
         channelAdapter.clearSelection()
-        if (currentCategory!!.id == currentCategoryy.id) return
         val defaultChannelPosition = channelAdapter.setDefaultSelected(selectedChannel)
         binding.rvChannels.scrollToPosition(defaultChannelPosition)
     }
