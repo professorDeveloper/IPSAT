@@ -1,5 +1,6 @@
 package com.ip_tv.ipsat.presentation.adapters
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -21,6 +22,7 @@ class PlayerChannelAdapter(
 
     inner class PlayerChannelVh(private val binding: ChannelMiddleItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
+        @SuppressLint("ResourceAsColor")
         fun onBind(channelItem: ChannelResponseItem, isSelected: Boolean) {
             binding.apply {
                 channelTitle.text = channelItem.name
@@ -49,6 +51,10 @@ class PlayerChannelAdapter(
         notifyDataSetChanged()
     }
 
+    fun clearSelection() {
+        selectedPosition = -1
+        notifyDataSetChanged()
+    }
     fun setDefaultSelected(channelItem: ChannelResponseItem): Int {
         val index = list.indexOfFirst { it.id == channelItem.id }
         if (index != -1) {
