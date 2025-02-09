@@ -18,7 +18,7 @@
 <img width="1920" alt="Cover (1)" src="https://github.com/user-attachments/assets/3ce60ad8-11b1-4e46-87ee-d603cdd28495" />
 
 ### For Users
-- Download the app from the official source (APK link)
+- Download the app from the official source ([APK link](https://github.com/professorDeveloper/IPSAT/releases/download/v1.0/app-release.apk))
 - Open the app and start exploring.
 
 ## 🛠 Tech Stack
