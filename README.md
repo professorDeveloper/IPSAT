@@ -23,7 +23,7 @@
 
 ## 🛠 Tech Stack
 - **Framework:** Android (Kotlin)
-- **Backend:** REST API / )
+- **Backend:** REST API / DASH )
 - **API Integration:** TMDB API (for series details)
 
 ## 📢 Contributing
