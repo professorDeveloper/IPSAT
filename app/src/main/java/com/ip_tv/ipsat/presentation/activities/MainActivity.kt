@@ -40,23 +40,28 @@ class MainActivity : AppCompatActivity() {
                 android.Manifest.permission.READ_EXTERNAL_STORAGE
             ),
             100
-        ) }
+        )
+    }
 
-  private  fun managePages(){
+    private fun managePages() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.showMoreMoviesScreen -> {
                     viewBinding.homeNavigation.hideWithAnimation(viewBinding.navHost)
                 }
+
                 R.id.updateInfoScreen -> {
                     viewBinding.homeNavigation.hideWithAnimation(viewBinding.navHost)
                 }
-                R.id.detailScreen ,R.id.detailSeriesScreen-> {
+
+                R.id.detailScreen, R.id.detailSeriesScreen -> {
                     viewBinding.homeNavigation.hideWithAnimation(viewBinding.navHost)
                 }
+
                 R.id.searchScreen -> {
                     viewBinding.homeNavigation.hideWithAnimation(viewBinding.navHost)
                 }
+
                 R.id.button_profile_page -> {
                     viewBinding.homeNavigation.showWithAnimation(viewBinding.navHost)
                 }
@@ -68,7 +73,6 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
-
 
 
 }

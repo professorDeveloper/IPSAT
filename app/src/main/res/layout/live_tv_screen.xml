@@ -14,22 +14,37 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
+        <FrameLayout
+            android:id="@+id/toolbar_container"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            android:theme="@style/ThemeOverlay.MaterialComponents.ActionBar"
+            android:layout_height="wrap_content"
             app:layout_scrollEffect="compress"
-            app:layout_scrollFlags="scroll|enterAlwaysCollapsed|snap"
-            app:title="Live Tv Screen"
-            app:titleTextAppearance="@style/TextAppearance.Material3.TitleMedium" />
+            app:layout_scrollFlags="scroll|enterAlwaysCollapsed|snap">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                android:theme="@style/ThemeOverlay.MaterialComponents.ActionBar"
+                app:menu="@menu/search_menu"
+                app:title="Live Tv Screen"
+                app:titleTextAppearance="@style/TextAppearance.Material3.TitleMedium" />
+
+            <com.ferfalk.simplesearchview.SimpleSearchView
+                android:id="@+id/searchView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorPrimary"
+                app:type="card"
+
+                app:voiceSearch="false" />
+        </FrameLayout>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_8sdp"
             app:tabGravity="start"
             app:tabIndicatorAnimationMode="elastic"
             app:tabIndicatorColor="@color/colorPrimary"
@@ -37,6 +52,7 @@
             app:tabPaddingEnd="6dp"
             app:tabPaddingStart="6dp"
             app:tabTextColor="?attr/colorSecondary" />
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.viewpager2.widget.ViewPager2

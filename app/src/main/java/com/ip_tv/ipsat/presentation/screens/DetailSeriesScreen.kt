@@ -130,7 +130,7 @@ class DetailSeriesScreen :
 
             withContext(Dispatchers.Main) {
                 val intent = Intent(requireActivity(), TrailerActivity::class.java)
-                intent.putExtra("apiKey", LocalData.youtube_key)
+                intent.putExtra("apiKey", LocalData.YOUTUBE_KEY)
                 intent.putExtra("videoId", youtubeId)
                 startActivity(intent)
                 WaitDialog.dismiss(requireActivity())

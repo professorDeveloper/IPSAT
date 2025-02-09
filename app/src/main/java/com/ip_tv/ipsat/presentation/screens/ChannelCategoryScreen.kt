@@ -11,11 +11,17 @@ import com.ip_tv.ipsat.databinding.ChannelCategoryScreenBinding
 import com.ip_tv.ipsat.domain.model.ChannelCategory
 import com.ip_tv.ipsat.domain.model.ChannelCategoryItem
 import com.ip_tv.ipsat.domain.model.ChannelResponseItem
+import com.ip_tv.ipsat.domain.model.SubCategoryItem
 import com.ip_tv.ipsat.presentation.activities.LiveTvActivity
 import com.ip_tv.ipsat.presentation.adapters.CategoryAdapter
 import com.ip_tv.ipsat.presentation.adapters.ChannelAdapter
 import com.ip_tv.ipsat.presentation.viewmodel.LiveTvScreenViewModel
 import com.ip_tv.ipsat.utils.BaseFragment
+import com.ip_tv.ipsat.utils.LocalData
+import com.ip_tv.ipsat.utils.LocalData.isDataHave
+import com.ip_tv.ipsat.utils.LocalData.selectedCategory
+import com.ip_tv.ipsat.utils.LocalData.setClearSearchResponseListener
+import com.ip_tv.ipsat.utils.LocalData.setSearchResponseListener
 import com.ip_tv.ipsat.utils.filterByKeywords
 import com.ip_tv.ipsat.utils.filterChannelsByCategory
 import com.ip_tv.ipsat.utils.gone
@@ -50,8 +56,8 @@ class ChannelCategoryScreen :
 
     private fun loadParsedData() {
         arguments?.getSerializable("listData")?.let {
-            categoryList =it as ChannelCategory
-        }?: run {
+            categoryList = it as ChannelCategory
+        } ?: run {
             Log.e("ChannelCategoryScreen", "Error: bundleData is null")
             return
         }
@@ -68,7 +74,7 @@ class ChannelCategoryScreen :
         binding.subCategoryRv.adapter = categoryAdapter
         channelAdapter.setChannelItemClickListener {
             LiveTvActivity.currentCategory = bundleData
-            LiveTvActivity.categoryList =categoryList
+            LiveTvActivity.categoryList = categoryList
             val intent = LiveTvActivity.newIntent(requireActivity(), it)
             requireActivity().startActivity(
                 intent
@@ -90,6 +96,7 @@ class ChannelCategoryScreen :
                                     bundleData.id
                                 )
                             )
+
                         }
 
                         is Resource.Error -> {
@@ -119,6 +126,20 @@ class ChannelCategoryScreen :
                 is Resource.Success -> {
                     binding.progressBar.gone()
                     binding.channelRv.visible()
+                    isDataHave.invoke(resource.data.isNotEmpty())
+
+                    setSearchResponseListener {
+                        search(it)
+                    }
+
+                    setClearSearchResponseListener {
+                        if (selectedCategory.isNotEmpty()) {
+                            val filteredList = resource.data.filterByKeywords(selectedCategory)
+                            channelAdapter.submitList(filteredList)
+                        } else {
+                            channelAdapter.submitList(resource.data)
+                        }
+                    }
 
                     if (resource.data.isNotEmpty()) {
                         binding.placeHolder.gone()
@@ -126,6 +147,8 @@ class ChannelCategoryScreen :
                         channelResponseList.addAll(resource.data)
                         channelAdapter.submitList(resource.data)
                         categoryAdapter.setItemCLickListener { selectedItems ->
+                            LocalData.selectedCategory.clear()
+                            LocalData.selectedCategory.addAll(selectedItems)
                             val filteredList = resource.data.filterByKeywords(selectedItems)
                             if (selectedItems.isNotEmpty() && filteredList.isNotEmpty()) {
                                 channelAdapter.submitList(
@@ -160,6 +183,13 @@ class ChannelCategoryScreen :
 
                 else -> {}
             }
+        }
+    }
+
+    fun search(query: String) {
+        if (query.isNotEmpty()) {
+            channelAdapter.query(query)
+
         }
     }
 }

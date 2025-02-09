@@ -11,7 +11,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ip_tv.ipsat.R
 import com.ip_tv.ipsat.databinding.ItemChannelBinding
 import com.ip_tv.ipsat.domain.model.ChannelResponseItem
+import com.ip_tv.ipsat.utils.LocalData
+import com.ip_tv.ipsat.utils.filterByKeywords
 import com.ip_tv.ipsat.utils.loadImage
+import kotlin.reflect.jvm.internal.impl.descriptors.Visibilities.Local
 
 class ChannelAdapter :
     ListAdapter<ChannelResponseItem, ChannelAdapter.ChannelVh>(ChannelDiffUtil()) {
@@ -34,6 +37,31 @@ class ChannelAdapter :
                 }
                 setAnimation(binding.root)
             }
+        }
+    }
+
+    fun query(query: String) {
+        if (LocalData.selectedCategory.isEmpty()) {
+            val trimmedQuery = query.trim()
+            val filteredList = if (trimmedQuery.isEmpty()) currentList else currentList.filter {
+                it.name.contains(
+                    trimmedQuery,
+                    ignoreCase = true
+                )
+            }
+            if (filteredList != currentList) submitList(filteredList)
+        } else {
+            val arrayList: ArrayList<ChannelResponseItem> =
+                currentList.toMutableList() as ArrayList<ChannelResponseItem>
+            arrayList.filterByKeywords(LocalData.selectedCategory)
+            val trimmedQuery = query.trim()
+            val filteredList = if (trimmedQuery.isEmpty()) currentList else arrayList.filter {
+                it.name.contains(
+                    trimmedQuery,
+                    ignoreCase = true
+                )
+            }
+            if (filteredList != arrayList) submitList(filteredList)
         }
     }
 

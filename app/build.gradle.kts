@@ -164,4 +164,6 @@ dependencies {
     implementation( "com.google.android.exoplayer:exoplayer-hls:$exo_version")
     implementation("com.google.android.exoplayer:extension-mediasession:$exo_version")
 
+    implementation("com.github.Ferfalk:SimpleSearchView:0.2.1")
+
 }

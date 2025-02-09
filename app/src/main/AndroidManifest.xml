@@ -70,6 +70,7 @@
             android:exported="false" />
         <activity
             android:name=".presentation.activities.MainActivity"
+            android:windowSoftInputMode="adjustPan"
             android:exported="false" />
         <activity
             android:name=".presentation.activities.SplashActivity"
