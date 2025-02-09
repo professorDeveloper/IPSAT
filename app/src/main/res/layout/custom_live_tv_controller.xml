@@ -71,6 +71,14 @@
                             tools:text="Popular" />
 
                     </LinearLayout>
+                    <ImageButton
+                        android:id="@+id/exo_lock"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:backgroundTint="#00FFFFFF"
+                        app:srcCompat="@drawable/ic_round_lock_open_24"
+                        app:tint="@color/bg_white"
+                        tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
 
                 </LinearLayout>
 
@@ -175,6 +183,104 @@
             app:played_color="?attr/colorPrimary"
             app:scrubber_color="?attr/colorAccent"
             tools:ignore="SpeakableTextPresentCheck" />
+        <LinearLayout
+            android:id="@+id/exo_bottom_cont"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:orientation="vertical">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:gravity="bottom"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <ImageButton
+                    android:id="@+id/exo_quality"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:backgroundTint="#00FFFFFF"
+                    android:src="@drawable/ic_round_high_quality_24"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:tint="#fff"
+                    tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
+                <ImageButton
+                    android:id="@+id/exo_pip"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:backgroundTint="#00FFFFFF"
+                    android:src="@drawable/ic_round_picture_in_picture_alt_24"
+                    app:tint="#fff"
+                    tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
+
+
+                <ImageButton
+                    android:id="@+id/exo_sub"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:backgroundTint="#00FFFFFF"
+                    android:baselineAligned="false"
+                    android:scaleX="-1"
+                    android:src="@drawable/ic_round_subtitles_24"
+                    android:visibility="gone"
+                    app:tint="#fff"
+                    tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
+
+                <ImageButton
+                    android:id="@+id/exo_download"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:backgroundTint="#00FFFFFF"
+                    android:src="@drawable/ic_round_download_24"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:tint="#fff"
+                    tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <ImageButton
+                    android:id="@+id/exo_rotate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:backgroundTint="#00FFFFFF"
+                    android:visibility="visible"
+                    app:srcCompat="@drawable/ic_round_screen_rotation_alt_24"
+                    tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
+                <ImageButton
+                    android:id="@+id/exo_screen"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:backgroundTint="#00FFFFFF"
+                    android:src="@drawable/ic_round_fullscreen_24"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
+
+                <ImageButton
+                    android:id="@+id/exo_cast"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:backgroundTint="#00FFFFFF"
+                    android:src="@drawable/ic_round_picture_in_picture_alt_24"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
+
+
+
+            </LinearLayout>
+        </LinearLayout>
 
     </LinearLayout>
 

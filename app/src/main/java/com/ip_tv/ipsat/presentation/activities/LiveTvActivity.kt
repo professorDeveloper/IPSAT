@@ -1,14 +1,21 @@
 package com.ip_tv.ipsat.presentation.activities
 
+import android.annotation.SuppressLint
+import android.app.AppOpsManager
+import android.app.PictureInPictureParams
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.content.res.Configuration
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
@@ -19,9 +26,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.source.MediaSource
+import com.google.android.exoplayer2.source.dash.DashMediaSource
+import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSource
+import com.google.android.material.snackbar.Snackbar
 import com.ip_tv.ipsat.R
 import com.ip_tv.ipsat.databinding.ActivityLiveTvBinding
 import com.ip_tv.ipsat.domain.model.ChannelCategoryItem
+import com.ip_tv.ipsat.domain.model.ChannelLinkResponse
 import com.ip_tv.ipsat.domain.model.ChannelResponseItem
 import com.ip_tv.ipsat.presentation.adapters.PlayerCategoryAdapter
 import com.ip_tv.ipsat.presentation.adapters.PlayerChannelAdapter
@@ -41,17 +54,28 @@ class LiveTvActivity : AppCompatActivity() {
     private val viewModel by viewModels<LiveTvScreenViewModel>()
 
     private lateinit var exoPlay: ImageView
+    private lateinit var exoQuality: ImageButton
+    private lateinit var exoRotate: ImageButton
+    private lateinit var exoPip: ImageButton
+    private lateinit var scaleBtn: ImageButton
+
     private lateinit var exoToggleButton: ImageView
     private lateinit var exoToggleButtonRight: ImageView
     private lateinit var exoTitle: TextView
+    private lateinit var exoProgress: PlayerActivity.ExtendedTimeBar
 
     private var notchHeight: Int = 0
     private var isNewChannelSelected = false
-
+    private var isFullscreen: Int = 0
     private lateinit var categoryAdapter: PlayerCategoryAdapter
     private lateinit var channelAdapter: PlayerChannelAdapter
 
     private lateinit var selectedChannel: ChannelResponseItem
+
+    private lateinit var videoName: TextView
+    private lateinit var videoInfo: TextView
+    private lateinit var serverInfo: TextView
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,6 +87,7 @@ class LiveTvActivity : AppCompatActivity() {
         setupPlayer()
         setupUI()
         viewModel.loadChannelsByCategory(currentCategory!!.id)
+        viewModel.loadChannelUrl(selectedChannel.id.toInt().toString())
         setupRecyclerViews()
         observeViewModel()
     }
@@ -85,12 +110,37 @@ class LiveTvActivity : AppCompatActivity() {
             binding.player.player = this
             playWhenReady = true
         }
-        loadChannel("https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8")
+        viewModel.animeLink.observe(this) {
+            setUpName(it)
+            loadChannel(it)
+        }
     }
 
-    private fun loadChannel(url: String) {
-        val mediaItem = MediaItem.fromUri(url)
-        player.setMediaItem(mediaItem)
+    private fun setUpName(url: ChannelLinkResponse) {
+        exoTitle.text = selectedChannel.name
+        serverInfo.text = selectedChannel.name
+        videoInfo.text = url.objectKey
+        videoName.text = url.objectKey
+    }
+
+    private fun loadChannel(url: ChannelLinkResponse) {
+        val mediaItem = MediaItem.Builder()
+            .setUri(url.playUrl)
+            .setMimeType("application/dash+xml")
+            .build()
+        val dataSourceFactory = DefaultHttpDataSource.Factory()
+            .setDefaultRequestProperties(
+                mapOf(
+                    "Cookie" to "CloudFront-Policy=${url.cloudFrontPolicy}; CloudFront-Signature=${url.cloudFrontSignature}; CloudFront-Key-Pair-Id=${url.cloudFrontKeyPairId}"
+                )
+            )
+
+
+        val mediaSource: MediaSource = DashMediaSource.Factory(dataSourceFactory)
+            .createMediaSource(mediaItem)
+
+        player.setMediaSource(mediaSource)
+
         player.prepare()
     }
 
@@ -99,6 +149,61 @@ class LiveTvActivity : AppCompatActivity() {
         exoToggleButton = binding.player.findViewById(R.id.btn_toggle_sidebar)
         exoToggleButtonRight = binding.player.findViewById(R.id.btn_right_toggle)
         exoTitle = binding.player.findViewById(R.id.exo_anime_title)
+        videoName = binding.player.findViewById(R.id.exo_video_name)
+        videoInfo = binding.player.findViewById(R.id.exo_video_info)
+        serverInfo = binding.player.findViewById(R.id.exo_server_info)
+        exoRotate = binding.player.findViewById(R.id.exo_rotate)
+        exoQuality = binding.player.findViewById(R.id.exo_quality)
+        exoProgress = binding.player.findViewById(com.google.android.exoplayer2.R.id.exo_progress)
+        scaleBtn = binding.player.findViewById(R.id.exo_screen)
+        exoPip = binding.player.findViewById(R.id.exo_pip)
+
+        exoProgress.setForceDisabled(true)
+
+        var flag = true
+        exoRotate.setOnClickListener {
+            if (flag) {
+                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+                binding.player.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIXED_WIDTH
+                flag = false
+            } else {
+                this.requestedOrientation =
+                    ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+                binding.player.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIXED_HEIGHT
+                flag = true
+
+            }
+        }
+
+        exoPip.setOnClickListener {
+            val appOps = getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
+            val status = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                appOps.checkOpNoThrow(
+                    AppOpsManager.OPSTR_PICTURE_IN_PICTURE, android.os.Process.myUid(), packageName
+                ) == AppOpsManager.MODE_ALLOWED
+            } else false
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                if (status) {
+                    this.enterPictureInPictureMode(
+                        PictureInPictureParams.Builder().build()
+                    )
+                    binding.player.useController = false
+                    PlayerActivity.pipStatus = false
+                } else {
+                    val intent = Intent(
+                        "android.settings.PICTURE_IN_PICTURE_SETTINGS",
+                        Uri.parse("package:$packageName")
+                    )
+                    startActivity(intent)
+                }
+            } else {
+                Toast.makeText(
+                    this,
+                    "Feature not supported on this device",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
 
         exoTitle.text = selectedChannel.name
         binding.player.keepScreenOn = true
@@ -106,6 +211,53 @@ class LiveTvActivity : AppCompatActivity() {
         exoPlay.setOnClickListener {
             togglePlayPause()
         }
+
+        var locked = false
+        val container = binding.player.findViewById<View>(R.id.exo_controller_cont)
+        val screen = binding.player.findViewById<View>(R.id.exo_black_screen)
+        val lockButton = binding.player.findViewById<ImageButton>(R.id.exo_unlock)
+        binding.player.findViewById<ImageButton>(R.id.exo_lock).setOnClickListener {
+            locked = true
+            screen.visibility = View.GONE
+            container.visibility = View.GONE
+            lockButton.visibility = View.VISIBLE
+        }
+        lockButton.setOnClickListener {
+            locked = false
+            screen.visibility = View.VISIBLE
+            container.visibility = View.VISIBLE
+            it.visibility = View.GONE
+        }
+
+
+        scaleBtn.setOnClickListener {
+            if (isFullscreen < 1) isFullscreen += 1 else isFullscreen = 0
+            when (isFullscreen) {
+                0 -> {
+                    if (requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE) {
+                        binding.player.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIXED_HEIGHT
+                    } else {
+                        binding.player.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIXED_WIDTH
+                    }
+                }
+
+                1 -> {
+                    binding.player.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FILL
+
+                }
+            }
+
+            Snackbar.make(
+                binding.player, (
+                        when (isFullscreen) {
+                            0 -> "Original"
+                            1 -> "Stretch"
+                            else -> "Original"
+                        }
+                        ), 1000
+            ).show()
+        }
+
 
         exoToggleButton.setOnClickListener { toggleSidebar(true) }
         exoToggleButtonRight.setOnClickListener { toggleSidebarRight(true) }
@@ -130,8 +282,8 @@ class LiveTvActivity : AppCompatActivity() {
 
         channelAdapter = PlayerChannelAdapter()
         channelAdapter.setItemChannelClickListener { channel ->
-            loadChannel(channel.scheduleListUrl)
             selectedChannel = channel
+            viewModel.loadChannelUrl(selectedChannel.id.toInt().toString())
             toggleSidebar(false)
         }
 

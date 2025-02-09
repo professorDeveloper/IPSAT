@@ -1,6 +1,8 @@
 package com.ip_tv.ipsat.presentation.adapters
 
 import android.annotation.SuppressLint
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -28,7 +30,11 @@ class PlayerChannelAdapter(
                 channelTitle.text = channelItem.name
                 channelImg.loadImage(channelItem.image)
                 if (isSelected) {
-                    binding.root.setStrokeColor(R.color.colorPrimary)
+                    binding.root.setStrokeColor(
+                        ColorStateList.valueOf(
+                            binding.root.context.getColor(R.color.colorPrimary)
+                        )
+                    )
                     binding.root.strokeWidth = 2
                 } else {
                     binding.root.strokeWidth = 0
@@ -55,6 +61,7 @@ class PlayerChannelAdapter(
         selectedPosition = -1
         notifyDataSetChanged()
     }
+
     fun setDefaultSelected(channelItem: ChannelResponseItem): Int {
         val index = list.indexOfFirst { it.id == channelItem.id }
         if (index != -1) {
