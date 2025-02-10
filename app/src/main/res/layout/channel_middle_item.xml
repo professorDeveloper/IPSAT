@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/_44sdp"
+    android:layout_height="wrap_content"
     android:layout_marginHorizontal="@dimen/_3sdp"
     android:layout_marginVertical="@dimen/_3sdp"
     android:orientation="horizontal"
@@ -20,11 +20,11 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/channelImg"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
             android:layout_marginEnd="@dimen/_8sdp"
             android:src="@drawable/channel_img"
-            app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Small" />
+            app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.ExtraSmall" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:text="MBC 3 HD"
                 android:textColor="#FFFFFF"
-                android:textSize="16sp" />
+                android:textSize="@dimen/_15ssp" />
 
         </LinearLayout>
 

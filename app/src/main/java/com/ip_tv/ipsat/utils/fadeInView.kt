@@ -18,25 +18,24 @@ import kotlinx.coroutines.launch
 
 fun fadeInView(rvFrame: View) {
     rvFrame.apply {
-        alpha = 0f // Boshlanishda ko'rinmas qilish
-        visibility = View.VISIBLE // Ko'rinadigan qilish
+        alpha = 0f
+        visibility = View.VISIBLE
 
-        // Animatsiyani boshlash
         animate()
-            .alpha(1f) // Shaffoflikni 1 ga oshirish
-            .setDuration(500) // Animatsiya davomiyligi 500 ms
-            .setListener(null) // Listener qo'shmaslik
+            .alpha(1f)
+            .setDuration(500)
+            .setListener(null)
     }
 }
 
 fun fadeOutView(rvFrame: View) {
     rvFrame.apply {
         animate()
-            .alpha(0f) // Shaffoflikni 0 ga kamaytirish
-            .setDuration(500) // Animatsiya davomiyligi 500 ms
+            .alpha(0f)
+            .setDuration(500)
             .setListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator) {
-                    visibility = View.INVISIBLE // Animatsiyadan keyin ko'rinmas qilish
+                    visibility = View.INVISIBLE
                 }
             })
     }
@@ -68,7 +67,6 @@ fun BottomNavigationView.hideWithoutAnimation(fragmentContainerView: View) {
 fun BottomNavigationView.hideWithAnimation(fragmentContainerView: View) {
     if (this.visibility == View.GONE) return
     this.animateTranslationY(66f, 0f, 700)
-//    fragmentContainerView.animateMarginBottom(0f, 700)
 }
 fun toast(string: String?) {
     if (string != null) {
@@ -96,7 +94,6 @@ fun MaterialCardView.select() {
 
 fun MaterialCardView.unSelect() {
     this.strokeWidth = 0
-//    this.strokeColor = ContextCompat.getColor(context, R.color.colorPrimary)
 }
 
 
