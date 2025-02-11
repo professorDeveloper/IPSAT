@@ -33,10 +33,14 @@
             android:autoRemoveFromRecents="true"
             android:configChanges="uiMode|orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden"
             android:excludeFromRecents="true"
+            android:canDisplayOnRemoteDevices="true"
+
             android:launchMode="singleTask"
             android:noHistory="true"
+
+            android:rotationAnimation="rotate"
             android:resizeableActivity="true"
-            android:screenOrientation="sensorLandscape"
+            android:screenOrientation="unspecified"
             android:supportsPictureInPicture="true"
             android:exported="false" />
         <activity

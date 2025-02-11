@@ -1,6 +1,7 @@
 package com.ip_tv.ipsat.presentation.activities
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.app.AppOpsManager
 import android.app.Dialog
 import android.app.PictureInPictureParams
@@ -16,6 +17,8 @@ import android.provider.Settings
 import android.view.OrientationEventListener
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
+import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -32,6 +35,8 @@ import com.bumptech.glide.Glide
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.PlaybackParameters
+import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.dash.DashMediaSource
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
@@ -43,6 +48,7 @@ import com.ip_tv.ipsat.databinding.ActivityLiveTvBinding
 import com.ip_tv.ipsat.domain.model.ChannelCategoryItem
 import com.ip_tv.ipsat.domain.model.ChannelLinkResponse
 import com.ip_tv.ipsat.domain.model.ChannelResponseItem
+import com.ip_tv.ipsat.presentation.adapters.CustomAdapter
 import com.ip_tv.ipsat.presentation.adapters.PlayerCategoryAdapter
 import com.ip_tv.ipsat.presentation.adapters.PlayerChannelAdapter
 import com.ip_tv.ipsat.presentation.viewmodel.LiveTvScreenViewModel
@@ -54,7 +60,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.min
 
 @AndroidEntryPoint
-class LiveTvActivity : AppCompatActivity() {
+class LiveTvActivity : AppCompatActivity(), Player.Listener {
 
     private lateinit var binding: ActivityLiveTvBinding
     private lateinit var player: ExoPlayer
@@ -66,8 +72,8 @@ class LiveTvActivity : AppCompatActivity() {
     private lateinit var exoPip: ImageButton
     private lateinit var scaleBtn: ImageButton
 
-    private lateinit var exoToggleButton: ImageView
-    private lateinit var exoToggleButtonRight: ImageView
+    private lateinit var exoToggleButton: FrameLayout
+    private lateinit var exoToggleButtonRight: FrameLayout
     private lateinit var exoTitle: TextView
     private lateinit var exoProgress: PlayerActivity.ExtendedTimeBar
 
@@ -82,7 +88,7 @@ class LiveTvActivity : AppCompatActivity() {
     private lateinit var videoName: TextView
     private lateinit var videoInfo: TextView
     private lateinit var serverInfo: TextView
-    private var orientationListener: OrientationEventListener? = null
+    private var isNormal = true
 
     var rotation = 0
 
@@ -90,6 +96,12 @@ class LiveTvActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLiveTvBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P &&
+            resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+        ) {
+            window.attributes.layoutInDisplayCutoutMode =
+                WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
+        }
         setupFullScreenMode()
         onBackPressedDispatcher.addCallback(this) {
             finishAndRemoveTask()
@@ -102,6 +114,12 @@ class LiveTvActivity : AppCompatActivity() {
         setupRecyclerViews()
         observeViewModel()
     }
+
+    @SuppressLint("StringFormatInvalid")
+    private fun changeVideoSpeed(byInt: Float) {
+        player.playbackParameters = PlaybackParameters(byInt)
+    }
+
 
     private fun setupFullScreenMode() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -160,37 +178,88 @@ class LiveTvActivity : AppCompatActivity() {
         videoName = binding.player.findViewById(R.id.exo_video_name)
         videoInfo = binding.player.findViewById(R.id.exo_video_info)
         serverInfo = binding.player.findViewById(R.id.exo_server_info)
-        exoRotate = binding.player.findViewById(R.id.exo_rotate)
         exoQuality = binding.player.findViewById(R.id.exo_quality)
         exoProgress = binding.player.findViewById(com.google.android.exoplayer2.R.id.exo_progress)
         scaleBtn = binding.player.findViewById(R.id.exo_screen)
         val exoBack = binding.player.findViewById<ImageButton>(R.id.exo_back)
-
+        val exoSpeed =
+            binding.player.findViewById<ImageButton>(com.google.android.exoplayer2.R.id.exo_playback_speed)
         exoPip = binding.player.findViewById(R.id.exo_pip)
 
         exoProgress.setForceDisabled(true)
         exoBack.setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
+            finishAndRemoveTask()
         }
+
+        exoRotate = binding.player.findViewById(R.id.exo_rotate)
+        exoRotate.setOnClickListener {
+            toggleScreenOrientation()
+        }
+
+
+        exoSpeed.setOnClickListener {
+            val builder =
+                AlertDialog.Builder(this, R.style.DialogTheme)
+            builder.setTitle("Speed")
+
+
+            val speed = arrayOf("0.25", "0.5", "Normal", "1.5", "2")
+            val adapter = CustomAdapter(
+                this,
+                speed
+            )
+            builder.setAdapter(adapter) { dad, which ->
+                window.setFlags(
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN
+                )
+                hideSystemBars()
+
+                when (which) {
+                    0 -> {
+                        isNormal = false
+                        adapter.setSelected(0)
+                        changeVideoSpeed(0.25f)
+                    }
+
+                    1 -> {
+                        isNormal = false
+                        adapter.setSelected(1)
+                        changeVideoSpeed(0.5f)
+                    }
+
+                    2 -> {
+                        isNormal = true
+
+                        adapter.setSelected(2)
+                        changeVideoSpeed(1f)
+                    }
+
+                    3 -> {
+                        isNormal = false
+                        adapter.setSelected(3)
+                        changeVideoSpeed(1.5f)
+                    }
+
+                    else -> {
+                        isNormal = false
+                        adapter.setSelected(4)
+                        changeVideoSpeed(2f)
+
+                    }
+                }
+            }
+            hideSystemBars()
+
+            val dialog = builder.create()
+            dialog.show()
+        }
+
+
         exoQuality.setOnClickListener {
             initPopupQuality().show()
         }
 
-        // For Screen Rotation
-        var flag = true
-        exoRotate.setOnClickListener {
-            if (flag) {
-                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-                binding.player.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIXED_WIDTH
-                flag = false
-            } else {
-                this.requestedOrientation =
-                    ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
-                binding.player.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIXED_HEIGHT
-                flag = true
-
-            }
-        }
 
 
 
@@ -229,22 +298,6 @@ class LiveTvActivity : AppCompatActivity() {
             togglePlayPause()
         }
 
-        var locked = false
-        val container = binding.player.findViewById<View>(R.id.exo_controller_cont)
-        val screen = binding.player.findViewById<View>(R.id.exo_black_screen)
-        val lockButton = binding.player.findViewById<ImageButton>(R.id.exo_unlock)
-        binding.player.findViewById<ImageButton>(R.id.exo_lock).setOnClickListener {
-            locked = true
-            screen.visibility = View.GONE
-            container.visibility = View.GONE
-            lockButton.visibility = View.VISIBLE
-        }
-        lockButton.setOnClickListener {
-            locked = false
-            screen.visibility = View.VISIBLE
-            container.visibility = View.VISIBLE
-            it.visibility = View.GONE
-        }
 
 
         scaleBtn.setOnClickListener {
@@ -285,6 +338,16 @@ class LiveTvActivity : AppCompatActivity() {
         binding.btnHideMenu.setOnClickListener { toggleSidebar(false) }
         binding.btnHideMenuRight.setOnClickListener { toggleSidebarRight(false) }
     }
+
+    private fun toggleScreenOrientation() {
+        requestedOrientation = when (requestedOrientation) {
+            ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE,
+            ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE -> ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
+
+            else -> ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+        }
+    }
+
 
     private fun initPopupQuality(): Dialog {
 
@@ -370,7 +433,7 @@ class LiveTvActivity : AppCompatActivity() {
     }
 
     private fun toggleSidebar(show: Boolean) {
-        binding.sidebar.animate().translationX(if (show) 0f else -binding.sidebar.width.toFloat())
+        binding.sidebar.animate().translationX(if (show) 0f else binding.sidebar.width.toFloat())
             .setDuration(300).start()
     }
 
@@ -399,11 +462,16 @@ class LiveTvActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        orientationListener?.enable()
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        WindowInsetsControllerCompat(window, binding.root).let { controller ->
+            controller.hide(WindowInsetsCompat.Type.systemBars())
+            controller.systemBarsBehavior =
+                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        }
+        hideSystemBars()
     }
 
     override fun onPause() {
         super.onPause()
-        orientationListener?.disable()
     }
 }
