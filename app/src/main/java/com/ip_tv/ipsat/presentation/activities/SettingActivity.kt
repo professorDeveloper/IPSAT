@@ -15,7 +15,6 @@ import com.ip_tv.ipsat.R
 import com.ip_tv.ipsat.databinding.DialogSetPasswordBinding
 import com.ip_tv.ipsat.databinding.DialogUserAgentBinding
 import com.ip_tv.ipsat.databinding.SettingScreenBinding
-import com.ip_tv.ipsat.presentation.dialogs.DevelopersDialogFragment
 import com.ip_tv.ipsat.presentation.viewmodel.SettingViewModel
 import com.ip_tv.ipsat.utils.BiometricPromptUtils
 import com.ip_tv.ipsat.utils.customAlertDialog
@@ -85,12 +84,7 @@ class SettingActivity : AppCompatActivity() {
             binding.appLock.isChecked = false
             binding.appLock.text = "Add Passcode"
         }
-        binding.loginTelegram.setOnClickListener {
-            openLinkInBrowser(getString(R.string.telegram), this)
-        }
-        binding.settingsDev.setOnClickListener {
-            DevelopersDialogFragment().show(supportFragmentManager, "dialog")
-        }
+
         binding.appLock.setOnClickListener {
             customAlertDialog().apply {
                 val view = DialogSetPasswordBinding.inflate(layoutInflater)
@@ -218,21 +212,6 @@ class SettingActivity : AppCompatActivity() {
             initActivity(this)
         }
 
-        binding.settingBuyMeCoffee.setOnClickListener {
-            lifecycleScope.launch {
-                it.pop()
-            }
-            openLinkInBrowser("https://www.buymeacoffee.com/chihaku", this)
-        }
-
-        binding.settingsShowYt.setOnClickListener {
-            binding.settingsShowYt.isChecked = false
-            toast("This feature will be available soon")
-        }
-
-        binding.loginGithub.setOnClickListener {
-            openLinkInBrowser(getString(R.string.github), this)
-        }
     }
 
 

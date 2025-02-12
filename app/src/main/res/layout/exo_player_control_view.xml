@@ -55,6 +55,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:tint="#fff"
                         tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
+
                     <ImageButton
                         android:id="@+id/exo_pip"
                         android:layout_width="48dp"
@@ -283,9 +284,9 @@
                         tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
 
                     <LinearLayout
-                        android:layout_gravity="center"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
                         android:orientation="vertical">
@@ -328,10 +329,11 @@
                     android:textAlignment="textEnd"
                     android:textColor="@color/bg_white"
                     android:textSize="12sp"
+                    android:visibility="gone"
                     tools:ignore="TextContrastCheck"
                     tools:text="720x1080" />
 
-                    <TextView
+                <TextView
                     android:id="@+id/exo_server_info"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -341,6 +343,7 @@
                     android:textAlignment="textEnd"
                     android:textColor="@color/bg_white"
                     android:textSize="12sp"
+                    android:visibility="gone"
                     tools:ignore="TextContrastCheck"
                     tools:text="Server" />
 
@@ -353,6 +356,7 @@
                     android:textAlignment="textEnd"
                     android:textColor="@color/bg_white"
                     android:textSize="12sp"
+                    android:visibility="gone"
                     tools:ignore="TextContrastCheck"
                     tools:text="720x1080" />
 
@@ -376,11 +380,11 @@
                 android:layout_width="120dp"
                 android:layout_height="80dp"
                 android:layout_gravity="start"
-                app:shapeAppearanceOverlay="@style/roundedImageView"
                 android:layout_marginBottom="8dp"
                 android:scaleType="fitCenter"
                 android:visibility="visible"
                 app:cardCornerRadius="8dp"
+                app:shapeAppearanceOverlay="@style/roundedImageView"
                 tools:src="@drawable/gradient_back" />
 
             <LinearLayout
@@ -430,8 +434,8 @@
                 android:id="@id/exo_progress"
                 class="com.ip_tv.ipsat.presentation.activities.PlayerActivity$ExtendedTimeBar"
                 android:layout_width="match_parent"
-                android:layout_marginVertical="8dp"
                 android:layout_height="24dp"
+                android:layout_marginVertical="8dp"
                 app:ad_marker_color="#A9FFFFFF"
                 app:bar_height="2dp"
                 app:played_color="?attr/colorPrimary"

@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="@dimen/_4sdp"
     android:layout_marginVertical="@dimen/_4sdp"
-    android:background="?selectableItemBackgroundBorderless">
+    android:background="?selectableItemBackground">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardView"

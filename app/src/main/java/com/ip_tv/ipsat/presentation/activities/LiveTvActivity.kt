@@ -134,22 +134,38 @@ class LiveTvActivity : AppCompatActivity(), Player.Listener {
         selectedChannel = intent.getSerializableExtra(EXTRA_CHANNEL_DATA) as ChannelResponseItem
     }
 
+    private fun getVideoQuality(): String {
+        val trackGroups = player.currentTrackGroups
+
+        for (i in 0 until trackGroups.length) {
+            val format = trackGroups.get(i).getFormat(0)
+
+            if (format.height > 0 && format.width > 0) {
+                val quality = "${format.width}x${format.height} @ ${format.bitrate / 1000} kbps"
+                return quality
+                break
+            }
+        }
+        return ""
+    }
+
     private fun setupPlayer() {
         player = ExoPlayer.Builder(this).build().apply {
             binding.player.player = this
             playWhenReady = true
         }
         viewModel.animeLink.observe(this) {
-            setUpName(it)
+            setUpName()
             loadChannel(it)
         }
     }
 
-    private fun setUpName(url: ChannelLinkResponse) {
+    private fun setUpName() {
+        val quality = getVideoQuality()
         exoTitle.text = selectedChannel.name
         serverInfo.text = selectedChannel.name
-        videoInfo.text = url.objectKey
-        videoName.text = url.objectKey
+        videoInfo.text = quality
+        videoName.text = quality
     }
 
     private fun loadChannel(url: ChannelLinkResponse) {

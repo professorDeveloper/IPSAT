@@ -19,6 +19,7 @@ import com.ip_tv.ipsat.presentation.viewmodel.ProfileViewModel
 import com.ip_tv.ipsat.utils.BaseFragment
 import com.ip_tv.ipsat.utils.animationTransaction
 import com.ip_tv.ipsat.utils.gone
+import com.ip_tv.ipsat.utils.invisible
 import com.ip_tv.ipsat.utils.snackString
 import com.ip_tv.ipsat.utils.toReadableDateTime
 import com.ip_tv.ipsat.utils.visible
@@ -34,7 +35,7 @@ class ProfileScreen : BaseFragment<ProfileScreenBinding>(ProfileScreenBinding::i
     }
 
     override fun onViewCreate(savedInstanceState: Bundle?) {
-        requireActivity().window.statusBarColor = Color.parseColor("#E5F4FA")
+        requireActivity().window.statusBarColor = requireActivity().getColor(R.color.colorPrimary)
         setupUI()
         observeModel()
     }
@@ -50,12 +51,12 @@ class ProfileScreen : BaseFragment<ProfileScreenBinding>(ProfileScreenBinding::i
                     binding.endDateShimmer.stopShimmer()
                     binding.macAddressShimmer.stopShimmer()
                     binding.tableLayout.visible()
-                    binding.shimmerTable.gone()
+                    binding.shimmerTable.invisible()
                     snackString("${it.throwable.message}")
                 }
 
                 is Resource.Loading -> {
-                    binding.tableLayout.gone()
+                    binding.tableLayout.invisible()
                     binding.shimmerTable.visible()
                     binding.shimmerCode.startShimmer()
                     binding.shimmerStatus.startShimmer()
@@ -66,7 +67,7 @@ class ProfileScreen : BaseFragment<ProfileScreenBinding>(ProfileScreenBinding::i
 
                 is Resource.Success -> {
                     binding.tableLayout.visible()
-                    binding.shimmerTable.gone()
+                    binding.shimmerTable.invisible()
                     binding.subscriptionCodeTxt.text = userPreferenceManager.subCode
                     binding.macAddressTxt.text = it.data.macAddress
                     binding.subscriptionActivatedDateTxt.text =
