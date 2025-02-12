@@ -53,7 +53,7 @@ class SplashActivity : AppCompatActivity() {
 
     private fun observeModel() {
         lifecycleScope.launch {
-            model.initSplash.flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
+            model.initSplash.flowWithLifecycle(lifecycle, Lifecycle.State.CREATED)
                 .collect { handleUserState(it) }
         }
         model.isFirst.observe(this@SplashActivity, openLoginObserver)

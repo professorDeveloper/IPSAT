@@ -1,6 +1,7 @@
 package com.ip_tv.ipsat.di
 
 import android.content.Context
+import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.ip_tv.ipsat.data.remote.AuthService
 import com.ip_tv.ipsat.data.remote.DetailService
 import com.ip_tv.ipsat.data.remote.LiveTvService
@@ -30,6 +31,7 @@ object NetworkModule {
     ): OkHttpClient {
         return OkHttpClient.Builder()
             .retryOnConnectionFailure(true) // Agar bog‘lanish uzilsa, qayta urinish
+            .addInterceptor(ChuckerInterceptor(context))
             .connectTimeout(30, TimeUnit.SECONDS) // Bog‘lanish timeout 30s
             .readTimeout(30, TimeUnit.SECONDS) // O‘qish timeout 30s
             .writeTimeout(30, TimeUnit.SECONDS) // Yozish timeout 30s
