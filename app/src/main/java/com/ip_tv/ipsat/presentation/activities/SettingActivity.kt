@@ -150,7 +150,18 @@ class SettingActivity : AppCompatActivity() {
                             toast("Success")
                         }
                     } else {
-                        snackString(getString(R.string.password_mismatch))
+                        val checkData = readData<String>(
+                            fileName = "app_password",
+                            context = this@SettingActivity
+                        ) ?: ""
+                        if (checkData.isNotEmpty()) {
+                            binding.appLock.isChecked = true
+                            binding.appLock.text = "Change Passcode"
+                        } else {
+                            binding.appLock.isChecked = false
+                            binding.appLock.text = "Add Passcode"
+                        }
+                        toast(getString(R.string.password_mismatch))
                     }
                 }
                 setNegButton(R.string.cancel) {

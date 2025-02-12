@@ -77,6 +77,7 @@ class SplashActivity : AppCompatActivity() {
                 snackString("${state.throwable.message}")
                 binding.checkProgress.gone()
                 openLogin()
+
             }
 
             is Resource.Loading -> {
