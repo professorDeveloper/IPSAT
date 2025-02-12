@@ -3,6 +3,7 @@ package com.ip_tv.ipsat.presentation.activities
 import Resource
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -38,7 +39,7 @@ class SplashActivity : AppCompatActivity() {
         setContentView(binding.root)
         initActivity(this@SplashActivity)
         manageDisplay()
-        model.isLocked.observe(this@SplashActivity) {
+        model.isLocked.observe(this) {
             lifecycleScope.launch {
                 binding.appLogo.visible()
                 binding.appLogo.alphaAnim()
@@ -46,15 +47,13 @@ class SplashActivity : AppCompatActivity() {
                 model.checkSubscribe()
                 observeModel()
             }
-
         }
 
     }
 
     private fun observeModel() {
         lifecycleScope.launch {
-            model.initSplash.flowWithLifecycle(lifecycle, Lifecycle.State.CREATED)
-                .collect { handleUserState(it) }
+            model.initSplash.observe(this@SplashActivity) { handleUserState(it) }
         }
         model.isFirst.observe(this@SplashActivity, openLoginObserver)
     }
@@ -77,23 +76,27 @@ class SplashActivity : AppCompatActivity() {
                 snackString("${state.throwable.message}")
                 binding.checkProgress.gone()
                 openLogin()
+                Log.d("GGGG", "handleUserState:ERROR ${state.throwable} .")
 
             }
 
             is Resource.Loading -> {
+                Log.d("GGGG", "handleUserState:LLOADDINGG .")
                 binding.checkProgress.visible()
             }
 
             is Resource.Success -> {
+                Log.d("GGG", "handleUserState:${state.data} ")
                 if (!CalcActivity.hasPermission) {
                     val pin: String = readData("app_password", this@SplashActivity) ?: ""
                     if (pin.isNotEmpty()) {
+                        Log.d("GGG", "handleUserState:HASEDPRERM ")
                         ContextCompat.startActivity(
                             this@SplashActivity,
                             Intent(this@SplashActivity, CalcActivity::class.java).putExtra(
-                                    "code",
-                                    pin
-                                )
+                                "code",
+                                pin
+                            )
                                 .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK),
                             null
                         )
@@ -102,6 +105,7 @@ class SplashActivity : AppCompatActivity() {
                     } else {
                         openHome()
                     }
+                }else {
                 }
             }
 
@@ -115,6 +119,14 @@ class SplashActivity : AppCompatActivity() {
         finish()
     }
 
+    override fun onResume() {
+        super.onResume()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        CalcActivity.hasPermission =false
+    }
     private fun openLogin() {
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)

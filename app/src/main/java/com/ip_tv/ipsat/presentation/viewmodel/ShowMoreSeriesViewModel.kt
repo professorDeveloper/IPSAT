@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ip_tv.ipsat.domain.model.Movie
 import com.ip_tv.ipsat.domain.model.SearchResults
 import com.ip_tv.ipsat.domain.repository.HomeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,6 +19,11 @@ class ShowMoreSeriesViewModel @Inject constructor(private val repository: HomeRe
     var searched = false
     var notSet = true
     lateinit var searchResults: SearchResults
+
+    suspend fun checkMovieSeries(query: Int, movie: Movie): Boolean {
+        return repository.checkMovieOrSeries(query)
+    }
+
 
     fun loadSearch(r: SearchResults) {
         viewModelScope.launch {

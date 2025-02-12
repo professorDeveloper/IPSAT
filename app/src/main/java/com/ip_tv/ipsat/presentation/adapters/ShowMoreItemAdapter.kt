@@ -30,7 +30,11 @@ class ShowMoreItemAdapter(
     private val matchParent: Boolean = false,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
      val mediaList: ArrayList<Movie> = ArrayList()
+    private lateinit var onItemClickListener: (position: Movie) -> Unit
 
+    fun setItemClickListener(listener: (position: Movie) -> Unit) {
+        onItemClickListener = listener
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return  MediaViewHolder(
@@ -76,16 +80,8 @@ class ShowMoreItemAdapter(
 
 
     fun clicked(position: Int) {
-        if ((mediaList?.size ?: 0) > position && position != -1) {
-            val bundle = Bundle()
-            bundle.putSerializable("movie", mediaList.get(position))
-            if (matchParent) {
-                activity. findNavController().navigate(R.id.detailSeriesScreen,bundle, animationTransaction().build())
-            }else {
-                activity. findNavController().navigate(R.id.detailScreen,bundle, animationTransaction().build())
-            }
-
-        }
+        val media = mediaList?.get(position) ?: return
+        onItemClickListener.invoke(media)
     }
 
     fun submitList(newMovies: List<Movie>) {

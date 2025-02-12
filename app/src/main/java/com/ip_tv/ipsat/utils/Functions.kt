@@ -46,6 +46,7 @@ import com.ip_tv.ipsat.R
 import com.ip_tv.ipsat.app.App
 import com.ip_tv.ipsat.domain.model.ChannelResponseItem
 import com.ip_tv.ipsat.domain.model.SubCategoryItem
+import com.ip_tv.ipsat.presentation.activities.CalcActivity
 import com.ip_tv.ipsat.presentation.activities.MainActivity
 import com.ip_tv.ipsat.presentation.activities.SplashActivity
 import kotlinx.coroutines.Dispatchers
@@ -127,7 +128,6 @@ fun String.toYear(): String {
     val year = this.substringBefore("-")
     return year
 }
-
 
 
 fun <T> readData(fileName: String, context: Context? = null, toast: Boolean = true): T? {

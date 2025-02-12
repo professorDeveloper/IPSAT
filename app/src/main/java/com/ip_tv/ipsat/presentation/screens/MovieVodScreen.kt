@@ -172,13 +172,26 @@ class MovieVodScreen : BaseFragment<MovieVodScreenBinding>(MovieVodScreenBinding
                     is Resource.Success -> {
                         val movieAdapter = MovieAdapter(this@MovieVodScreen)
                         movieAdapter.setItemClickListener {
-                            val bundle = Bundle()
-                            bundle.putSerializable("movie", it)
-                            findNavController().navigate(
-                                R.id.detailScreen,
-                                bundle,
-                                animationTransaction().build()
-                            )
+                            WaitDialog.setMessage("Loading..").show(requireActivity())
+                            lifecycleScope.launch {
+                                delay(300)
+                                model.checkMovieSeries(it.id, it).apply {
+                                    WaitDialog.dismiss()
+                                    if (this) {
+                                        val bundle = Bundle()
+                                        bundle.putSerializable("movie", it)
+                                        findNavController().navigate(
+                                            R.id.detailSeriesScreen,
+                                            bundle,
+                                            animationTransaction().build()
+                                        )
+                                    } else {
+                                        val bundle = Bundle()
+                                        bundle.putSerializable("movie", it)
+                                        findNavController().navigate(R.id.detailScreen, bundle)
+                                    }
+                                }
+                            }
                         }
                         movieAdapter.submitList(it.data)
                         animePageAdapter.updateKids(movieAdapter)
@@ -287,13 +300,26 @@ class MovieVodScreen : BaseFragment<MovieVodScreenBinding>(MovieVodScreenBinding
                         val movieAdapter = MovieAdapter(this@MovieVodScreen)
                         movieAdapter.submitList(it.data)
                         movieAdapter.setItemClickListener {
-                            val bundle = Bundle()
-                            bundle.putSerializable("movie", it)
-                            findNavController().navigate(
-                                R.id.detailScreen,
-                                bundle,
-                                animationTransaction().build()
-                            )
+                            WaitDialog.setMessage("Loading..").show(requireActivity())
+                            lifecycleScope.launch {
+                                delay(300)
+                                model.checkMovieSeries(it.id, it).apply {
+                                    WaitDialog.dismiss()
+                                    if (this) {
+                                        val bundle = Bundle()
+                                        bundle.putSerializable("movie", it)
+                                        findNavController().navigate(
+                                            R.id.detailSeriesScreen,
+                                            bundle,
+                                            animationTransaction().build()
+                                        )
+                                    } else {
+                                        val bundle = Bundle()
+                                        bundle.putSerializable("movie", it)
+                                        findNavController().navigate(R.id.detailScreen, bundle)
+                                    }
+                                }
+                            }
 
                         }
                         animePageAdapter.updateRecent(movieAdapter)
@@ -320,13 +346,26 @@ class MovieVodScreen : BaseFragment<MovieVodScreenBinding>(MovieVodScreenBinding
                         val movieAdapter = MovieAdapter(this@MovieVodScreen)
 
                         movieAdapter.setItemClickListener {
-                            val bundle = Bundle()
-                            bundle.putSerializable("movie", it)
-                            findNavController().navigate(
-                                R.id.detailSeriesScreen,
-                                bundle,
-                                animationTransaction().build()
-                            )
+                            WaitDialog.setMessage("Loading..").show(requireActivity())
+                            lifecycleScope.launch {
+                                delay(300)
+                                model.checkMovieSeries(it.id, it).apply {
+                                    WaitDialog.dismiss()
+                                    if (this) {
+                                        val bundle = Bundle()
+                                        bundle.putSerializable("movie", it)
+                                        findNavController().navigate(
+                                            R.id.detailSeriesScreen,
+                                            bundle,
+                                            animationTransaction().build()
+                                        )
+                                    } else {
+                                        val bundle = Bundle()
+                                        bundle.putSerializable("movie", it)
+                                        findNavController().navigate(R.id.detailScreen, bundle)
+                                    }
+                                }
+                            }
 
                         }
                         movieAdapter.submitList(it.data)
@@ -353,13 +392,26 @@ class MovieVodScreen : BaseFragment<MovieVodScreenBinding>(MovieVodScreenBinding
                     is Resource.Success -> {
                         val movieAdapter = MovieAdapter(this@MovieVodScreen)
                         movieAdapter.setItemClickListener {
-                            val bundle = Bundle()
-                            bundle.putSerializable("movie", it)
-                            findNavController().navigate(
-                                R.id.detailScreen,
-                                bundle,
-                                animationTransaction().build()
-                            )
+                            WaitDialog.setMessage("Loading..").show(requireActivity())
+                            lifecycleScope.launch {
+                                delay(300)
+                                model.checkMovieSeries(it.id, it).apply {
+                                    WaitDialog.dismiss()
+                                    if (this) {
+                                        val bundle = Bundle()
+                                        bundle.putSerializable("movie", it)
+                                        findNavController().navigate(
+                                            R.id.detailSeriesScreen,
+                                            bundle,
+                                            animationTransaction().build()
+                                        )
+                                    } else {
+                                        val bundle = Bundle()
+                                        bundle.putSerializable("movie", it)
+                                        findNavController().navigate(R.id.detailScreen, bundle)
+                                    }
+                                }
+                            }
                         }
                         movieAdapter.submitList(it.data)
                         animePageAdapter.updateDocumentary(movieAdapter)

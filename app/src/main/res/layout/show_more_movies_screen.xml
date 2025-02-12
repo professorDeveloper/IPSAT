@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:fontFamily="@font/sfpro"
-                android:text="Series to watch"
+                android:text="Movies to watch"
                 android:textSize="18sp" />
 
             <androidx.cardview.widget.CardView

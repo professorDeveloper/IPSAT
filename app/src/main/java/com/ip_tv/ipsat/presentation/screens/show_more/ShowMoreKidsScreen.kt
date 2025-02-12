@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ip_tv.ipsat.R
@@ -74,6 +75,10 @@ class ShowMoreKidsScreen : BaseFragment<ShowMoreKidsScreenBinding>(
             mediaAdapter.submitList(it!!.results)
         }
 
+        mediaAdapter.setItemClickListener {
+            val bundle = Bundle()
+            bundle.putSerializable("movie", it)
+            findNavController().navigate(R.id.detailScreen, bundle)        }
         binding.searchFilter.setOnClickListener {
             val filterDialog = FilterBottomSheetDialog.newInstance(
                 selectedCountry, selectedYear, selectedCategories

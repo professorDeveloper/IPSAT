@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ip_tv.ipsat.R
@@ -55,9 +56,15 @@ class ShowMoreDocumentaryScreen :   BaseFragment<ShowMoreDocumentaryScreenBindin
         }
         model.loadSearch(model.searchResults)
         mediaAdapter = ShowMoreItemAdapter(this,)
+
         binding.moviesShowMoreRv.adapter = ConcatAdapter(
             mediaAdapter,
         )
+        mediaAdapter.setItemClickListener {
+            val bundle = Bundle()
+            bundle.putSerializable("movie", it)
+            findNavController().navigate(R.id.detailScreen, bundle)
+        }
         model.loadSearch(model.searchResults)
         model.result.observe(this ){
             model.searchResults?.apply {

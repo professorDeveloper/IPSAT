@@ -22,7 +22,7 @@ class SplashViewModel @Inject constructor(
     private val useCase: CheckSubscribeUseCase,
     private val userPreferenceManager: UserPreferenceManager,
 ) : ViewModel() {
-    private val _initSplash = MutableStateFlow<Resource<SubscriptionResponse>>(Resource.Idle)
+    private val _initSplash = MutableLiveData<Resource<SubscriptionResponse>>(Resource.Idle)
     private val _isFirst = MutableLiveData<Unit>()
     val initSplash = _initSplash
     val isFirst = _isFirst

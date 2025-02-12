@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ip_tv.ipsat.R
@@ -17,21 +18,23 @@ import com.ip_tv.ipsat.presentation.dialogs.FilterBottomSheetDialog
 import com.ip_tv.ipsat.presentation.viewmodel.ShowMoreMovieViewModel
 import com.ip_tv.ipsat.presentation.viewmodel.ShowMoreSeriesViewModel
 import com.ip_tv.ipsat.utils.BaseFragment
+import com.kongzue.dialogx.dialogs.WaitDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class ShowMoreSeriesScreen:
+class ShowMoreSeriesScreen :
     BaseFragment<ShowMoreMoviesScreenBinding>(ShowMoreMoviesScreenBinding::inflate) {
     private val scope = lifecycleScope
     private lateinit var mediaAdapter: ShowMoreItemAdapter
     private var selectedCountry: String? = null
     private var selectedYear: String? = null
-    private var default= "All"
-    private var isDefaultCategory=false
-    private var isDefaultCountry=false
-    private var isDefaultYear=false
+    private var default = "All"
+    private var isDefaultCategory = false
+    private var isDefaultCountry = false
+    private var isDefaultYear = false
 
     private var selectedCategories: MutableList<String> = mutableListOf()
 
@@ -52,14 +55,31 @@ class ShowMoreSeriesScreen:
             )
         }
         model.loadSearch(model.searchResults)
-        mediaAdapter = ShowMoreItemAdapter(this,matchParent = true)
+        mediaAdapter = ShowMoreItemAdapter(this, matchParent = true)
         binding.moviesShowMoreRv.adapter = ConcatAdapter(
             mediaAdapter,
         )
+        mediaAdapter.setItemClickListener {
+            WaitDialog.setMessage("Loading..").show(requireActivity())
+            lifecycleScope.launch {
+                delay(300)
+                model.checkMovieSeries(it.id, it).apply {
+                    WaitDialog.dismiss()
+                    if (this) {
+                        val bundle = Bundle()
+                        bundle.putSerializable("movie", it)
+                        findNavController().navigate(
+                            R.id.detailSeriesScreen,
+                            bundle
+                        )
+                    }
+                }
+            }
+        }
         model.loadSearch(model.searchResults)
-        model.result.observe(this ){
+        model.result.observe(this) {
             model.searchResults?.apply {
-                results =it?.results!!
+                results = it?.results!!
                 hasNextPage = it.hasNextPage
             }
             mediaAdapter.submitListNew(it!!.results)
@@ -67,8 +87,8 @@ class ShowMoreSeriesScreen:
         }
         model.nextPageResult.observe(this) {
             model.searchResults?.apply {
-                results =it?.results!!
-                page=it.page
+                results = it?.results!!
+                page = it.page
                 hasNextPage = it.hasNextPage
             }
             mediaAdapter.submitList(it!!.results)
@@ -79,31 +99,33 @@ class ShowMoreSeriesScreen:
                 selectedCountry, selectedYear, selectedCategories
             )
             filterDialog.onFiltersApplied = { country, year, categories ->
-                model.searchResults.page =1
-                if (country==null) {
-                    isDefaultCountry=true
-                    selectedCountry=country
-                }else {
-                    isDefaultCountry=false
+                model.searchResults.page = 1
+                if (country == null) {
+                    isDefaultCountry = true
+                    selectedCountry = country
+                } else {
+                    isDefaultCountry = false
                     selectedCountry = country
                 }
-                if (year==null) {
-                    isDefaultYear=true
-                    selectedYear=year
-                }else {
-                    isDefaultYear=false
+                if (year == null) {
+                    isDefaultYear = true
+                    selectedYear = year
+                } else {
+                    isDefaultYear = false
                     selectedYear = year
                 }
                 if (categories.isEmpty()) {
-                    isDefaultCategory=true
-                    selectedCategories= arrayListOf()
-                }else {
-                    isDefaultCategory=false
+                    isDefaultCategory = true
+                    selectedCategories = arrayListOf()
+                } else {
+                    isDefaultCategory = false
                     selectedCategories = categories.toMutableList()
                 }
-                model.searchResults.country =if (isDefaultCountry) default else selectedCountry
-                model.searchResults.releaseYear =if (isDefaultYear) (-1).toInt() else selectedYear!!.toInt()
-                model.searchResults.genres =if (isDefaultCategory) arrayListOf() else categories.toMutableList()
+                model.searchResults.country = if (isDefaultCountry) default else selectedCountry
+                model.searchResults.releaseYear =
+                    if (isDefaultYear) (-1).toInt() else selectedYear!!.toInt()
+                model.searchResults.genres =
+                    if (isDefaultCategory) arrayListOf() else categories.toMutableList()
                 model.loadSearch(model.searchResults)
             }
             filterDialog.show(parentFragmentManager, "FilterDialog")
