@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">IPSAT</string>
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="version_current">Version %1$s</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="vod_page">VOD Page</string>
     <string name="seek_seconds_forward">+%d seconds</string>
@@ -9,6 +9,33 @@
     <string name="filler">Filler \n</string>
     <string name="skip">Skip</string>
     <string name="animations">animations\n\t</string>
+    <string name="support">Want to support the developer of IPSA?</string>
+    <string name="donate_goal">Follow Github</string>
+    <string name="telegram">https://stc_android</string>
+    <string name="github">https://github.com/professorDeveloper</string>
+    <string name="show_yt">Show External Player</string>
+    <string name="error">Error</string>
+    <string name="bio_prompt_info_title">Biometric Authentication</string>
+    <string name="user_agent_desc">Change your default user agent</string>
+    <string name="user_agent">User Agent</string>
+    <string name="enter_password_to_decrypt_file">Enter your password to decrypt the file</string>
+    <string name="incorrect_password">Incorrect password</string>
+    <string name="password_cannot_be_empty">Password cannot be empty</string>
+    <string name="unknown_file_type">Unknown file type</string>
+    <string name="error_importing_settings">Error importing settings</string>
+    <string name="download_manager">Download Manager</string>
+    <string name="enter_password">Enter Password</string>
+    <string name="password">Password</string>
+    <string name="bio_prompt_info_desc">Use your fingerprint or face to unlock the app</string>
+    <string name="cancel">Cancel</string>
+    <string name="exporting_requires_encryption">Exporting credentials requires a password for encryption</string>
+    <string name="ok">Ok</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="enable_forgot_password">Enable Forgot Password (hold clear button for 10 seconds)</string>
+    <string name="app_lock">App Lock</string>
+    <string name="success">Success</string>
+    <string name="password_mismatch">Passwords do not match or are empty</string>
+    <string name="remove">Remove</string>
     <string-array name="tips">
         <item>You can Long Click an episode/chapter to Mark it as Read.</item>
         <item>Long Clicking Shows can directly open List Editor.</item>

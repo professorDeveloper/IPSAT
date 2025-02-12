@@ -13,6 +13,25 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
+    <uses-permission
+        android:name="android.permission.QUERY_ALL_PACKAGES"
+        tools:ignore="QueryAllPackagesPermission" />
+    <uses-permission
+        android:name="android.permission.READ_APP_SPECIFIC_LOCALES"
+        tools:ignore="ProtectedPermissions" />
+
+    <!-- ExoPlayer: Bluetooth Headsets -->
+    <uses-feature
+        android:name="android.hardware.bluetooth"
+        android:required="false" />
+
+
+
+
     <application
         android:name=".app.App"
         android:allowBackup="true"
@@ -29,20 +48,28 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".presentation.activities.SettingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.activities.CalcActivity"
+            android:exported="false" />
+
+
+        <activity
             android:name=".presentation.activities.LiveTvActivity"
             android:autoRemoveFromRecents="true"
+            android:canDisplayOnRemoteDevices="true"
             android:configChanges="uiMode|orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden"
             android:excludeFromRecents="true"
-            android:canDisplayOnRemoteDevices="true"
 
+            android:exported="false"
             android:launchMode="singleTask"
-            android:noHistory="true"
 
-            android:rotationAnimation="rotate"
+            android:noHistory="true"
             android:resizeableActivity="true"
+            android:rotationAnimation="rotate"
             android:screenOrientation="unspecified"
-            android:supportsPictureInPicture="true"
-            android:exported="false" />
+            android:supportsPictureInPicture="true" />
         <activity
             android:name=".presentation.activities.PlayerSeriesActivity"
             android:autoRemoveFromRecents="true"
@@ -74,8 +101,8 @@
             android:exported="false" />
         <activity
             android:name=".presentation.activities.MainActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".presentation.activities.SplashActivity"
             android:exported="true"

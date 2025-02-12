@@ -8,6 +8,8 @@ import com.ip_tv.ipsat.domain.model.SubscriptionResponse
 import com.ip_tv.ipsat.domain.preference.UserPreferenceManager
 import com.ip_tv.ipsat.domain.usecase.CheckSubscribeUseCase
 import com.ip_tv.ipsat.utils.AuthState
+import com.ip_tv.ipsat.utils.currContext
+import com.ip_tv.ipsat.utils.readData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -16,14 +18,30 @@ import java.lang.Exception
 import javax.inject.Inject
 
 @HiltViewModel
-class SplashViewModel  @Inject constructor(private val useCase:CheckSubscribeUseCase,private val userPreferenceManager: UserPreferenceManager):ViewModel(){
+class SplashViewModel @Inject constructor(
+    private val useCase: CheckSubscribeUseCase,
+    private val userPreferenceManager: UserPreferenceManager,
+) : ViewModel() {
     private val _initSplash = MutableStateFlow<Resource<SubscriptionResponse>>(Resource.Idle)
-    private val _isFirst =MutableLiveData<Unit>()
+    private val _isFirst = MutableLiveData<Unit>()
     val initSplash = _initSplash
     val isFirst = _isFirst
 
-    fun checkSubscribe(){
-        if(userPreferenceManager.isLogged) {
+
+    private val _isLocked = MutableLiveData<Boolean>()
+    val isLocked = _isLocked
+
+    init {
+        loadLock()
+    }
+
+
+    private fun loadLock() {
+        _isLocked.value = readData("isLocked", currContext()) ?: false
+    }
+
+    fun checkSubscribe() {
+        if (userPreferenceManager.isLogged) {
             _initSplash.value = Resource.Loading
             useCase.checkSubscribe().onEach {
                 it.onFailure {
@@ -34,9 +52,10 @@ class SplashViewModel  @Inject constructor(private val useCase:CheckSubscribeUse
 
                 it.onSuccess {
                     _initSplash.value = Resource.Success(it)
+
                 }
             }.launchIn(viewModelScope)
-        }else {
+        } else {
             isFirst.postValue(Unit)
         }
     }

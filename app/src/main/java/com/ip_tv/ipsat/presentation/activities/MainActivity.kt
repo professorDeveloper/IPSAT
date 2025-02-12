@@ -41,6 +41,8 @@ class MainActivity : AppCompatActivity() {
             ),
             100
         )
+
+
     }
 
     private fun managePages() {

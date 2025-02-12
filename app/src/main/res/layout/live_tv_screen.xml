@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingTop="@dimen/_14sdp"
     tools:context=".presentation.screens.LiveTvScreen">
 
     <com.google.android.material.appbar.AppBarLayout

@@ -19,6 +19,8 @@ abstract class RepositoryModule {
     abstract fun bindAuthRepository(
         authRepositoryImpl: AuthRepositoryImpl
     ): AuthRepository
+
+
     @Binds
     abstract fun bindHomeRepository(
         homeRepository: HomeRepositoryImpl

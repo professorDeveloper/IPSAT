@@ -25,7 +25,7 @@ android {
 
     buildTypes {
         release {
-            isShrinkResources =true
+            isShrinkResources = true
             isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -55,7 +55,7 @@ android {
         exclude("lib/armeabi-v7a/libcardioDecider.so")
         exclude("lib/armeabi-v7a/libcardioRecognizer.so")
         exclude("lib/armeabi-v7a/libcardioRecognizer_tegra2.so")
-        exclude ("lib/armeabi-v7a/libopencv_core.so")
+        exclude("lib/armeabi-v7a/libopencv_core.so")
         exclude("lib/armeabi-v7a/libopencv_imgproc.so")
         exclude("lib/mips/libcardioDecider.so")
         exclude("lib/x86/libcardioDecider.so")
@@ -71,7 +71,7 @@ android {
     }
 
     lint {
-        checkReleaseBuilds =false
+        checkReleaseBuilds = false
     }
 }
 
@@ -119,8 +119,8 @@ dependencies {
     implementation("de.hdodenhof:circleimageview:3.1.0")
 
     //Chucker
-    debugImplementation( "com.github.chuckerteam.chucker:library:4.0.0")
-    releaseImplementation( "com.github.chuckerteam.chucker:library-no-op:4.0.0")
+    debugImplementation("com.github.chuckerteam.chucker:library:4.0.0")
+    releaseImplementation("com.github.chuckerteam.chucker:library-no-op:4.0.0")
 //
     /**
      * Glide
@@ -136,7 +136,7 @@ dependencies {
     // LinearProgress
     //
     //Lottie
-    implementation ("com.airbnb.android:lottie:5.2.0")
+    implementation("com.airbnb.android:lottie:5.2.0")
 
     implementation("com.tbuonomo:dotsindicator:5.1.0")
 
@@ -152,18 +152,22 @@ dependencies {
     implementation("com.github.Blatzar:NiceHttp:0.4.4")
 
     // exo player
-    api ("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.1")
+    api("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.1")
     implementation("com.google.code.gson:gson:2.10.1")
 
-    implementation ("com.github.Blatzar:NiceHttp:0.4.4")// So wee Need this Libraries
+    implementation("com.github.Blatzar:NiceHttp:0.4.4")// So wee Need this Libraries
 
     implementation("org.apache.commons:commons-compress:1.21")
     val exo_version = "2.19.1"
-    implementation( "com.google.android.exoplayer:exoplayer:$exo_version")
+    implementation("com.google.android.exoplayer:exoplayer:$exo_version")
     implementation("com.google.android.exoplayer:exoplayer-ui:$exo_version")
-    implementation( "com.google.android.exoplayer:exoplayer-hls:$exo_version")
+    implementation("com.google.android.exoplayer:exoplayer-hls:$exo_version")
     implementation("com.google.android.exoplayer:extension-mediasession:$exo_version")
 
     implementation("com.github.Ferfalk:SimpleSearchView:0.2.1")
+
+    //Biometric
+    implementation("androidx.biometric:biometric:1.1.0")
+
 
 }

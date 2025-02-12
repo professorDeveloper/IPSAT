@@ -38,19 +38,14 @@ class LiveTvScreen : BaseFragment<LiveTvScreenBinding>(LiveTvScreenBinding::infl
     private var isBannerLoaded = false
     override fun onViewCreate(savedInstanceState: Bundle?) {
         requireActivity().window.statusBarColor = requireActivity().getColor(R.color.colorPrimary)
-        val window = requireActivity().window
-        WindowCompat.setDecorFitsSystemWindows(window, true)
+//        val window = requireActivity().window
+//        WindowCompat.setDecorFitsSystemWindows(window, true)
 
         if (!isBannerLoaded) {
             model.loadCategory()
         }
         observeCategory()
-        requireActivity().onBackPressedDispatcher.addCallback {
-            if (!binding.searchView.onBackPressed()) {
-                requireActivity().onBackPressed()
-            }
 
-        }
     }
 
     private fun setupSearchView(menu: Menu) = with(binding) {

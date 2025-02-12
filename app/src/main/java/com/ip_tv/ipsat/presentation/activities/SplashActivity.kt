@@ -3,10 +3,10 @@ package com.ip_tv.ipsat.presentation.activities
 import Resource
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Lifecycle
@@ -17,15 +17,15 @@ import com.ip_tv.ipsat.R
 import com.ip_tv.ipsat.databinding.ActivitySplashBinding
 import com.ip_tv.ipsat.domain.model.SubscriptionResponse
 import com.ip_tv.ipsat.presentation.viewmodel.SplashViewModel
-import com.ip_tv.ipsat.utils.AuthState
 import com.ip_tv.ipsat.utils.alphaAnim
 import com.ip_tv.ipsat.utils.gone
+import com.ip_tv.ipsat.utils.initActivity
+import com.ip_tv.ipsat.utils.readData
 import com.ip_tv.ipsat.utils.snackString
 import com.ip_tv.ipsat.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 @AndroidEntryPoint
 class SplashActivity : AppCompatActivity() {
@@ -36,27 +36,30 @@ class SplashActivity : AppCompatActivity() {
         enableEdgeToEdge()
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        initActivity(this@SplashActivity)
         manageDisplay()
-        lifecycleScope.launch {
-            binding.appLogo.visible()
-            binding.appLogo.alphaAnim()
-            delay(2000)
-            model.checkSubscribe()
-            observeModel()
+        model.isLocked.observe(this@SplashActivity) {
+            lifecycleScope.launch {
+                binding.appLogo.visible()
+                binding.appLogo.alphaAnim()
+                delay(2000)
+                model.checkSubscribe()
+                observeModel()
+            }
+
         }
 
     }
 
-    private fun observeModel(){
+    private fun observeModel() {
         lifecycleScope.launch {
-            model.initSplash
-                .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
+            model.initSplash.flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
                 .collect { handleUserState(it) }
         }
         model.isFirst.observe(this@SplashActivity, openLoginObserver)
     }
 
-    private fun manageDisplay(){
+    private fun manageDisplay() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -64,7 +67,7 @@ class SplashActivity : AppCompatActivity() {
         }
     }
 
-    private val openLoginObserver =Observer<Unit> {
+    private val openLoginObserver = Observer<Unit> {
         openLogin()
     }
 
@@ -81,20 +84,37 @@ class SplashActivity : AppCompatActivity() {
             }
 
             is Resource.Success -> {
-                openHome()
+                if (!CalcActivity.hasPermission) {
+                    val pin: String = readData("app_password", this@SplashActivity) ?: ""
+                    if (pin.isNotEmpty()) {
+                        ContextCompat.startActivity(
+                            this@SplashActivity,
+                            Intent(this@SplashActivity, CalcActivity::class.java).putExtra(
+                                    "code",
+                                    pin
+                                )
+                                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK),
+                            null
+                        )
+                        finish()
+                        return
+                    } else {
+                        openHome()
+                    }
+                }
             }
 
             else -> {}
         }
     }
 
-    private fun openHome(){
+    private fun openHome() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         finish()
     }
 
-   private fun openLogin(){
+    private fun openLogin() {
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
         finish()

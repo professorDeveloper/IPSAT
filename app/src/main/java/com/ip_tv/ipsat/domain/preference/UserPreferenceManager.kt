@@ -9,24 +9,34 @@ import javax.inject.Inject
 class UserPreferenceManager @Inject constructor(@ApplicationContext context: Context) {
 
     private val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
-    var isLogged :Boolean
+    var isLogged: Boolean
         get() = sharedPref.getBoolean("isLogged", false)
         set(value) {
             sharedPref.edit().putBoolean("isLogged", value).apply()
         }
 
+    var isLocked: Boolean
+        get() = sharedPref.getBoolean("isLocked", false)
+        set(value) {
+            sharedPref.edit().putBoolean("isLocked", value).apply()
+        }
+    var curTheme: Int
+        get() = sharedPref.getInt("curTheme", 0)
+        set(value) {
+            sharedPref.edit().putInt("curTheme", value).apply()
+        }
     var subCode: String
         get() = sharedPref.getString("activate_code", null) ?: generateAndSaveUID()
         set(value) {
             sharedPref.edit().putString("activate_code", value).apply()
         }
 
+
     private fun generateAndSaveUID(): String {
         val newUID = UUID.randomUUID().toString()
         sharedPref.edit().putString("userUID", newUID).apply()
         return newUID
     }
-
 
 
 }

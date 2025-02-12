@@ -4,57 +4,48 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="@dimen/_12sdp"
+    android:layout_marginHorizontal="@dimen/_4sdp"
     android:layout_marginVertical="@dimen/_4sdp"
-    android:padding="@dimen/_4sdp">
+    android:background="?selectableItemBackgroundBorderless">
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardView"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_70sdp"
+        android:layout_height="@dimen/_65sdp"
+        android:padding="@dimen/_4sdp"
+        app:cardBackgroundColor="@color/main_background"
         app:cardCornerRadius="@dimen/_4sdp"
         app:cardElevation="1dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:strokeColor="@color/stroke_color"
+        app:strokeWidth="@dimen/_2sdp">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/coverImage"
-            android:layout_width="@dimen/_60sdp"
-            android:layout_height="@dimen/_60sdp"
-            android:layout_gravity="center"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_gravity="top|center"
             android:scaleType="centerCrop"
             app:srcCompat="@drawable/channel_img" />
-    </androidx.cardview.widget.CardView>
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_4sdp"
-        android:layout_marginTop="@dimen/_8sdp"
-        android:ellipsize="end"
-        android:fontFamily="@font/inter_bold"
-        android:lines="1"
-        android:maxEms="12"
-        android:maxLines="1"
-        android:textSize="@dimen/_15ssp"
-        app:layout_constraintStart_toStartOf="@+id/cardView"
-        app:layout_constraintTop_toBottomOf="@+id/cardView"
-        tools:text="MBC 2HD" />
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:layout_marginBottom="@dimen/_4sdp"
+            android:ellipsize="end"
+            android:fontFamily="@font/inter_bold"
+            android:lines="1"
+            android:maxEms="12"
+            android:maxLines="1"
+            android:textSize="@dimen/_11ssp"
+            app:layout_constraintStart_toStartOf="@+id/cardView"
+            app:layout_constraintTop_toBottomOf="@+id/cardView"
+            tools:text="MBC 2HD" />
+    </com.google.android.material.card.MaterialCardView>
 
-    <TextView
-        android:id="@+id/info"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_2sdp"
-        android:fontFamily="@font/inter_regular"
-        android:lines="1"
-        android:maxLines="1"
-        android:textSize="@dimen/_13ssp"
-
-        app:layout_constraintStart_toStartOf="@+id/title"
-        app:layout_constraintTop_toBottomOf="@+id/title"
-        tools:text="Arabic · Mauritania" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

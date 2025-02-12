@@ -1,13 +1,18 @@
 package com.ip_tv.ipsat.utils
 
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
 import android.content.res.Resources.getSystem
 import android.graphics.Color
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
+import android.net.Uri
 import android.net.wifi.WifiManager
+import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
@@ -29,6 +34,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
@@ -40,7 +46,10 @@ import com.ip_tv.ipsat.R
 import com.ip_tv.ipsat.app.App
 import com.ip_tv.ipsat.domain.model.ChannelResponseItem
 import com.ip_tv.ipsat.domain.model.SubCategoryItem
+import com.ip_tv.ipsat.presentation.activities.MainActivity
+import com.ip_tv.ipsat.presentation.activities.SplashActivity
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream
@@ -80,11 +89,29 @@ fun ArrayList<ChannelResponseItem>.filterByKeywords(
     Log.d("GG", "filterByKeywords:${this} ")
     return this.filter { item ->
         keywords.any { keyword ->
-            if (item.categoryProperty == null) false else item.categoryProperty.contains(keyword.property_name, ignoreCase = true)
+            if (item.categoryProperty == null) false else item.categoryProperty.contains(
+                keyword.property_name,
+                ignoreCase = true
+            )
         }
     }
 }
 
+
+suspend fun View.pop() {
+    ObjectAnimator.ofFloat(this@pop, "scaleX", 1f, 1.25f).setDuration(120).start()
+    ObjectAnimator.ofFloat(this@pop, "scaleY", 1f, 1.25f).setDuration(120).start()
+    delay(120)
+    ObjectAnimator.ofFloat(this@pop, "scaleX", 1.25f, 1f).setDuration(100).start()
+    ObjectAnimator.ofFloat(this@pop, "scaleY", 1.25f, 1f).setDuration(100).start()
+    delay(100)
+}
+
+
+fun openLinkInBrowser(link: String?, activity: Activity) {
+    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
+    activity.startActivity(intent)
+}
 
 fun String.toReadableDateTime(): String {
     return try {
@@ -100,6 +127,7 @@ fun String.toYear(): String {
     val year = this.substringBefore("-")
     return year
 }
+
 
 
 fun <T> readData(fileName: String, context: Context? = null, toast: Boolean = true): T? {
@@ -389,8 +417,32 @@ class MediaPageTransformer : ViewPager2.PageTransformer {
 fun initActivity(a: Activity) {
     val window = a.window
     WindowCompat.setDecorFitsSystemWindows(window, false)
+    manageThemeAndRefresh(readData<Int>("current_theme", a) ?: 0)
+
+}
 
 
+fun startMainActivity(activity: Activity, bundle: Bundle? = null) {
+    activity.finishAffinity()
+    activity.startActivity(
+        Intent(
+            activity,
+            MainActivity::class.java
+        ).apply {
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+            if (bundle != null) putExtras(bundle)
+        }
+    )
+}
+
+fun manageThemeAndRefresh(them: Int) {
+    AppCompatDelegate.setDefaultNightMode(
+        when (them) {
+            0 -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+            1 -> AppCompatDelegate.MODE_NIGHT_NO
+            else -> AppCompatDelegate.MODE_NIGHT_YES
+        }
+    )
 }
 
 abstract class GesturesListener : GestureDetector.SimpleOnGestureListener() {
