@@ -1,3 +1,11 @@
+/*
+ * Copyright (C) 2025 Azamov . - All Rights Reserved
+ *
+ * Unauthorized copying or redistribution of this file in source and binary forms via any medium
+ * is strictly prohibited.
+ *
+ */
+
 package com.ip_tv.ipsat.presentation.screens
 
 import android.content.ClipData

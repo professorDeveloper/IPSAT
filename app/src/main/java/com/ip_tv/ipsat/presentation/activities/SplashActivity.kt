@@ -1,3 +1,11 @@
+/*
+ * Copyright (C) 2025 Azamov . - All Rights Reserved
+ *
+ * Unauthorized copying or redistribution of this file in source and binary forms via any medium
+ * is strictly prohibited.
+ *
+ */
+
 package com.ip_tv.ipsat.presentation.activities
 
 import Resource
@@ -93,7 +101,7 @@ class SplashActivity : AppCompatActivity() {
                         Log.d("GGG", "handleUserState:HASEDPRERM ")
                         ContextCompat.startActivity(
                             this@SplashActivity,
-                            Intent(this@SplashActivity, LockActivity::class.java).putExtra(
+                            Intent(this@SplashActivity, CalcActivity::class.java).putExtra(
                                 "code",
                                 pin
                             )
