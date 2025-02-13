@@ -93,7 +93,7 @@ class SplashActivity : AppCompatActivity() {
                         Log.d("GGG", "handleUserState:HASEDPRERM ")
                         ContextCompat.startActivity(
                             this@SplashActivity,
-                            Intent(this@SplashActivity, CalcActivity::class.java).putExtra(
+                            Intent(this@SplashActivity, LockActivity::class.java).putExtra(
                                 "code",
                                 pin
                             )
@@ -105,7 +105,7 @@ class SplashActivity : AppCompatActivity() {
                     } else {
                         openHome()
                     }
-                }else {
+                } else {
                 }
             }
 
@@ -125,8 +125,9 @@ class SplashActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        CalcActivity.hasPermission =false
+        CalcActivity.hasPermission = false
     }
+
     private fun openLogin() {
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)

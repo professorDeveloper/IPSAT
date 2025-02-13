@@ -15,9 +15,12 @@
         <item name="android:layoutDirection">ltr</item>
 
     </style>
+
     <style name="HeadingText">
         <item name="android:fontFamily">@font/inter_bold</item>
         <item name="android:textColor">?attr/colorPrimary</item>
         <item name="android:textSize">18sp</item>
     </style>
+
+
 </resources>

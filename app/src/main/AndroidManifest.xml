@@ -53,6 +53,9 @@
         <activity
             android:name=".presentation.activities.CalcActivity"
             android:exported="false" />
+        <activity
+            android:name=".presentation.activities.LockActivity"
+            android:exported="false" />
 
 
         <activity
