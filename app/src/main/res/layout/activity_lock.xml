@@ -74,7 +74,7 @@
 
             <Button
                 android:id="@+id/button7"
-                android:layout_width="110dp"
+                android:layout_width="101dp"
                 android:layout_height="100dp"
                 android:layout_gravity="bottom|end"
                 android:backgroundTint="?attr/colorSurfaceVariant"
@@ -88,7 +88,7 @@
 
             <Button
                 android:id="@+id/button8"
-                android:layout_width="110dp"
+                android:layout_width="101dp"
                 android:layout_height="100dp"
                 android:layout_gravity="bottom|end"
                 android:layout_marginStart="16dp"
@@ -104,7 +104,7 @@
 
             <Button
                 android:id="@+id/button9"
-                android:layout_width="110dp"
+                android:layout_width="101dp"
                 android:layout_height="100dp"
                 android:layout_gravity="bottom|end"
                 android:backgroundTint="?attr/colorSurfaceVariant"
@@ -126,7 +126,7 @@
 
             <Button
                 android:id="@+id/button4"
-                android:layout_width="110dp"
+                android:layout_width="101dp"
                 android:layout_height="100dp"
                 android:layout_gravity="bottom|end"
                 android:backgroundTint="?attr/colorSurfaceVariant"
@@ -140,7 +140,7 @@
 
             <Button
                 android:id="@+id/button5"
-                android:layout_width="110dp"
+                android:layout_width="101dp"
                 android:layout_height="100dp"
                 android:layout_gravity="bottom|end"
                 android:layout_marginStart="16dp"
@@ -156,7 +156,7 @@
 
             <Button
                 android:id="@+id/button6"
-                android:layout_width="110dp"
+                android:layout_width="101dp"
                 android:layout_height="100dp"
                 android:layout_gravity="bottom|end"
                 android:backgroundTint="?attr/colorSurfaceVariant"
@@ -178,7 +178,7 @@
 
             <Button
                 android:id="@+id/button1"
-                android:layout_width="110dp"
+                android:layout_width="101dp"
                 android:layout_height="100dp"
                 android:layout_gravity="bottom|end"
                 android:backgroundTint="?attr/colorSurfaceVariant"
@@ -192,7 +192,7 @@
 
             <Button
                 android:id="@+id/button2"
-                android:layout_width="110dp"
+                android:layout_width="101dp"
                 android:layout_height="100dp"
                 android:layout_gravity="bottom|end"
                 android:layout_marginStart="16dp"
@@ -208,7 +208,7 @@
 
             <Button
                 android:id="@+id/button3"
-                android:layout_width="110dp"
+                android:layout_width="101dp"
                 android:layout_height="100dp"
                 android:layout_gravity="bottom|end"
                 android:backgroundTint="?attr/colorSurfaceVariant"
@@ -230,7 +230,7 @@
 
             <Button
                 android:id="@+id/buttonClear"
-                android:layout_width="110dp"
+                android:layout_width="101dp"
                 android:layout_height="100dp"
                 android:layout_gravity="bottom|end"
                 android:layout_marginTop="16dp"
@@ -245,7 +245,7 @@
 
             <Button
                 android:id="@+id/button0"
-                android:layout_width="110dp"
+                android:layout_width="101dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginStart="16dp"
@@ -261,7 +261,7 @@
 
             <Button
                 android:id="@+id/buttonBackspace"
-                android:layout_width="110dp"
+                android:layout_width="101dp"
                 android:layout_height="100dp"
                 android:layout_gravity="bottom|end"
                 android:backgroundTint="?attr/colorOnSurface"
