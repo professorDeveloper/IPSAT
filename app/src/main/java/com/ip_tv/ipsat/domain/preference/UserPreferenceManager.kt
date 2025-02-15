@@ -2,11 +2,15 @@ package com.ip_tv.ipsat.domain.preference
 
 import android.content.Context
 import androidx.preference.PreferenceManager
+import com.chuckerteam.chucker.api.ChuckerCollector
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.UUID
 import javax.inject.Inject
 
 class UserPreferenceManager @Inject constructor(@ApplicationContext context: Context) {
+
+    val chuckerCollector: ChuckerCollector = ChuckerCollector(context)
+
 
     private val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
     var isLogged: Boolean

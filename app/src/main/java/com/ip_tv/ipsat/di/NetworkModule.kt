@@ -13,8 +13,11 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
+import okhttp3.Protocol
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.Collections
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -30,9 +33,10 @@ object NetworkModule {
         appReference: UserPreferenceManager,
     ): OkHttpClient {
         return OkHttpClient.Builder()
+            .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC))
             .retryOnConnectionFailure(true) // Agar bog‘lanish uzilsa, qayta urinish
-            .addInterceptor(ChuckerInterceptor(context))
             .connectTimeout(30, TimeUnit.SECONDS) // Bog‘lanish timeout 30s
+            .protocols(Collections.singletonList(Protocol.HTTP_1_1))
             .readTimeout(30, TimeUnit.SECONDS) // O‘qish timeout 30s
             .writeTimeout(30, TimeUnit.SECONDS) // Yozish timeout 30s
             .build()

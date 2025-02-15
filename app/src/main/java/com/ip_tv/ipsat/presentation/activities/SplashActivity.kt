@@ -25,6 +25,7 @@ import androidx.lifecycle.lifecycleScope
 import com.ip_tv.ipsat.R
 import com.ip_tv.ipsat.databinding.ActivitySplashBinding
 import com.ip_tv.ipsat.domain.model.SubscriptionResponse
+import com.ip_tv.ipsat.domain.preference.UserPreferenceManager
 import com.ip_tv.ipsat.presentation.viewmodel.SplashViewModel
 import com.ip_tv.ipsat.utils.alphaAnim
 import com.ip_tv.ipsat.utils.gone
@@ -35,12 +36,17 @@ import com.ip_tv.ipsat.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.concurrent.locks.Lock
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SplashActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySplashBinding
     private val model by viewModels<SplashViewModel>()
+    @Inject
+     lateinit var userPreferenceManager: UserPreferenceManager
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivitySplashBinding.inflate(layoutInflater)
@@ -95,25 +101,18 @@ class SplashActivity : AppCompatActivity() {
 
             is Resource.Success -> {
                 Log.d("GGG", "handleUserState:${state.data} ")
-                if (!CalcActivity.hasPermission) {
-                    val pin: String = readData("app_password", this@SplashActivity) ?: ""
-                    if (pin.isNotEmpty()) {
-                        Log.d("GGG", "handleUserState:HASEDPRERM ")
-                        ContextCompat.startActivity(
-                            this@SplashActivity,
-                            Intent(this@SplashActivity, CalcActivity::class.java).putExtra(
-                                "code",
-                                pin
-                            )
-                                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK),
-                            null
-                        )
-                        finish()
-                        return
-                    } else {
-                        openHome()
-                    }
+                if (userPreferenceManager.isLocked) {
+                    Log.d("GGG", "handleUserState:HASEDPRERM ")
+                    ContextCompat.startActivity(
+                        this@SplashActivity,
+                        Intent(this@SplashActivity, LockActivity::class.java)
+                            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK),
+                        null
+                    )
+                    finish()
+                    return
                 } else {
+                    openHome()
                 }
             }
 
@@ -133,7 +132,6 @@ class SplashActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        CalcActivity.hasPermission = false
     }
 
     private fun openLogin() {

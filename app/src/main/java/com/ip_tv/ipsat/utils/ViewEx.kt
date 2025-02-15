@@ -6,7 +6,10 @@ import android.content.res.Resources
 import android.graphics.Paint
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.RoundRectShape
+import android.os.Build
 import android.os.SystemClock
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.DisplayMetrics
@@ -255,9 +258,11 @@ fun AppCompatEditText.clear() {
 }
 
 
+
 fun View.vibrationAnimation() {
     val vibrationAnim =
         AnimationUtils.loadAnimation(App.instance, R.anim.vibiration_anim)
     startAnimation(vibrationAnim)
-
+    val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+    vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE))
 }

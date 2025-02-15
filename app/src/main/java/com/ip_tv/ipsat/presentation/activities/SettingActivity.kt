@@ -1,9 +1,14 @@
 package com.ip_tv.ipsat.presentation.activities
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.widget.LinearLayout
+import android.widget.PopupWindow
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
@@ -15,6 +20,7 @@ import com.ip_tv.ipsat.R
 import com.ip_tv.ipsat.databinding.DialogSetPasswordBinding
 import com.ip_tv.ipsat.databinding.DialogUserAgentBinding
 import com.ip_tv.ipsat.databinding.SettingScreenBinding
+import com.ip_tv.ipsat.domain.preference.UserPreferenceManager
 import com.ip_tv.ipsat.presentation.viewmodel.SettingViewModel
 import com.ip_tv.ipsat.utils.BiometricPromptUtils
 import com.ip_tv.ipsat.utils.customAlertDialog
@@ -29,12 +35,16 @@ import com.ip_tv.ipsat.utils.toast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.util.UUID
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SettingActivity : AppCompatActivity() {
 
     private val binding by lazy { SettingScreenBinding.inflate(layoutInflater) }
     private val model by viewModels<SettingViewModel>()
+
+    @Inject
+     lateinit var userPreferenceManager: UserPreferenceManager
     private val restartMainActivity = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() = startMainActivity(this@SettingActivity)
     }
@@ -76,122 +86,13 @@ class SettingActivity : AppCompatActivity() {
 
     private fun initClick() {
 
-        val data = readData<String>(fileName = "app_password", context = this@SettingActivity) ?: ""
-        if (data.isNotEmpty()) {
-            binding.appLock.isChecked = true
-            binding.appLock.text = "Change Passcode"
-        } else {
-            binding.appLock.isChecked = false
-            binding.appLock.text = "Add Passcode"
-        }
 
         binding.appLock.setOnClickListener {
-            customAlertDialog().apply {
-                val view = DialogSetPasswordBinding.inflate(layoutInflater)
-                setTitle(R.string.app_lock)
-                setCustomView(view.root)
-                setPosButton(R.string.ok) { ->
-                    if (view.forgotPasswordCheckbox.isChecked) {
-                        saveData("app_forgot", true)
-                    }
-                    val password = view.passwordInput.text.toString()
-                    val confirmPassword = view.confirmPasswordInput.text.toString()
-                    if (password == confirmPassword && password.isNotEmpty()) {
-                        saveData("app_password", password)
-                        if (view.biometricCheckbox.isChecked) {
-                            val canBiometricPrompt = BiometricManager.from(applicationContext)
-                                .canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_WEAK) == BiometricManager.BIOMETRIC_SUCCESS
-
-                            if (canBiometricPrompt) {
-                                val biometricPrompt =
-                                    BiometricPromptUtils.createBiometricPrompt(this@SettingActivity) { _ ->
-                                        val token = UUID.randomUUID().toString()
-                                        saveData(
-                                            "biometric_pass", token
-                                        )
-
-                                        val checkData = readData<String>(
-                                            fileName = "app_password",
-                                            context = this@SettingActivity
-                                        ) ?: ""
-                                        if (checkData.isNotEmpty()) {
-                                            binding.appLock.isChecked = true
-                                            binding.appLock.text = "Change Passcode"
-                                        } else {
-                                            binding.appLock.isChecked = false
-                                            binding.appLock.text = "Add Passcode"
-                                        }
-                                        toast("Success")
-                                    }
-                                val promptInfo =
-                                    BiometricPromptUtils.createPromptInfo(this@SettingActivity)
-                                biometricPrompt.authenticate(promptInfo)
-                            }
-                        } else {
-
-                            val checkData = readData<String>(
-                                fileName = "app_password",
-                                context = this@SettingActivity
-                            ) ?: ""
-                            if (checkData.isNotEmpty()) {
-                                binding.appLock.isChecked = true
-                                binding.appLock.text = "Change Passcode"
-                            } else {
-                                binding.appLock.isChecked = false
-                                binding.appLock.text = "Add Passcode"
-                            }
-                            saveData("biometric_pass", "")
-                            toast("Success")
-                        }
-                    } else {
-                        val checkData = readData<String>(
-                            fileName = "app_password",
-                            context = this@SettingActivity
-                        ) ?: ""
-                        if (checkData.isNotEmpty()) {
-                            binding.appLock.isChecked = true
-                            binding.appLock.text = "Change Passcode"
-                        } else {
-                            binding.appLock.isChecked = false
-                            binding.appLock.text = "Add Passcode"
-                        }
-                        toast(getString(R.string.password_mismatch))
-                    }
-                }
-                setNegButton(R.string.cancel) {
-
-                    val checkData =
-                        readData<String>(fileName = "app_password", context = this@SettingActivity)
-                            ?: ""
-                    if (checkData.isNotEmpty()) {
-                        binding.appLock.isChecked = true
-                        binding.appLock.text = "Change Passcode"
-                    } else {
-                        binding.appLock.isChecked = false
-                        binding.appLock.text = "Add Passcode"
-                    }
-                }
-                setNeutralButton(R.string.remove) { ->
-                    saveData("app_password", "")
-                    saveData("biometric_pass", "")
-                    saveData("app_forgot", false)
-                    toast("Success")
-                    binding.appLock.isChecked = false
-                }
-                setOnShowListener {
-                    view.passwordInput.requestFocus()
-                    val canAuthenticate = BiometricManager.from(applicationContext).canAuthenticate(
-                        BiometricManager.Authenticators.BIOMETRIC_WEAK,
-                    ) == BiometricManager.BIOMETRIC_SUCCESS
-                    view.biometricCheckbox.isVisible = canAuthenticate
-                    view.biometricCheckbox.isChecked =
-                        (readData("biometric_pass", this@SettingActivity) ?: "").isNotEmpty()
-                    view.forgotPasswordCheckbox.isChecked =
-                        readData("app_forgot", this@SettingActivity) ?: false
-                }
-                show()
+            if ((readData("app_password", this@SettingActivity) ?: "").isNotEmpty()) {
+                showPopupMenu(binding.appLock)
+            } else {
+                showEditDialog()
             }
-
         }
         binding.settingsUiAuto.setOnClickListener {
             saveData("current_theme", 0)
@@ -212,6 +113,80 @@ class SettingActivity : AppCompatActivity() {
             initActivity(this)
         }
 
+    }
+
+    private fun showEditDialog() {
+        customAlertDialog().apply {
+            val view = DialogSetPasswordBinding.inflate(layoutInflater)
+            setTitle(R.string.app_lock)
+            setCustomView(view.root)
+            setPosButton(R.string.ok) { ->
+                if (view.forgotPasswordCheckbox.isChecked) {
+                    saveData("app_forgot", true)
+                }
+                val password = view.passwordInput.text.toString()
+                val confirmPassword = view.confirmPasswordInput.text.toString()
+                if (password == confirmPassword && password.isNotEmpty() && password.length == 4) {
+                    saveData("app_password", password)
+                    userPreferenceManager.isLocked = true
+                    saveData("biometric_pass", "")
+
+                    toast("Success")
+                } else {
+
+                    toast(getString(R.string.password_mismatch))
+                }
+            }
+            setNegButton(R.string.cancel) {
+                toast("Action cancelled")
+            }
+            setOnShowListener {
+                view.passwordInput.requestFocus()
+                view.forgotPasswordCheckbox.isChecked =
+                    readData("app_forgot", this@SettingActivity) ?: false
+            }
+            show()
+        }
+
+    }
+
+    @SuppressLint("MissingInflatedId")
+    private fun showPopupMenu(anchor: View) {
+        val inflater = LayoutInflater.from(this)
+        val view = inflater.inflate(R.layout.menu_custom, null)
+
+        val popupWindow = PopupWindow(
+            view,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            true
+        )
+
+        val tvEdit: LinearLayout = view.findViewById(R.id.tv_change_passcode)
+        val clearPasscode: LinearLayout = view.findViewById(R.id.remove_passcode)
+
+
+        tvEdit.requestFocus()
+
+        tvEdit.setOnClickListener {
+            popupWindow.dismiss()
+            showEditDialog()
+        }
+
+
+        clearPasscode.setOnClickListener {
+            saveData("app_password", "")
+            saveData("app_forgot", false)
+            userPreferenceManager.isLocked = false
+            popupWindow.dismiss()
+            finish()
+            startActivity(Intent(this, SettingActivity::class.java))
+            initActivity(this)
+            toast("Passcode removed")
+        }
+
+        popupWindow.elevation = 10f
+        popupWindow.showAsDropDown(anchor, 0, 0)
     }
 
 

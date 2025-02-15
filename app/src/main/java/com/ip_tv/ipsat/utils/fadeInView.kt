@@ -28,6 +28,7 @@ fun fadeInView(rvFrame: View) {
     }
 }
 
+
 fun fadeOutView(rvFrame: View) {
     rvFrame.apply {
         animate()

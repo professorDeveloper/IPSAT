@@ -3,7 +3,6 @@ package com.ip_tv.ipsat.utils
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.res.Resources.getSystem
@@ -46,9 +45,7 @@ import com.ip_tv.ipsat.R
 import com.ip_tv.ipsat.app.App
 import com.ip_tv.ipsat.domain.model.ChannelResponseItem
 import com.ip_tv.ipsat.domain.model.SubCategoryItem
-import com.ip_tv.ipsat.presentation.activities.CalcActivity
 import com.ip_tv.ipsat.presentation.activities.MainActivity
-import com.ip_tv.ipsat.presentation.activities.SplashActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext

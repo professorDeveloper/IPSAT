@@ -31,7 +31,6 @@ class MainActivity : AppCompatActivity() {
         viewBinding = ActivityMainBinding.inflate(layoutInflater)
         initActivity(this)
         setContentView(viewBinding.root)
-        CalcActivity.hasPermission = false
         viewBinding.homeNavigation.setupWithNavController(navController)
         managePages()
         requestPermissions(

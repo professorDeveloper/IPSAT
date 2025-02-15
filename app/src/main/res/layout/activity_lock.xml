@@ -1,12 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (C) 2025 Azamov . - All Rights Reserved
   ~
   ~ Unauthorized copying or redistribution of this file in source and binary forms via any medium
   ~ is strictly prohibited.
   ~
   -->
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -16,13 +14,25 @@
     android:gravity="center"
     android:orientation="vertical">
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottieLayer"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginVertical="@dimen/_8sdp"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/pin_code"
+        app:lottie_repeatMode="reverse"
+        app:lottie_repeatCount="3"
+        app:lottie_speed="0.7" />
+
     <TextView
         android:id="@+id/tv_pin_prompt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:fontFamily="@font/inter_bold"
-        android:text="Enter Pin Code"
+        android:text="Enter App Pin Code"
         android:textColor="?attr/colorOnSurface"
         android:textSize="@dimen/_16ssp"
         android:textStyle="bold" />
@@ -32,7 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_4sdp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="@dimen/_8sdp"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -80,10 +90,10 @@
             android:layout_marginTop="16dp"
             android:orientation="horizontal">
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/button7"
-                android:layout_width="101dp"
-                android:layout_height="100dp"
+                android:layout_width="90dp"
+                android:layout_height="80dp"
                 android:layout_gravity="bottom|end"
                 android:backgroundTint="?attr/colorSurfaceVariant"
                 android:elegantTextHeight="true"
@@ -96,8 +106,8 @@
 
             <Button
                 android:id="@+id/button8"
-                android:layout_width="101dp"
-                android:layout_height="100dp"
+                android:layout_width="85dp"
+                android:layout_height="80dp"
                 android:layout_gravity="bottom|end"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
@@ -112,8 +122,8 @@
 
             <Button
                 android:id="@+id/button9"
-                android:layout_width="101dp"
-                android:layout_height="100dp"
+                android:layout_width="85dp"
+                android:layout_height="80dp"
                 android:layout_gravity="bottom|end"
                 android:backgroundTint="?attr/colorSurfaceVariant"
                 android:elegantTextHeight="true"
@@ -134,8 +144,8 @@
 
             <Button
                 android:id="@+id/button4"
-                android:layout_width="101dp"
-                android:layout_height="100dp"
+                android:layout_width="85dp"
+                android:layout_height="80dp"
                 android:layout_gravity="bottom|end"
                 android:backgroundTint="?attr/colorSurfaceVariant"
                 android:elegantTextHeight="true"
@@ -148,8 +158,8 @@
 
             <Button
                 android:id="@+id/button5"
-                android:layout_width="101dp"
-                android:layout_height="100dp"
+                android:layout_width="85dp"
+                android:layout_height="80dp"
                 android:layout_gravity="bottom|end"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
@@ -164,8 +174,8 @@
 
             <Button
                 android:id="@+id/button6"
-                android:layout_width="101dp"
-                android:layout_height="100dp"
+                android:layout_width="85dp"
+                android:layout_height="80dp"
                 android:layout_gravity="bottom|end"
                 android:backgroundTint="?attr/colorSurfaceVariant"
                 android:elegantTextHeight="true"
@@ -186,8 +196,8 @@
 
             <Button
                 android:id="@+id/button1"
-                android:layout_width="101dp"
-                android:layout_height="100dp"
+                android:layout_width="85dp"
+                android:layout_height="80dp"
                 android:layout_gravity="bottom|end"
                 android:backgroundTint="?attr/colorSurfaceVariant"
                 android:elegantTextHeight="true"
@@ -200,8 +210,8 @@
 
             <Button
                 android:id="@+id/button2"
-                android:layout_width="101dp"
-                android:layout_height="100dp"
+                android:layout_width="85dp"
+                android:layout_height="80dp"
                 android:layout_gravity="bottom|end"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
@@ -216,8 +226,8 @@
 
             <Button
                 android:id="@+id/button3"
-                android:layout_width="101dp"
-                android:layout_height="100dp"
+                android:layout_width="85dp"
+                android:layout_height="80dp"
                 android:layout_gravity="bottom|end"
                 android:backgroundTint="?attr/colorSurfaceVariant"
                 android:elegantTextHeight="true"
@@ -238,8 +248,8 @@
 
             <Button
                 android:id="@+id/buttonClear"
-                android:layout_width="101dp"
-                android:layout_height="100dp"
+                android:layout_width="85dp"
+                android:layout_height="80dp"
                 android:layout_gravity="bottom|end"
                 android:layout_marginTop="16dp"
                 android:backgroundTint="?attr/colorOnSurface"
@@ -253,8 +263,8 @@
 
             <Button
                 android:id="@+id/button0"
-                android:layout_width="101dp"
-                android:layout_height="100dp"
+                android:layout_width="85dp"
+                android:layout_height="80dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
@@ -269,8 +279,8 @@
 
             <Button
                 android:id="@+id/buttonBackspace"
-                android:layout_width="101dp"
-                android:layout_height="100dp"
+                android:layout_width="85dp"
+                android:layout_height="80dp"
                 android:layout_gravity="bottom|end"
                 android:backgroundTint="?attr/colorOnSurface"
                 android:elegantTextHeight="true"
