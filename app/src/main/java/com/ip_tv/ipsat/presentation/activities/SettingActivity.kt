@@ -2,13 +2,16 @@ package com.ip_tv.ipsat.presentation.activities
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.media.Image
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.PopupWindow
+import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
@@ -44,7 +47,7 @@ class SettingActivity : AppCompatActivity() {
     private val model by viewModels<SettingViewModel>()
 
     @Inject
-     lateinit var userPreferenceManager: UserPreferenceManager
+    lateinit var userPreferenceManager: UserPreferenceManager
     private val restartMainActivity = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() = startMainActivity(this@SettingActivity)
     }
@@ -130,8 +133,8 @@ class SettingActivity : AppCompatActivity() {
                     saveData("app_password", password)
                     userPreferenceManager.isLocked = true
                     saveData("biometric_pass", "")
-
                     toast("Success")
+                    toast("Passcode Enabled !")
                 } else {
 
                     toast(getString(R.string.password_mismatch))
@@ -150,7 +153,7 @@ class SettingActivity : AppCompatActivity() {
 
     }
 
-    @SuppressLint("MissingInflatedId")
+    @SuppressLint("MissingInflatedId", "UseCompatLoadingForDrawables")
     private fun showPopupMenu(anchor: View) {
         val inflater = LayoutInflater.from(this)
         val view = inflater.inflate(R.layout.menu_custom, null)
@@ -161,6 +164,28 @@ class SettingActivity : AppCompatActivity() {
             ViewGroup.LayoutParams.WRAP_CONTENT,
             true
         )
+        if (userPreferenceManager.isLocked) {
+            val tvDisableImg = view.findViewById<ImageView>(R.id.tv_disable_passwordimg)
+            val tvDisable: TextView = view.findViewById<TextView>(R.id.tv_disable_passwordtxt)
+            tvDisable.text = "Disable Passcode"
+            tvDisableImg.setImageDrawable(getDrawable(R.drawable.vpn_key_off))
+        } else {
+            val tvDisableImg = view.findViewById<ImageView>(R.id.tv_disable_passwordimg)
+            val tvDisable: TextView = view.findViewById<TextView>(R.id.tv_disable_passwordtxt)
+            tvDisableImg.setImageDrawable(getDrawable(R.drawable.enable_passcode))
+            tvDisable.text = "Enable Passcode"
+        }
+
+        view.findViewById<LinearLayout>(R.id.tv_disable_password).setOnClickListener {
+            if (userPreferenceManager.isLocked) {
+                toast("Passcode Disabled !")
+            } else {
+                toast("Passcode Enabled !")
+            }
+            userPreferenceManager.isLocked = !userPreferenceManager.isLocked
+            popupWindow.dismiss()
+        }
+
 
         val tvEdit: LinearLayout = view.findViewById(R.id.tv_change_passcode)
         val clearPasscode: LinearLayout = view.findViewById(R.id.remove_passcode)

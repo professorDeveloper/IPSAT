@@ -5,52 +5,92 @@
       ~ is strictly prohibited.
       ~
       -->
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:layout_margin="@dimen/_4sdp"
-        android:background="@drawable/menu_bg"
-        android:orientation="vertical"
-        android:padding="8dp">
+    android:background="@drawable/menu_bg"
+    android:orientation="vertical"
+    android:padding="8dp">
 
 
     <LinearLayout
-            android:id="@+id/tv_change_passcode"
-            android:layout_width="match_parent"
+        android:id="@+id/tv_change_passcode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginVertical="4dp"
+        android:background="@drawable/background_card"
+        android:clickable="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:focusedByDefault="true"
+        android:orientation="horizontal"
+        android:paddingHorizontal="14dp"
+        android:paddingVertical="8dp">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_margin="4dp"
+            android:contentDescription="Change Passocde"
+            android:duplicateParentState="true"
+            android:src="@drawable/lock_rest"
+            app:tint="?attr/colorOnSurface" />
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="8dp"
-            android:layout_marginVertical="4dp"
-            android:background="@drawable/background_card"
-            android:clickable="true"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:focusedByDefault="true"
-            android:orientation="horizontal"
-            android:paddingHorizontal="14dp"
-            android:paddingVertical="8dp">
+            android:layout_gravity="center"
+            android:layout_margin="4dp"
+            android:layout_marginStart="2dp"
+            android:duplicateParentState="true"
+            android:fontFamily="@font/inter_bold"
+            android:paddingStart="12dp"
+            android:text="Change Passcode"
+            android:textSize="@dimen/_12ssp" />
+    </LinearLayout>
 
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_margin="4dp"
-                android:contentDescription="Change Passocde"
-                android:duplicateParentState="true"
-                android:src="@drawable/lock_rest"
-                app:tint="?attr/colorOnSurface" />
+    <LinearLayout
+        android:id="@+id/tv_disable_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginVertical="4dp"
+        android:background="@drawable/background_card"
+        android:clickable="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:focusedByDefault="true"
+        android:orientation="horizontal"
+        android:paddingHorizontal="14dp"
+        android:paddingVertical="8dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="4dp"
-                android:layout_marginStart="2dp"
-                android:duplicateParentState="true"
-                android:fontFamily="@font/inter_bold"
-                android:paddingStart="12dp"
-                android:text="Change Passcode"
-                android:textSize="@dimen/_12ssp" />
-        </LinearLayout>
+        <ImageView
+            android:id="@+id/tv_disable_passwordimg"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_margin="4dp"
+            android:contentDescription="Disable Password"
+            android:duplicateParentState="true"
+            android:src="@drawable/vpn_key_off"
+            app:tint="?attr/colorOnSurface" />
+
+        <TextView
+            android:id="@+id/tv_disable_passwordtxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="4dp"
+            android:layout_marginStart="2dp"
+            android:duplicateParentState="true"
+            android:fontFamily="@font/inter_bold"
+            android:paddingStart="12dp"
+            android:text="Disable Passcode"
+            android:textSize="@dimen/_12ssp" />
+    </LinearLayout>
+
     <LinearLayout
         android:id="@+id/remove_passcode"
         android:layout_width="match_parent"
@@ -86,4 +126,4 @@
             android:textSize="@dimen/_12ssp" />
     </LinearLayout>
 
-    </LinearLayout>
+</LinearLayout>
