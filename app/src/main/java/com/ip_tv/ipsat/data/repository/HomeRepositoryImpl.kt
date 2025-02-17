@@ -314,14 +314,15 @@ class HomeRepositoryImpl @Inject constructor(
 
     }.flowOn(Dispatchers.IO)
 
-    override suspend fun checkMovieOrSeries(id: Int):Boolean {
-        val response =detailService.getSeriesDetail(userPreferenceManager.subCode,id.toString())
+    override suspend fun checkMovieOrSeries(id: Int): Boolean {
+        val response = detailService.getSeriesDetail(userPreferenceManager.subCode, id.toString())
         return if (response.isSuccessful) {
             true
-        }else if (response.code()==400)  {
+        } else if (response.code() == 400) {
             false
         } else {
-            val errorResponse = response.errorBody()?.string().toString().toDataClass<ErrorResponse>()
+            val errorResponse =
+                response.errorBody()?.string().toString().toDataClass<ErrorResponse>()
             throw Exception(errorResponse.message)
         }
     }
