@@ -32,7 +32,7 @@ object NetworkModule {
         @ApplicationContext context: Context,
         appReference: UserPreferenceManager,
     ): OkHttpClient {
-        return OkHttpClient.Builder()
+        return OkHttpClient.Builder ()
             .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC))
             .retryOnConnectionFailure(true) // Agar bog‘lanish uzilsa, qayta urinish
             .connectTimeout(30, TimeUnit.SECONDS) // Bog‘lanish timeout 30s
