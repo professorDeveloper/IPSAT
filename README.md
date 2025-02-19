@@ -1,5 +1,6 @@
 
 # 📌 IPSAT App For Everyone 📌
+# **COMING SOON: IPSAT FOR TV**  will soon be [released](https://github.com/professorDeveloper/ipsat_tv) with enhancements
 
 *IPSAT BETA is a modern mobile application designed for streaming movies and TV series. The platform provides users with an intuitive interface to explore, watch, and manage their favorite content. The app is currently in its beta phase, allowing users to experience new features before the official release.*
 
