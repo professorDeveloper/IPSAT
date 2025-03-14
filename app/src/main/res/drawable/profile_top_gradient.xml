@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (C) 2025 Azamov . - All Rights Reserved
+  ~
+  ~ Unauthorized copying or redistribution of this file in source and binary forms via any medium
+  ~ is strictly prohibited.
+  ~
+  -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:angle="270"
+                android:startColor="#8A9191"
+                android:endColor="#7B8382"
+                android:type="linear"/>
+            <corners android:bottomRightRadius="24dp" android:bottomLeftRadius="24dp"/>
+        </shape>
+    </item>
+</layer-list>

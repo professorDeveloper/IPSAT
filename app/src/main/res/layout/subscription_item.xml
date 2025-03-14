@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (C) 2025 Azamov . - All Rights Reserved
+  ~
+  ~ Unauthorized copying or redistribution of this file in source and binary forms via any medium
+  ~ is strictly prohibited.
+  ~
+  -->
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:background="@drawable/item_subscription_bg"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:padding="16dp">
+
+
+    <TextView
+        android:id="@+id/subscriptionTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/inter_bold"
+        android:text="Active"
+        android:textColor="@color/textColor"
+        android:textSize="@dimen/_15ssp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/subscriptionPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/inter_bold"
+        android:text="Your Subcode :"
+        android:textColor="@color/textColor"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="@+id/subscriptionTitle"
+        app:layout_constraintTop_toBottomOf="@+id/subscriptionTitle" />
+
+    <TextView
+        android:id="@+id/subscriptionCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:fontFamily="@font/inter_bold"
+        android:text="12345678"
+        android:textColor="@color/colorPrimary"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/subscriptionPrice"
+        app:layout_constraintStart_toEndOf="@+id/subscriptionPrice"
+        app:layout_constraintTop_toTopOf="@+id/subscriptionPrice" />
+
+    <LinearLayout
+        android:id="@+id/aboutContainerTop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/subscriptionPrice">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:layout_width="@dimen/_24sdp"
+                android:layout_height="@dimen/_24sdp"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/tv_retro"
+                app:tint="@color/textColor" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvChannels"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_bold"
+                    android:text="200+"
+                    android:textColor="@color/textColor"
+                    android:textSize="@dimen/_10ssp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="marquee"
+                    android:fontFamily="@font/inter_bold"
+                    android:lines="1"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:text="Tv Channels"
+                    android:textColor="@color/textColor"
+                    android:textSize="@dimen/_11ssp" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="start"
+            android:orientation="horizontal">
+
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/film_icon"
+                app:tint="@color/textColor" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/movieSeriesCount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_bold"
+                    android:text="1000+"
+                    android:textColor="@color/textColor"
+                    android:textSize="@dimen/_10ssp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="marquee"
+                    android:fontFamily="@font/inter_bold"
+                    android:lines="1"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:text="Movies"
+                    android:textColor="@color/textColor"
+                    android:textSize="@dimen/_11ssp" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/aboutContainerBottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/aboutContainerTop">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/_18sdp"
+                android:layout_height="@dimen/_18sdp"
+
+                android:layout_gravity="center"
+                android:src="@drawable/ic_hd_movie"
+                app:tint="@color/textColor" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="marquee"
+                    android:fontFamily="@font/inter_bold"
+                    android:lines="1"
+                    android:marqueeRepeatLimit="marquee_forever"
+
+                    android:text="Cartoons"
+                    android:textColor="@color/textColor"
+                    android:textSize="@dimen/_10ssp" />
+
+                <TextView
+                    android:id="@+id/cartoonCountTxt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_bold"
+                    android:text="1000+"
+                    android:textColor="@color/textColor"
+                    android:textSize="@dimen/_11ssp" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:layout_width="@dimen/_18sdp"
+                android:layout_height="@dimen/_18sdp"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/ic_device"
+                app:tint="@color/textColor" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/deviceCount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_bold"
+                    android:text="1"
+                    android:textColor="@color/textColor"
+                    android:textSize="@dimen/_10ssp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="marquee"
+                    android:fontFamily="@font/inter_bold"
+                    android:lines="1"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:text="Device"
+                    android:textColor="@color/textColor"
+                    android:textSize="@dimen/_11ssp" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/aboutSubscriptionTxt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:ellipsize="end"
+        android:fontFamily="@font/inter_semi_bold"
+        android:maxLines="3"
+        android:minLines="3"
+        android:text="@string/lorem"
+        android:textColor="@color/textColorDesc"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="@+id/aboutContainerBottom"
+        app:layout_constraintTop_toBottomOf="@+id/aboutContainerBottom" />
+
+    <LinearLayout
+        android:id="@+id/playContainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/background_button"
+        android:duplicateParentState="true"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/aboutSubscriptionTxt">
+
+        <TextView
+            android:id="@+id/expiredDateTxt"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:duplicateParentState="true"
+            android:fontFamily="@font/inter_semi_bold"
+            android:paddingVertical="13dp"
+
+            android:text="Expired Date : 2024-12-03"
+            android:textAlignment="center"
+            android:textColor="@color/whiteMain"
+            android:textSize="14sp" />
+
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

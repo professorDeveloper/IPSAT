@@ -18,6 +18,7 @@ import com.ip_tv.ipsat.presentation.adapters.MovieAdapter
 import com.ip_tv.ipsat.presentation.adapters.ShowMoreItemAdapter
 import com.ip_tv.ipsat.presentation.viewmodel.SearchViewModel
 import com.ip_tv.ipsat.utils.BaseFragment
+import com.ip_tv.ipsat.utils.DialogUtils
 import com.ip_tv.ipsat.utils.LocalData
 import com.ip_tv.ipsat.utils.animationTransaction
 import com.ip_tv.ipsat.utils.gone
@@ -52,7 +53,11 @@ class SearchScreen : BaseFragment<SearchScreenBinding>(SearchScreenBinding::infl
         when (state) {
             is Resource.Error -> {
                 binding.progressBar.gone()
-                showSnack(binding.root, state.throwable.message.toString())
+                DialogUtils.createTapadooDialog(
+                    requireActivity(),
+                    "Search Eerrorr",
+                    state.throwable.message.toString(), R.color.map_red
+                )
             }
 
             is Resource.Loading -> {
@@ -61,30 +66,44 @@ class SearchScreen : BaseFragment<SearchScreenBinding>(SearchScreenBinding::infl
             }
 
             is Resource.Success -> {
-                adapter.submitListNew(state.data)
-                adapter.setItemClickListener {
-                    WaitDialog.setMessage("Loading..").show(requireActivity())
-                    lifecycleScope.launch {
-                        delay(300)
-                        model.checkMovieSeries(it.id,it).apply {
-                            WaitDialog.dismiss()
-                            if ( this) {
-                                val bundle = Bundle()
-                                bundle.putSerializable("movie", it)
-                                findNavController().navigate(R.id.detailSeriesScreen, bundle, animationTransaction().build())
-                            }else {
-                                val bundle = Bundle()
-                                bundle.putSerializable("movie", it)
-                                findNavController().navigate(R.id.detailScreen, bundle)
+                if (state.data.isNotEmpty()) {
+                    adapter.submitListNew(state.data)
+                    adapter.setItemClickListener {
+                        WaitDialog.setMessage("Loading..").show(requireActivity())
+                        lifecycleScope.launch {
+                            delay(300)
+                            model.checkMovieSeries(it.id, it).apply {
+                                WaitDialog.dismiss()
+                                if (this) {
+                                    val bundle = Bundle()
+                                    bundle.putSerializable("movie", it)
+                                    findNavController().navigate(
+                                        R.id.detailSeriesScreen,
+                                        bundle,
+                                        animationTransaction().build()
+                                    )
+                                } else {
+                                    val bundle = Bundle()
+                                    bundle.putSerializable("movie", it)
+                                    findNavController().navigate(R.id.detailScreen, bundle)
+                                }
                             }
                         }
                     }
-                }
-                binding.movieListRv.visible()
-                binding.movieListRv.adapter = adapter
-                binding.progressBar.gone()
-                if (!historyList.contains(query)) {
-                    historyList.add(query)
+                    binding.movieListRv.visible()
+                    binding.movieListRv.adapter = adapter
+                    binding.progressBar.gone()
+                    if (!historyList.contains(query)) {
+                        historyList.add(query)
+                    }
+                } else {
+                    binding.progressBar.gone()
+                    DialogUtils.createTapadooDialog(
+                        requireActivity(),
+                        "Search Error",
+                        "Search result not found",
+                        R.color.map_red
+                    )
                 }
             }
 
@@ -92,8 +111,7 @@ class SearchScreen : BaseFragment<SearchScreenBinding>(SearchScreenBinding::infl
         }
     }
 
-    private fun observeModel()
-    {
+    private fun observeModel() {
         lifecycleScope.launch {
         }
     }
@@ -101,8 +119,8 @@ class SearchScreen : BaseFragment<SearchScreenBinding>(SearchScreenBinding::infl
     private var searchJob: Job? = null
 
     private fun manageSearch() {
-        binding.searchBar.isSuggestionsEnabled =true
-        binding.searchBar.lastSuggestions =historyList
+        binding.searchBar.isSuggestionsEnabled = true
+        binding.searchBar.lastSuggestions = historyList
         binding.searchBar.addTextChangeListener(object : TextWatcher {
             override fun beforeTextChanged(
                 s: CharSequence?,

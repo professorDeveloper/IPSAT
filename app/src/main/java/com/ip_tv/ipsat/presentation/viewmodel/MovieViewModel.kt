@@ -279,9 +279,9 @@ class MovieViewModel @Inject constructor(private val movieScreenUse: MovieScreen
         }
     }
 
-    suspend fun checkMovieSeries(query: Int,movie: Movie) :Boolean{
-        return repo.checkMovieOrSeries(query)
-    }
+        suspend fun checkMovieSeries(query: Int,movie: Movie) :Boolean{
+            return repo.checkMovieOrSeries(query)
+        }
 
     fun resetData() {
         isDataLoaded = false

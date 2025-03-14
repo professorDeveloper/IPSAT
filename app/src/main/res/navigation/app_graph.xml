@@ -9,7 +9,14 @@
         android:id="@+id/button_profile_page"
         android:name="com.ip_tv.ipsat.presentation.screens.ProfileScreen"
         android:label="profile_screen"
-        tools:layout="@layout/profile_screen" />
+        tools:layout="@layout/profile_screen" >
+        <action
+            android:id="@+id/action_button_profile_page_to_updateInfoScreen"
+            app:destination="@id/updateInfoScreen" />
+        <action
+            android:id="@+id/action_button_profile_page_to_mySubscriptionPage"
+            app:destination="@id/mySubscriptionPage" />
+    </fragment>
     <fragment
         android:id="@+id/button_live_tv"
         android:name="com.ip_tv.ipsat.presentation.screens.LiveTvScreen"
@@ -56,4 +63,9 @@
         android:name="com.ip_tv.ipsat.presentation.screens.DetailSeriesScreen"
         android:label="detail_series_screen"
         tools:layout="@layout/detail_series_screen" />
+    <fragment
+        android:id="@+id/mySubscriptionPage"
+        android:name="com.ip_tv.ipsat.MySubscriptionPage"
+        android:label="my_subscription_page"
+        tools:layout="@layout/my_subscription_page" />
 </navigation>

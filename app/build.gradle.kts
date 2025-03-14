@@ -1,8 +1,8 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-        id("kotlin-kapt")
-        id("com.google.dagger.hilt.android")
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 
 }
 
@@ -168,6 +168,10 @@ dependencies {
 
     //Biometric
     implementation("androidx.biometric:biometric:1.1.0")
+
+    // tapadoo
+    implementation("com.github.tapadoo:alerter:7.2.4")
+
 
 
 }

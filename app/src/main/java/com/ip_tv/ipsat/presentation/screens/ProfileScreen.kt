@@ -43,62 +43,66 @@ class ProfileScreen : BaseFragment<ProfileScreenBinding>(ProfileScreenBinding::i
     }
 
     override fun onViewCreate(savedInstanceState: Bundle?) {
-        requireActivity().window.statusBarColor = requireActivity().getColor(R.color.colorPrimary)
+        requireActivity().window.statusBarColor = requireActivity().getColor(R.color.status)
         setupUI()
         observeModel()
     }
 
     private fun observeModel() {
         val userPreferenceManager = UserPreferenceManager(requireContext())
-        profileViewModel.userDetail.observe(this) {
-            when (it) {
-                is Resource.Error -> {
-                    binding.shimmerCode.stopShimmer()
-                    binding.shimmerStatus.stopShimmer()
-                    binding.activatedDateShimmer.stopShimmer()
-                    binding.endDateShimmer.stopShimmer()
-                    binding.macAddressShimmer.stopShimmer()
-                    binding.tableLayout.visible()
-                    binding.shimmerTable.invisible()
-                    snackString("${it.throwable.message}")
-                }
-
-                is Resource.Loading -> {
-                    binding.tableLayout.invisible()
-                    binding.shimmerTable.visible()
-                    binding.shimmerCode.startShimmer()
-                    binding.shimmerStatus.startShimmer()
-                    binding.activatedDateShimmer.startShimmer()
-                    binding.endDateShimmer.startShimmer()
-                    binding.macAddressShimmer.startShimmer()
-                }
-
-                is Resource.Success -> {
-                    binding.tableLayout.visible()
-                    binding.shimmerTable.invisible()
-                    binding.subscriptionCodeTxt.text = userPreferenceManager.subCode
-                    binding.macAddressTxt.text = it.data.macAddress
-                    binding.subscriptionActivatedDateTxt.text =
-                        it.data.activatedAt.toString().toReadableDateTime()
-                    binding.subscriptionEndDateTxt.text =
-                        it.data.endDate.toString().toReadableDateTime()
-                    binding.subscriptionStatusTxt.text = it.data.status
-                    binding.shimmerCode.stopShimmer()
-                    binding.shimmerStatus.stopShimmer()
-                    binding.activatedDateShimmer.stopShimmer()
-                    binding.endDateShimmer.stopShimmer()
-                    binding.macAddressShimmer.stopShimmer()
-                }
-
-                else -> {}
-            }
-        }
+//        profileViewModel.userDetail.observe(this) {
+//            when (it) {
+//                is Resource.Error -> {
+//                    binding.shimmerCode.stopShimmer()
+//                    binding.shimmerStatus.stopShimmer()
+//                    binding.activatedDateShimmer.stopShimmer()
+//                    binding.endDateShimmer.stopShimmer()
+//                    binding.macAddressShimmer.stopShimmer()
+//                    binding.tableLayout.visible()
+//                    binding.shimmerTable.invisible()
+//                    snackString("${it.throwable.message}")
+//                }
+//
+//                is Resource.Loading -> {
+//                    binding.tableLayout.invisible()
+//                    binding.shimmerTable.visible()
+//                    binding.shimmerCode.startShimmer()
+//                    binding.shimmerStatus.startShimmer()
+//                    binding.activatedDateShimmer.startShimmer()
+//                    binding.endDateShimmer.startShimmer()
+//                    binding.macAddressShimmer.startShimmer()
+//                }
+//
+//                is Resource.Success -> {
+//                    binding.tableLayout.visible()
+//                    binding.shimmerTable.invisible()
+//                    binding.subscriptionCodeTxt.text = userPreferenceManager.subCode
+//                    binding.macAddressTxt.text = it.data.macAddress
+//                    binding.subscriptionActivatedDateTxt.text =
+//                        it.data.activatedAt.toString().toReadableDateTime()
+//                    binding.subscriptionEndDateTxt.text =
+//                        it.data.endDate.toString().toReadableDateTime()
+//                    binding.subscriptionStatusTxt.text = it.data.status
+//                    binding.shimmerCode.stopShimmer()
+//                    binding.shimmerStatus.stopShimmer()
+//                    binding.activatedDateShimmer.stopShimmer()
+//                    binding.endDateShimmer.stopShimmer()
+//                    binding.macAddressShimmer.stopShimmer()
+//                }
+//
+//                else -> {}
+//            }
+//        }
     }
 
     private fun setupUI() {
 
-        binding.subscriptionBtn.setOnClickListener {
-            profileViewModel.getUserDetail()
+        binding.subScriptionInfoContainer.setOnClickListener {
+            findNavController().navigate(
+                R.id.mySubscriptionPage,
+                null,
+                animationTransaction().build()
+            )
         }
         binding.subscriptionCodeTxt.setOnClickListener {
             val clipboardManager =
@@ -107,10 +111,10 @@ class ProfileScreen : BaseFragment<ProfileScreenBinding>(ProfileScreenBinding::i
             val clip = ClipData.newPlainText("Copied Text", textToCopy)
             clipboardManager.setPrimaryClip(clip)
         }
-        binding.subscriptionStatusTxt.setOnClickListener {
+        binding.status.setOnClickListener {
             val clipboardManager =
                 requireActivity().getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
-            val textToCopy = binding.subscriptionStatusTxt.text.toString()
+            val textToCopy = binding.status.text.toString()
             val clip = ClipData.newPlainText("Copied Text", textToCopy)
             clipboardManager.setPrimaryClip(clip)
         }
@@ -119,7 +123,7 @@ class ProfileScreen : BaseFragment<ProfileScreenBinding>(ProfileScreenBinding::i
             val intent = Intent(requireContext(), SettingActivity::class.java)
             startActivity(intent)
         }
-        binding.subscriptionUpdateInfo.setOnClickListener {
+        binding.notificationContainer.setOnClickListener {
             findNavController().navigate(
                 R.id.updateInfoScreen,
                 null,

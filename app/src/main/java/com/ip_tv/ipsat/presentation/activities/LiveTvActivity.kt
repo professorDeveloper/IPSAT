@@ -365,18 +365,18 @@ class LiveTvActivity : AppCompatActivity(), Player.Listener {
     }
 
 
-    private fun initPopupQuality(): Dialog {
+        private fun initPopupQuality(): Dialog {
 
-        val trackSelectionDialogBuilder =
-            TrackSelectionDialogBuilder(this, "Available Qualities", player, C.TRACK_TYPE_VIDEO)
-        trackSelectionDialogBuilder.setTheme(R.style.DialogTheme)
-        trackSelectionDialogBuilder.setTrackNameProvider {
-            if (it.frameRate > 0f) it.height.toString() + "p" else it.height.toString() + "p (fps : N/A)"
+            val trackSelectionDialogBuilder =
+                TrackSelectionDialogBuilder(this, "Available Qualities", player, C.TRACK_TYPE_VIDEO)
+            trackSelectionDialogBuilder.setTheme(R.style.DialogTheme)
+            trackSelectionDialogBuilder.setTrackNameProvider {
+                if (it.frameRate > 0f) it.height.toString() + "p" else it.height.toString() + "p (fps : N/A)"
+            }
+            val trackDialog = trackSelectionDialogBuilder.build()
+            trackDialog.setOnDismissListener { hideSystemBars() }
+            return trackDialog
         }
-        val trackDialog = trackSelectionDialogBuilder.build()
-        trackDialog.setOnDismissListener { hideSystemBars() }
-        return trackDialog
-    }
 
 
     private fun togglePlayPause() {

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (C) 2025 Azamov . - All Rights Reserved
+  ~
+  ~ Unauthorized copying or redistribution of this file in source and binary forms via any medium
+  ~ is strictly prohibited.
+  ~
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mediaCountdownContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:visibility="visible"
+    tools:ignore="MissingDefaultResource">
+
+    <TextView
+        android:id="@+id/mediaCountdownText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:alpha="0.58"
+        android:fontFamily="@font/inter_bold"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textSize="16sp"
+        android:textColor="@color/bg_black_50"
+        android:text="Episode 2 will be released in" />
+
+    <TextView
+        android:id="@+id/mediaCountdown"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:fontFamily="@font/inter_bold"
+        android:textAllCaps="true"
+        android:textSize="18sp"
+        android:textColor="@color/bg_black_50"
+        android:text="00:00:00" />
+
+</LinearLayout>
