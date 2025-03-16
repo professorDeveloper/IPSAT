@@ -3,9 +3,11 @@ package com.ip_tv.ipsat.di
 import com.ip_tv.ipsat.data.repository.AuthRepositoryImpl
 import com.ip_tv.ipsat.data.repository.DetailRepositoryImpl
 import com.ip_tv.ipsat.data.repository.HomeRepositoryImpl
+import com.ip_tv.ipsat.data.repository.MovieBookmarkRepositoryImpl
 import com.ip_tv.ipsat.domain.repository.AuthRepository
 import com.ip_tv.ipsat.domain.repository.DetailRepository
 import com.ip_tv.ipsat.domain.repository.HomeRepository
+import com.ip_tv.ipsat.domain.repository.MovieBookmarkRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -30,5 +32,9 @@ abstract class RepositoryModule {
     abstract fun bindDetailRepository(
         detailRepository: DetailRepositoryImpl
     ): DetailRepository
+    @Binds
+    abstract fun bindBookmarkRepository(
+        bookMarkRepo: MovieBookmarkRepositoryImpl
+    ): MovieBookmarkRepository
 
 }

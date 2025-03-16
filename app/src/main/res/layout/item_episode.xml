@@ -6,8 +6,8 @@
     android:layout_width="match_parent"
 
     android:layout_height="wrap_content"
-    android:layout_marginVertical="@dimen/_4sdp"
     android:layout_marginHorizontal="@dimen/_6sdp"
+    android:layout_marginVertical="@dimen/_4sdp"
     android:backgroundTintMode="src_atop"
     android:longClickable="true"
     app:cardBackgroundColor="?attr/colorSurface"
@@ -60,7 +60,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="-10dp"
                     android:layout_marginTop="-18dp"
-                    app:cardBackgroundColor="?attr/colorOnSurface"
+                    app:cardBackgroundColor="@color/card_background"
                     app:cardCornerRadius="16dp">
 
                     <TextView
@@ -72,7 +72,7 @@
                         android:layout_marginTop="19dp"
                         android:layout_marginEnd="8dp"
                         android:fontFamily="@font/inter_bold"
-                        android:textColor="@color/white"
+                        android:textColor="@color/textColor"
                         android:textSize="20sp"
                         tools:text="12" />
                 </androidx.cardview.widget.CardView>

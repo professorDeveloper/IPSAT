@@ -29,7 +29,6 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="@dimen/_60sdp"
         android:scaleType="fitXY"
         android:visibility="visible"
         app:srcCompat="@drawable/linear_gradient_bg"

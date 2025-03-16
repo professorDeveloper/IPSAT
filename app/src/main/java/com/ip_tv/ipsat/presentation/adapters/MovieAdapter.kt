@@ -20,7 +20,6 @@ class MovieAdapter(private val activity:Fragment) : RecyclerView.Adapter<MovieAd
 
    inner class MovieVh(private val binding: ItemMovieBinding) : RecyclerView.ViewHolder(binding.root) {
         fun onBind(movie: Movie) {
-            setAnimation(activity.requireActivity(), binding.root)
             binding.titleItem.text = movie.name ?: "Unknown"
             binding.itemCompactScore.text = movie.rating?.toString() ?: "No Rating"
             binding.itemImg.loadImage(movie.image ?: "")

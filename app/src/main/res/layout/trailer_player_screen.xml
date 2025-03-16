@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (C) 2025 Azamov . - All Rights Reserved
+  ~
+  ~ Unauthorized copying or redistribution of this file in source and binary forms via any medium
+  ~ is strictly prohibited.
+  ~
+  -->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:background="@color/black">
+
+    <com.google.android.exoplayer2.ui.PlayerView
+        android:id="@+id/pv_player"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:visibility="gone"
+        app:controller_layout_id="@layout/exo_player_control_view"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:resize_mode="fit"
+        app:show_buffering="always"
+        app:show_next_button="false"
+        app:show_previous_button="false"
+        app:show_subtitle_button="true"
+        app:show_timeout="2000" />
+
+
+    <LinearLayout
+        android:id="@+id/loading_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:background="@color/black"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="10dp"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/inter_bold"
+            android:padding="8dp"
+            android:text="Trailer is loading..."
+            android:textAlignment="center"
+
+            android:textColor="@color/whiteMain" />
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="4dp"
+            app:indicatorColor="@color/white40"
+            app:trackColor="@color/red" />
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

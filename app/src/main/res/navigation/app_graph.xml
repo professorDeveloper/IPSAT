@@ -9,7 +9,7 @@
         android:id="@+id/button_profile_page"
         android:name="com.ip_tv.ipsat.presentation.screens.ProfileScreen"
         android:label="profile_screen"
-        tools:layout="@layout/profile_screen" >
+        tools:layout="@layout/profile_screen">
         <action
             android:id="@+id/action_button_profile_page_to_updateInfoScreen"
             app:destination="@id/updateInfoScreen" />
@@ -17,6 +17,11 @@
             android:id="@+id/action_button_profile_page_to_mySubscriptionPage"
             app:destination="@id/mySubscriptionPage" />
     </fragment>
+    <fragment
+        android:id="@+id/button_bookmark_page"
+        android:name="com.ip_tv.ipsat.presentation.screens.FavoriteScreen"
+        android:label="favorite_screen"
+        tools:layout="@layout/favorite_screen" />
     <fragment
         android:id="@+id/button_live_tv"
         android:name="com.ip_tv.ipsat.presentation.screens.LiveTvScreen"
@@ -34,9 +39,9 @@
         tools:layout="@layout/update_info_screen" />
     <fragment
         android:id="@+id/showMoreMoviesScreen"
-        tools:layout="@layout/show_more_movies_screen"
         android:name="com.ip_tv.ipsat.presentation.screens.show_more.ShowMoreMoviesScreen"
-        android:label="ShowMoreMoviesScreen" />
+        android:label="ShowMoreMoviesScreen"
+        tools:layout="@layout/show_more_movies_screen" />
     <fragment
         android:id="@+id/showMoreKidsScreen"
         android:name="com.ip_tv.ipsat.presentation.screens.show_more.ShowMoreKidsScreen"
@@ -56,16 +61,35 @@
         tools:layout="@layout/search_screen" />
     <fragment
         android:id="@+id/detailScreen"
+        tools:layout="@layout/detail_movie_screen"
         android:name="com.ip_tv.ipsat.presentation.screens.DetailScreen"
-        android:label="DetailScreen" />
+        android:label="DetailScreen" >
+
+        <action
+            android:id="@+id/action_detailScreen_to_trailerPlayerScreen"
+            app:destination="@id/trailerPlayerScreen" />
+    </fragment>
     <fragment
         android:id="@+id/detailSeriesScreen"
         android:name="com.ip_tv.ipsat.presentation.screens.DetailSeriesScreen"
         android:label="detail_series_screen"
-        tools:layout="@layout/detail_series_screen" />
+        tools:layout="@layout/detail_series_screen" >
+        <action
+            android:id="@+id/action_detailSeriesScreen_to_trailerPlayerScreen"
+            app:destination="@id/trailerPlayerScreen" />
+    </fragment>
     <fragment
         android:id="@+id/mySubscriptionPage"
         android:name="com.ip_tv.ipsat.MySubscriptionPage"
         android:label="my_subscription_page"
         tools:layout="@layout/my_subscription_page" />
+    <fragment
+        android:id="@+id/trailerPlayerScreen"
+        tools:layout="@layout/trailer_player_screen"
+        android:name="com.ip_tv.ipsat.presentation.screens.TrailerPlayerScreen"
+        android:label="TrailerPlayerScreen" >
+        <argument
+            android:name="url"
+            app:argType="string" />
+    </fragment>
 </navigation>

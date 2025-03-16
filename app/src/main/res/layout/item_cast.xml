@@ -1,48 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="@dimen/_60sdp"
-    android:layout_margin="@dimen/_8sdp"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    app:cardBackgroundColor="@color/prem_bg"
+    android:layout_marginHorizontal="@dimen/_4sdp"
+    android:layout_marginVertical="@dimen/_3sdp"
+    android:orientation="vertical"
+    app:cardCornerRadius="@dimen/_8sdp"
+    app:cardElevation="0dp">
 
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:clipToPadding="false"
         android:orientation="vertical"
-        android:clipToPadding="false">
+        android:padding="@dimen/_5sdp">
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/castImage"
-            android:layout_width="@dimen/_40sdp"
-            android:layout_height="@dimen/_40sdp"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_60sdp"
             android:layout_gravity="center"
             android:scaleType="centerCrop"
-            android:src="@drawable/img"
-            android:transitionName="characterCover" />
-
+            android:src="@drawable/joker_banner"
+            android:transitionName="characterCover"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Small" />
 
 
         <TextView
             android:id="@+id/castName"
             android:layout_width="wrap_content"
-            android:layout_gravity="center"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/inter_bold"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/_4sdp"
             android:ellipsize="marquee"
-            android:marqueeRepeatLimit="marquee_forever"
+            android:fontFamily="@font/inter_bold"
             android:lines="1"
 
+            android:marqueeRepeatLimit="marquee_forever"
             android:singleLine="true"
-            android:textSize="@dimen/_13ssp"
-            android:layout_marginTop="@dimen/_4sdp"
             android:text="JokerJokerJoker"
+            android:textSize="@dimen/_11ssp"
+            android:transitionName="mediaTitle" />
+
+        <TextView
+            android:id="@+id/castCharacter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:ellipsize="marquee"
+            android:fontFamily="@font/inter_bold"
+            android:lines="1"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:text="JokerJokerJoker"
+            android:textSize="10sp"
             android:transitionName="mediaTitle" />
 
 
     </LinearLayout>
 
 
-</FrameLayout>
+</androidx.cardview.widget.CardView>

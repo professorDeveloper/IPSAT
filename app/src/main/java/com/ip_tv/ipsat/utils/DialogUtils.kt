@@ -8,14 +8,26 @@
 
 package com.ip_tv.ipsat.utils
 
+import android.app.ActionBar
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.view.Gravity
 import com.ip_tv.ipsat.R
 import com.tapadoo.alerter.Alerter
 
 object DialogUtils {
 
+    fun loadingDialog(ctx: Context): Dialog {
+        val dialog = Dialog(ctx)
+        dialog.setContentView(R.layout.dialog_loading)
+        dialog.window?.setGravity(Gravity.CENTER)
+        dialog.window?.setLayout(ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        return dialog
+    }
     fun createTapadooDialog(
         activity: Activity,
         title: String? = null,

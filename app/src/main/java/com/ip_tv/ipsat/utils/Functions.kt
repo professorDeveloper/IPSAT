@@ -11,6 +11,7 @@ import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.net.Uri
 import android.net.wifi.WifiManager
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -49,6 +50,7 @@ import com.ip_tv.ipsat.presentation.activities.MainActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
+import okhttp3.OkHttpClient
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream
 import java.io.BufferedInputStream
@@ -63,10 +65,21 @@ import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 import java.net.NetworkInterface
 import java.net.URL
+import java.security.SecureRandom
+import java.security.cert.X509Certificate
+import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 import java.util.Timer
 import java.util.TimerTask
+import javax.net.ssl.HostnameVerifier
+import javax.net.ssl.HttpsURLConnection
+import javax.net.ssl.SSLContext
+import javax.net.ssl.TrustManager
+import javax.net.ssl.X509TrustManager
 import kotlin.math.max
 
 var statusBarHeight = 0
@@ -93,6 +106,106 @@ fun ArrayList<ChannelResponseItem>.filterByKeywords(
             )
         }
     }
+}
+
+
+fun String.toDateFromIso8601(): Date? {
+    val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+    dateFormat.timeZone = TimeZone.getTimeZone("UTC") // UTC vaqt zonasini sozlash
+    return try {
+        dateFormat.parse(this)
+    } catch (e: Exception) {
+        null
+    }
+}
+
+fun disableSSLCertificateChecking(connection: HttpsURLConnection) {
+    try {
+        // Ishonchsiz TrustManager: barcha sertifikatlarni tekshiruvsiz qabul qiladi
+        val trustAllCerts = arrayOf<TrustManager>(object : X509TrustManager {
+            override fun checkClientTrusted(
+                chain: Array<out X509Certificate>?,
+                authType: String?
+            ) {
+            }
+
+            override fun checkServerTrusted(
+                chain: Array<out X509Certificate>?,
+                authType: String?
+            ) {
+            }
+
+            override fun getAcceptedIssuers(): Array<X509Certificate> = arrayOf()
+        })
+
+        val sslContext = SSLContext.getInstance("TLS")
+        sslContext.init(null, trustAllCerts, SecureRandom())
+        connection.sslSocketFactory = sslContext.socketFactory
+        // Barcha host nomlarini qabul qilish
+        connection.hostnameVerifier = HostnameVerifier { _, _ -> true }
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+}
+
+
+fun makeSslForTrailer(sslContext: SSLContext) {
+    sslContext.init(null, arrayOf(object : X509TrustManager {
+        override fun checkClientTrusted(
+            chain: Array<out X509Certificate>?,
+            authType: String?
+        ) {
+        }
+
+        override fun checkServerTrusted(
+            chain: Array<out X509Certificate>?,
+            authType: String?
+        ) {
+        }
+
+        override fun getAcceptedIssuers(): Array<X509Certificate> = arrayOf()
+    }), SecureRandom())
+}
+
+fun String.toDateFromIso8601ForTxt(): String? {
+    return try {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Android 8+ versiyalar uchun java.time API
+            val instant = LocalDateTime.parse(this, DateTimeFormatter.ISO_DATE_TIME)
+            val formatter = DateTimeFormatter.ofPattern("dd MMM yyyy", Locale.getDefault())
+            instant.format(formatter)
+        } else {
+            // Android 5-7 versiyalar uchun SimpleDateFormat
+            val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+            val outputFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+
+            val date: Date? = inputFormat.parse(this)
+            date?.let { outputFormat.format(it) } ?: "Wrong format"
+        }
+    } catch (e: Exception) {
+        "Wrong format"
+    }
+}
+fun makeCustomHttpClient(sslContext: SSLContext): OkHttpClient {
+    return OkHttpClient.Builder()
+        .sslSocketFactory(sslContext.socketFactory, @SuppressLint("CustomX509TrustManager")
+        object : X509TrustManager {
+            override fun checkClientTrusted(
+                chain: Array<out X509Certificate>?,
+                authType: String?
+            ) {
+            }
+
+            override fun checkServerTrusted(
+                chain: Array<out X509Certificate>?,
+                authType: String?
+            ) {
+            }
+
+            override fun getAcceptedIssuers(): Array<X509Certificate> = arrayOf()
+        })
+        .hostnameVerifier { _, _ -> true }
+        .build()
 }
 
 
@@ -184,6 +297,10 @@ fun Fragment.hideSystemBars() {
                     or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                     or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
             )
+}
+
+fun Fragment.showSystemBars() {
+    requireActivity().window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
 }
 
 

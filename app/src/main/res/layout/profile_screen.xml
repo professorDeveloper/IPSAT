@@ -1,305 +1,319 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (C) 2025 Azamov . - All Rights Reserved
+  ~
+  ~ Unauthorized copying or redistribution of this file in source and binary forms via any medium
+  ~ is strictly prohibited.
+  ~
+  -->
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipeRefreshLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginTop="@dimen/_8sdp"
+    android:paddingTop="@dimen/_16sdp"
     tools:context=".presentation.screens.ProfileScreen">
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="                    app:tint=&quot;@color/bg_black_50&quot; />&#xA;" />
-
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/profile_bg"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="310dp"
-        android:scaleType="centerCrop"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/joker_banner"
-        tools:visibility="visible" />
-
-    <View
-        android:id="@+id/profile_bg2"
-        android:layout_width="match_parent"
-        android:layout_height="310dp"
-        android:background="@drawable/linear_gradient_bg"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible" />
-
-    <LinearLayout
-        android:id="@+id/linearLayout3"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_230sdp"
-        android:gravity="center"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="@dimen/_72sdp"
-            android:layout_height="@dimen/_72sdp"
-            android:layout_gravity="center_horizontal"
-            android:src="@drawable/joker_banner" />
-
-        <TextView
-            android:id="@+id/subscriptionCodeTxt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_12sdp"
-            android:fontFamily="@font/inter_bold"
-            android:text="882072073258"
-            android:textColor="@color/textLightColor"
-            android:textSize="@dimen/_14ssp" />
+        android:layout_height="match_parent">
 
         <LinearLayout
+            android:id="@+id/linearLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:gravity="top|center"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tableLayout"
+            app:layout_constraintVertical_bias=".06">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/inter_bold"
-                android:text="Status: "
-                android:textColor="@color/textLightColor"
-                android:textSize="@dimen/_14ssp" />
 
-            <TextView
-                android:id="@+id/status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/subscriptionUpdateInfo"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_4sdp"
+                android:background="?selectableItemBackground"
+                android:orientation="vertical"
+                app:cardCornerRadius="0dp">
 
-                android:fontFamily="@font/inter_bold"
-                android:text="Active"
-                android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/_15ssp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        app:srcCompat="@drawable/info" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_4sdp"
+                        android:text="Update Info"
+                        android:textColor="@color/white_and_black"
+                        android:textSize="@dimen/_13ssp" />
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/subscriptionSettings"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp"
+                android:background="?selectableItemBackground"
+                android:orientation="vertical"
+                app:cardCornerRadius="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        app:srcCompat="@drawable/settings"
+                        app:tint="@color/white_and_black" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_4sdp"
+                        android:text="Settings"
+                        android:textColor="@color/white_and_black"
+                        android:textSize="@dimen/_13ssp" />
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/exitBtn"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp"
+                android:background="?selectableItemBackground"
+                android:orientation="vertical"
+                android:padding="@dimen/_4sdp"
+                app:cardCornerRadius="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        android:scaleType="centerCrop"
+                        app:srcCompat="@drawable/ic_exit" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_marginStart="@dimen/_4sdp"
+                        android:text="Exit Profile"
+                        android:textColor="@color/white_and_black"
+                        android:textSize="@dimen/_13ssp" />
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
         </LinearLayout>
 
 
-    </LinearLayout>
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardView4"
-        android:layout_width="240dp"
-        android:layout_height="60dp"
-        android:layout_gravity="center"
-        android:layout_marginVertical="6dp"
-        android:visibility="invisible"
-        app:cardBackgroundColor="?attr/colorSurfaceVariant"
-        app:cardCornerRadius="10dp"
-        app:cardElevation="4dp"
-        app:layout_constraintBottom_toBottomOf="@+id/linearLayout3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
-        tools:visibility="visible">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <TableLayout
+            android:id="@+id/tableLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-
-            android:background="?attr/colorSurfaceVariant">
-
-            <LinearLayout
-                android:id="@+id/notificationContainer"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="30dp"
-                android:background="?attr/selectableItemBackground"
-                android:gravity="center"
-                android:orientation="vertical"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@id/barview"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginTop="8dp"
-                    app:srcCompat="@drawable/alerter_ic_notifications" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:layout_marginTop="4dp"
-                    android:fontFamily="@font/inter_bold"
-                    android:text="Notification"
-                    android:textSize="10sp" />
-            </LinearLayout>
-
-            <View
-                android:id="@+id/barview"
-                android:layout_width="1dp"
-                android:layout_height="0dp"
-                android:layout_marginHorizontal="30dp"
-                android:background="?attr/colorOnSurface"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/notificationContainer"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <LinearLayout
-                android:id="@+id/subScriptionInfoContainer"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="30dp"
-                android:background="?attr/selectableItemBackground"
-                android:gravity="center"
-                android:orientation="vertical"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/barview"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginTop="8dp"
-                    app:srcCompat="@drawable/info" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:layout_marginTop="4dp"
-                    android:fontFamily="@font/inter_bold"
-                    android:text="Subscriptions"
-                    android:textAlignment="center"
-                    android:textSize="10sp" />
-            </LinearLayout>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.google.android.material.card.MaterialCardView>
-
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:gravity="top|center"
-        android:orientation="vertical"
-        android:paddingTop="@dimen/_8sdp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView4"
-        app:layout_constraintVertical_bias=".06">
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/myBookmarksContainer"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_40sdp"
-            android:layout_marginTop="@dimen/_4sdp"
-            android:background="?selectableItemBackground"
-            android:orientation="vertical"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:divider="@drawable/table_row_divider"
+            android:elevation="4dp"
             android:padding="@dimen/_4sdp"
-            app:cardCornerRadius="0dp">
+            android:showDividers="middle"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <LinearLayout
+            <include
+                android:id="@+id/countDownView"
+                layout="@layout/item_countdown" />
+
+            <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical">
-
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:layout_width="@dimen/_20sdp"
-                    android:layout_height="@dimen/_20sdp"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/_8sdp"
-                    android:scaleType="centerCrop"
-                    app:srcCompat="@drawable/ic_favorite_black_24" />
+                android:layout_height="wrap_content"
+                android:paddingVertical="@dimen/_2sdp">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-
-                    android:layout_marginStart="@dimen/_4sdp"
-                    android:text="My Bookmarks"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="start"
+                    android:text="Code:"
                     android:textColor="@color/white_and_black"
-                    android:textSize="@dimen/_13ssp" />
-            </LinearLayout>
-
-        </com.google.android.material.card.MaterialCardView>
-
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/subscriptionSettings"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_40sdp"
-            android:background="?selectableItemBackground"
-            android:orientation="vertical"
-            app:cardCornerRadius="0dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:layout_width="@dimen/_20sdp"
-                    android:layout_height="@dimen/_20sdp"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/_8sdp"
-                    app:srcCompat="@drawable/settings"
-                    app:tint="@color/bg_black_50" />
+                    android:textSize="@dimen/_12ssp" />
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:id="@+id/subscriptionCodeTxt"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_4sdp"
-                    android:text="Settings"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_weight="2"
+                    android:clickable="true"
+                    android:ellipsize="end"
+                    android:focusable="true"
+                    android:fontFamily="@font/inter_bold"
+                    android:singleLine="true"
+                    android:text="886601525947"
                     android:textColor="@color/white_and_black"
-                    android:textSize="@dimen/_13ssp" />
-            </LinearLayout>
+                    android:textSize="@dimen/_13ssp"
+                    android:textStyle="italic" />
+            </TableRow>
 
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/exitContainer"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_40sdp"
-            android:layout_gravity="center"
-            android:background="?selectableItemBackground"
-            android:orientation="vertical"
-            app:cardCornerRadius="0dp">
-
-            <LinearLayout
+            <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:layout_width="@dimen/_20sdp"
-                    android:layout_height="@dimen/_20sdp"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/_8sdp"
-                    app:srcCompat="@drawable/ic_exit" />
+                android:layout_height="wrap_content"
+                android:paddingVertical="@dimen/_2sdp">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_4sdp"
-                    android:text="Exit App"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="start"
+                    android:text="Status:"
                     android:textColor="@color/white_and_black"
-                    android:textSize="@dimen/_13ssp" />
-            </LinearLayout>
+                    android:textSize="@dimen/_12ssp" />
 
-        </com.google.android.material.card.MaterialCardView>
+                <TextView
+                    android:id="@+id/subscriptionStatusTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_weight="2"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/inter_bold"
+                    android:singleLine="true"
+                    android:text="Active"
+                    android:textColor="@color/map_green"
+                    android:textSize="@dimen/_13ssp"
+                    android:textStyle="normal" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="@dimen/_2sdp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="start"
+                    android:text="Activated Date:"
+                    android:textColor="@color/white_and_black"
+                    android:textSize="@dimen/_12ssp" />
+
+                <TextView
+                    android:id="@+id/subscriptionActivatedDateTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_weight="2"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/inter_bold"
+                    android:singleLine="true"
+                    android:text="2024-12-18"
+                    android:textColor="@color/map_green"
+                    android:textSize="@dimen/_13ssp"
+                    android:textStyle="normal" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="@dimen/_2sdp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="start"
+                    android:text="End Date:"
+                    android:textColor="@color/white_and_black"
+                    android:textSize="@dimen/_12ssp" />
+
+                <TextView
+                    android:id="@+id/subscriptionEndDateTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_weight="2"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/inter_bold"
+                    android:singleLine="true"
+                    android:text="2024-12-19"
+                    android:textColor="@color/map_red"
+                    android:textSize="@dimen/_13ssp"
+                    android:textStyle="normal" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="@dimen/_2sdp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="start"
+                    android:text="Mac Address:"
+                    android:textColor="@color/white_and_black"
+                    android:textSize="@dimen/_12ssp" />
+
+                <TextView
+                    android:id="@+id/macAddressTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_weight="2"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/inter_bold"
+                    android:singleLine="true"
+                    android:text="a8:25:28:b9:dd:74"
+                    android:textSize="@dimen/_13ssp"
+                    android:textStyle="normal" />
+            </TableRow>
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="1dp" />
+
+        </TableLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    </LinearLayout>
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

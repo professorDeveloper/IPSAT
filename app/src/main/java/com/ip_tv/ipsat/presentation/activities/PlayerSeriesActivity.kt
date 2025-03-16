@@ -238,11 +238,6 @@ class PlayerSeriesActivity : AppCompatActivity(), Player.Listener {
 
 
 
-        playbackPosition = readData(
-            "${epList.get(currentEpIndex).name}_${PlayerSeriesActivity.currentEpIndex}",
-            this
-        ) ?: 0
-
         println("Position$playbackPosition")
         model.keepScreenOn.observe(this) { keepScreenOn ->
             playerView.keepScreenOn = keepScreenOn
@@ -266,11 +261,13 @@ class PlayerSeriesActivity : AppCompatActivity(), Player.Listener {
             )
         }
         if (!isInit) {
-            model.loadVod(epList[currentEpIndex].id)
             playbackPosition = readData(
-                "${epList.get(currentEpIndex).name}_${PlayerSeriesActivity.currentEpIndex}",
+                "${epList.get(if (currentEpIndex == -1) 0 else currentEpIndex).name}_${PlayerSeriesActivity.currentEpIndex}",
                 this
             ) ?: 0
+            model.loadVod(epList[currentEpIndex].id)
+
+
             prevEpBtn.setImageViewEnabled(PlayerSeriesActivity.currentEpIndex.toInt() >= 1)
             nextEpBtn.setImageViewEnabled(currentEpIndex.toInt() != epCount.toInt())
         }
@@ -298,6 +295,10 @@ class PlayerSeriesActivity : AppCompatActivity(), Player.Listener {
         }
 
         model.showSubsBtn.observe(this) {
+            playbackPosition = readData(
+                "${epList.get(if (currentEpIndex == -1) 0 else currentEpIndex).name}_${PlayerSeriesActivity.currentEpIndex}",
+                this
+            ) ?: 0
             if (!it) {
                 if (playbackPosition != 0L) {
                     val time = String.format(
@@ -620,9 +621,19 @@ class PlayerSeriesActivity : AppCompatActivity(), Player.Listener {
         }
 
         nextEpBtn.setOnClickListener {
+            saveData(
+                "${epList.get(currentEpIndex).name}_${PlayerSeriesActivity.currentEpIndex}",
+                model.player.currentPosition,
+                this
+            )
             setNewEpisode(1)
         }
         prevEpBtn.setOnClickListener {
+            saveData(
+                "${epList.get(currentEpIndex).name}_${PlayerSeriesActivity.currentEpIndex}",
+                model.player.currentPosition,
+                this
+            )
             setNewEpisode(-1)
         }
     }

@@ -11,6 +11,11 @@
         android:icon="@drawable/tv_page_icon"
         android:title="VOD" />
     <item
+        android:id="@+id/button_bookmark_page"
+        android:icon="@drawable/ic_favorite_black_24"
+        android:title="Bookmark" />
+
+    <item
         android:id="@+id/button_profile_page"
         android:icon="@drawable/ic_profile_page"
         android:title="USER" />

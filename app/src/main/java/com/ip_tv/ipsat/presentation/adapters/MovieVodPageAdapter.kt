@@ -75,13 +75,7 @@ class MovieVodPageAdapter(
     override fun onBindViewHolder(holder: MovieVodPageViewHolder, position: Int) {
         holder.binding.apply {
             trendingViewPager = bannerViewPager
-            setAnimation(
-                root.context,
-                root,
-                150,
-                floatArrayOf(0.0f, 1.0f, 0.0f, 1.0f),
-                pivot = 0.5f to 0.5f
-            )
+
             if (ready.value == false)
                 ready.postValue(true)
         }

@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+    id("androidx.navigation.safeargs.kotlin")
 
 }
 
@@ -83,6 +84,7 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.2.0")
     implementation("androidx.activity:activity:1.9.3")
     implementation("androidx.paging:paging-runtime-ktx:3.3.5")
+    implementation("androidx.media3:media3-datasource-okhttp:1.5.1")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
@@ -163,6 +165,11 @@ dependencies {
     implementation("com.google.android.exoplayer:exoplayer-ui:$exo_version")
     implementation("com.google.android.exoplayer:exoplayer-hls:$exo_version")
     implementation("com.google.android.exoplayer:extension-mediasession:$exo_version")
+    // OkHttp library
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+
+    // ExoPlayer OkHttp extension
+    implementation("com.google.android.exoplayer:extension-okhttp:$exo_version")
 
     implementation("com.github.Ferfalk:SimpleSearchView:0.2.1")
 
@@ -171,6 +178,14 @@ dependencies {
 
     // tapadoo
     implementation("com.github.tapadoo:alerter:7.2.4")
+
+    //Room ORM
+    // Room Components
+    implementation("androidx.room:room-runtime:2.6.1")
+    //noinspection KaptUsageInsteadOfKsp
+    kapt("androidx.room:room-compiler:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
+
 
 
 

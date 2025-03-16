@@ -4,14 +4,20 @@ import Resource
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ip_tv.ipsat.data.local.entity.MovieBookmark
+import com.ip_tv.ipsat.data.remote.CastResponse
+import com.ip_tv.ipsat.data.remote.IMDBScraping
+import com.ip_tv.ipsat.data.remote.extractViId
 import com.ip_tv.ipsat.domain.model.Movie
 import com.ip_tv.ipsat.domain.model.SearchResults
 import com.ip_tv.ipsat.domain.model.SeriesDetailResponse
 import com.ip_tv.ipsat.domain.model.VodMovieResponse
 import com.ip_tv.ipsat.domain.repository.DetailRepository
 import com.ip_tv.ipsat.domain.repository.HomeRepository
+import com.ip_tv.ipsat.domain.repository.MovieBookmarkRepository
 import com.ip_tv.ipsat.utils.hasConnection
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -20,6 +26,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailViewModel @Inject constructor(
     private val repo: DetailRepository,
+    private val movieBookmarkRepo: MovieBookmarkRepository,
     private val repository: HomeRepository
 ) : ViewModel() {
     private val _seriesDetailResponse: MutableLiveData<Resource<SeriesDetailResponse>> =
@@ -33,9 +40,54 @@ class DetailViewModel @Inject constructor(
 
     val movieDetailResponse: MutableLiveData<Resource<VodMovieResponse>> = _movieDetailResponse
 
+    private val _isBookmarkResponse: MutableLiveData<Boolean> = MutableLiveData()
+
+    val isBookmarkResponse: MutableLiveData<Boolean> = _isBookmarkResponse
 
     private val _searchResult: MutableLiveData<Resource<ArrayList<Movie>>> = MutableLiveData()
     val searchResult: MutableLiveData<Resource<ArrayList<Movie>>> = _searchResult
+    val trailerUrl = MutableLiveData<Pair<String, String>>()
+    val castResponse = MutableLiveData<CastResponse>()
+
+    fun loadTrailer(query: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val trailer = IMDBScraping()
+            val list = trailer.searchMovie(query)
+            val trailerUrll = trailer.getTrailer(list)
+            val trailerMasterUrl =
+                trailer.getTrailerLink(trailerUrll.first.extractViId().toString())
+            castResponse.postValue(trailerUrll.second)
+            trailerUrl.postValue(
+                Pair(trailerUrll.first, trailerMasterUrl)
+            )
+
+        }
+    }
+
+    fun addBookmark(movie: MovieBookmark) {
+        viewModelScope.launch {
+            movieBookmarkRepo.addBookmark(movie)
+        }
+    }
+
+    fun removeBookmark(movie: MovieBookmark) {
+        viewModelScope.launch {
+            movieBookmarkRepo.removeBookmark(movie)
+        }
+    }
+
+    suspend fun getCurrentBookmarkById(id: Int): MovieBookmark {
+        return movieBookmarkRepo.getAllBookmarks().find { it.id == id }!!
+    }
+    fun checkBookmark(id: Int) {
+        viewModelScope.launch {
+            _isBookmarkResponse.postValue(
+                movieBookmarkRepo.isBookmarked(id)
+            )
+        }
+    }
+
+
 
     fun getSearchResult(query: String, year: String) {
         _searchResult.postValue(Resource.Loading)
@@ -67,7 +119,7 @@ class DetailViewModel @Inject constructor(
                     _seriesDetailResponse.postValue(Resource.Error(Exception(it.message)))
                 }
                 result.onSuccess { series ->
-                        _seriesDetailResponse.postValue(Resource.Success(series))
+                    _seriesDetailResponse.postValue(Resource.Success(series))
 
                 }
             }.launchIn(viewModelScope)

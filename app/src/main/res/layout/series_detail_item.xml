@@ -55,11 +55,12 @@
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/ivPoster"
                     android:layout_width="@dimen/_100sdp"
-                    app:srcCompat="@drawable/joker_banner"
                     android:layout_height="@dimen/_150sdp"
-                    android:scaleType="centerCrop" />
+                    android:scaleType="centerCrop"
+                    app:srcCompat="@drawable/joker_banner" />
 
             </androidx.cardview.widget.CardView>
+
             <ImageView
                 android:id="@+id/backButton"
                 android:layout_width="24dp"
@@ -103,8 +104,8 @@
                 <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    app:tint="@color/map_yellow"
-                    app:srcCompat="@drawable/ic_star" />
+                    app:srcCompat="@drawable/ic_star"
+                    app:tint="@color/map_yellow" />
 
                 <TextView
                     android:id="@+id/tvVoteAverage"
@@ -123,14 +124,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                tools:text="Action, Crime, Drama \nDirector: Quentin Tarantino"
                 android:layout_marginEnd="16dp"
                 android:ellipsize="end"
                 android:fontFamily="@font/nunito_medium_italic"
                 android:maxLines="3"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/tvMovieTitleValue"
-                app:layout_constraintTop_toBottomOf="@+id/tvMovieTitleValue" />
+                app:layout_constraintTop_toBottomOf="@+id/tvMovieTitleValue"
+                tools:text="Action, Crime, Drama \nDirector: Quentin Tarantino" />
 
             <TextView
                 android:id="@+id/tvDuration"
@@ -158,10 +159,10 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_weight="1.5"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
                     android:layout_marginHorizontal="8dp"
+                    android:layout_weight="1.5"
                     android:gravity="center"
                     android:orientation="vertical">
 
@@ -185,9 +186,9 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1.5"
                     android:layout_gravity="start"
                     android:layout_marginHorizontal="8dp"
+                    android:layout_weight="1.5"
 
                     android:gravity="center"
                     android:orientation="vertical">
@@ -214,10 +215,10 @@
                     android:id="@+id/ep_card"
                     style="@style/Widget.Material3.CardView.Filled"
                     android:layout_width="match_parent"
-                    android:layout_gravity="start"
-                    android:layout_weight="1"
-                    android:layout_marginHorizontal="8dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_marginHorizontal="8dp"
+                    android:layout_weight="1"
                     android:clickable="true"
                     android:focusable="true"
                     app:cardBackgroundColor="@color/prem_bg">
@@ -252,8 +253,8 @@
                                 android:layout_toEndOf="@+id/imageViewEp"
                                 android:fontFamily="sans-serif-condensed-medium"
                                 android:paddingHorizontal="6dp"
-                                android:textSize="@dimen/_13ssp"
-                                android:text="Watch Trailer" />
+                                android:text="Watch Trailer"
+                                android:textSize="@dimen/_13ssp" />
                         </RelativeLayout>
 
                     </LinearLayout>
@@ -284,7 +285,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/line">
 
 
-
             </LinearLayout>
 
 
@@ -311,25 +311,23 @@
                 <com.ip_tv.ipsat.utils.FadingEdgeRecyclerView
                     android:id="@+id/castRv"
                     android:layout_width="match_parent"
-                    tools:listitem="@layout/item_cast"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    app:layout_constraintTop_toBottomOf="@id/tvDescriptionTitle"
                     app:layout_constraintStart_toStartOf="@id/tvDescriptionTitle"
-                    android:layout_height="wrap_content"/>
+                    app:layout_constraintTop_toBottomOf="@id/tvDescriptionTitle"
+                    tools:listitem="@layout/item_cast" />
 
                 <TextView
                     android:id="@+id/tvEpisodeTitle"
                     android:layout_width="wrap_content"
-                    android:fontFamily="@font/nunito_bold"
                     android:layout_height="wrap_content"
-                    android:textSize="18sp"
                     android:layout_marginTop="@dimen/_8sdp"
+                    android:fontFamily="@font/nunito_bold"
                     android:text="Episodes 33 Count"
+                    android:textSize="18sp"
                     app:layout_constraintStart_toStartOf="@+id/tvDescriptionTitle"
                     app:layout_constraintTop_toBottomOf="@+id/castRv" />
-
-
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

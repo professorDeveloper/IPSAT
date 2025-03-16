@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
     android:id="@+id/bg"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
 
@@ -20,16 +20,17 @@
         app:navGraph="@navigation/app_graph" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/home_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorSurfaceContainer"
+        app:itemActiveIndicatorStyle="@style/App.Custom.Indicator"
         app:itemBackground="@drawable/item_bg"
         app:itemIconTint="@drawable/item_navbar_bg"
-        app:itemTextColor="@drawable/item_navbar_bg"
-        android:background="?attr/colorSurfaceContainer"
-        android:layout_width="match_parent"
-        app:itemActiveIndicatorStyle="@style/App.Custom.Indicator"
 
+        app:itemTextColor="@drawable/item_navbar_bg"
+        app:labelVisibilityMode="auto"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:id="@+id/home_navigation"
-        app:menu="@menu/main_menu"
-        android:layout_height="wrap_content"/>
+        app:menu="@menu/main_menu" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 

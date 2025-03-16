@@ -56,12 +56,16 @@ class MainActivity : AppCompatActivity() {
                     viewBinding.homeNavigation.hideWithAnimation(viewBinding.navHost)
                 }
 
-                R.id.detailScreen, R.id.detailSeriesScreen -> {
+                R.id.detailScreen,R.id.trailerPlayerScreen, R.id.detailSeriesScreen -> {
                     viewBinding.homeNavigation.hideWithAnimation(viewBinding.navHost)
                 }
 
                 R.id.searchScreen -> {
                     viewBinding.homeNavigation.hideWithAnimation(viewBinding.navHost)
+                }
+
+                R.id.button_bookmark_page -> {
+                    viewBinding.homeNavigation.showWithAnimation(viewBinding.navHost)
                 }
 
                 R.id.button_profile_page -> {

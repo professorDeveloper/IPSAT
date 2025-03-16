@@ -1,0 +1,17 @@
+<!--
+  ~ Copyright (C) 2025 Azamov . - All Rights Reserved
+  ~
+  ~ Unauthorized copying or redistribution of this file in source and binary forms via any medium
+  ~ is strictly prohibited.
+  ~
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="40dp"
+    android:height="40dp"
+    android:viewportWidth="960"
+    android:viewportHeight="960">
+    <path
+        android:fillColor="@color/colorPrimary"
+        android:pathData="M178,874v-689q0,-37.19 27.61,-64.59Q233.22,93 269,93h422q36.19,0 64.09,27.41Q783,147.81 783,185v689L480,745 178,874Z" />
+</vector>

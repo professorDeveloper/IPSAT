@@ -30,7 +30,6 @@ class MovieCompatAdapter (private val movieList:ArrayList<Movie>) : RecyclerView
         @SuppressLint("SetTextI18n")
         fun onBind(movie: Movie) {
             binding.itemCompactImage.loadImage(movie.image)
-            setAnimation(binding.root.context, binding.root)
             binding.itemCompactImage.loadImage(movie.image)
             Glide.with(binding.root.context as Context)
                 .load(GlideUrl(movie.image ))

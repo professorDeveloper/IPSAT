@@ -14,7 +14,6 @@ class CastAdapter():RecyclerView.Adapter<CastAdapter.CastVh>() {
     inner class CastVh(private val binding:ItemCastBinding):RecyclerView.ViewHolder(binding.root){
         fun onBind(data: Cast){
             binding.apply {
-                setAnimation(binding.root.context,binding.root)
                 castName.text=data.name
                 Glide.with(binding.root.context)
                     .load(data.image)
