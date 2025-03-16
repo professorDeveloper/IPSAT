@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "685249234169",
+    "project_id": "ipsat-a6060",
+    "storage_bucket": "ipsat-a6060.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:685249234169:android:b6d1c952c09f1cf5dece28",
+        "android_client_info": {
+          "package_name": "com.ip_tv.ipsat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCnpjzC3egBeCTxxQVM2fjGqb0I4cNpoW0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
