@@ -15,6 +15,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import okhttp3.ConnectionPool
 import okhttp3.OkHttpClient
 import okhttp3.Protocol
 import okhttp3.logging.HttpLoggingInterceptor
@@ -39,10 +40,11 @@ object NetworkModule {
         return OkHttpClient.Builder()
             .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC))
             .retryOnConnectionFailure(true) // Agar bog‘lanish uzilsa, qayta urinish
-            .connectTimeout(30, TimeUnit.SECONDS) // Bog‘lanish timeout 30s
             .protocols(Collections.singletonList(Protocol.HTTP_1_1))
-            .readTimeout(30, TimeUnit.SECONDS) // O‘qish timeout 30s
-            .writeTimeout(30, TimeUnit.SECONDS) // Yozish timeout 30s
+            .connectionPool(ConnectionPool(1, 1, TimeUnit.NANOSECONDS)) // Keep-Alive ni o‘chiradi
+            .connectTimeout(60, TimeUnit.SECONDS) // Default: 10s
+            .readTimeout(60, TimeUnit.SECONDS)    // Default: 10s
+            .writeTimeout(60, TimeUnit.SECONDS)
             .build()
     }
 

@@ -22,5 +22,75 @@
         <item name="android:textSize">18sp</item>
     </style>
 
+    <style name="LayoutHeader">
+        <item name="android:textSize">@dimen/h2_text_size</item>
+        <item name="android:fontFamily">@font/nunito_bold</item>
+        <item name="android:gravity">center</item>
+        <item name="android:alpha">0.9</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="TextLabel">
+        <item name="android:textSize">@dimen/b_text_size</item>
+        <item name="android:fontFamily">@font/inter_regular</item>
+        <item name="android:gravity">center</item>
+        <item name="android:alpha">0.7</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+    <style name="TextValue" parent="TextLabel">
+        <item name="android:alpha">0.9</item>
+    </style>
+
+    <style name="TextLabelAlpha" parent="TextLabel">
+        <item name="android:alpha">0.5</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlayExtended" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">16dp</item>
+    </style>
+    <style name="ToggleButtonWithIcon" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="iconPadding">0dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetLeft">0dp</item>
+        <item name="android:insetRight">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="iconGravity">textStart</item>
+        <item name="android:minWidth">56dp</item>
+        <item name="android:minHeight">56dp</item>
+        <item name="strokeWidth">0dp</item>
+        <item name="backgroundTint">@android:color/transparent</item>
+        <item name="rippleColor">@android:color/transparent</item>
+    </style>
+    <style name="layout_detail_item">
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:background">@drawable/layout_detail_background</item>
+    </style>
+    <style name="StatusMaterialButton">
+        <item name="android:layout_width">16dp</item>
+        <item name="android:layout_height">16dp</item>
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:stateListAnimator">@null</item>
+        <item name="cornerRadius">4dp</item>
+        <item name="rippleColor">@null</item>
+    </style>
+    <style name="SpeedDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:background">@color/indigo</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColorAlertDialogListItem">@color/white</item>
+        <item name="android:windowMinWidthMajor">40%</item>
+        <item name="android:dialogPreferredPadding">16dp</item>
+    </style>
+
+    <style name="textAppearnce">
+        <item name="android:textSize">@dimen/_15ssp</item>
+        <item name="android:fontFamily">@font/nunito_bold</item>
+    </style>
+
 
 </resources>

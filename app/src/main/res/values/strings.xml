@@ -37,6 +37,7 @@
     <string name="success">Success</string>
     <string name="password_mismatch">Passwords do not match or are empty</string>
     <string name="remove">Remove</string>
+    <string name="rating">Rating</string>
     <string-array name="tips">
         <item>You can Long Click an episode/chapter to Mark it as Read.</item>
         <item>Long Clicking Shows can directly open List Editor.</item>
@@ -51,4 +52,29 @@
         <item>Novels? more like NO vels.</item>
         <item>Long Click the logo to check for App Update</item>
     </string-array>
+    <string name="video">Видео</string>
+    <string name="screenshots">Screenshots</string>
+    <string name="in_peoples_lists">In Peoples Lists</string>
+    <string name="recommendations">Рекомендации</string>
+
+    // Rating
+    <string name="num_10">10</string>
+    <string name="num_9">9</string>
+    <string name="num_8">8</string>
+    <string name="num_7">7</string>
+    <string name="num_6">6</string>
+    <string name="num_5">5</string>
+    <string name="num_4">4</string>
+    <string name="num_3">3</string>
+    <string name="num_2">2</string>
+    <string name="num_1">1</string>
+
+
+    <string name="watching">Watching</string>
+    <string name="plan_to_watch">Plan to watch</string>
+    <string name="completed">Completed</string>
+    <string name="on_hold">On Hold</string>
+    <string name="dropped">Dropped</string>
+    <string name="ratesScoresStats">% Votes</string>
+
 </resources>

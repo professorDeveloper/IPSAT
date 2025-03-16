@@ -302,7 +302,15 @@ fun Fragment.hideSystemBars() {
 fun Fragment.showSystemBars() {
     requireActivity().window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
 }
+fun Int.formatToK(): String {
+    return if (this >= 1000) {
+        "${(this / 1000.0).format(1)}k"
+    } else {
+        this.toString()
+    }
+}
 
+fun Double.format(digits: Int) = "%.${digits}f".format(this)
 
 suspend fun extractTarFile(tarUrl: String, outputDir: File) {
     withContext(Dispatchers.IO) {

@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (C) 2025 Azamov . - All Rights Reserved
+  ~
+  ~ Unauthorized copying or redistribution of this file in source and binary forms via any medium
+  ~ is strictly prohibited.
+  ~
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ll_rating"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingTop="16dp"
+    android:visibility="gone"
+    tools:visibility="visible">
+
+    <TextView
+        style="@style/LayoutHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/rating" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/cl_rating_margin_top"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_rating"
+                style="@style/TextValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/nunito_medium"
+                android:textSize="@dimen/h1_text_size"
+                tools:text="4.8" />
+
+            <TextView
+                android:id="@+id/tv_num_scoring_users"
+                style="@style/TextLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+
+                android:layout_marginBottom="22dp"
+                android:foregroundGravity="center"
+                tools:text="242K голосов" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:orientation="horizontal">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center">
+
+                <LinearLayout
+                    android:id="@+id/ll_first_numbers"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:weightSum="1"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/tv_9"
+                        style="@style/TextLabelAlpha"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_marginEnd="@dimen/num_rating_margin_end"
+                        android:layout_weight="0.2"
+                        android:text="@string/num_9" />
+
+                    <TextView
+                        android:id="@+id/tv_7"
+                        style="@style/TextLabelAlpha"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_marginEnd="@dimen/num_rating_margin_end"
+                        android:layout_weight="0.2"
+                        android:text="@string/num_7" />
+
+                    <TextView
+                        android:id="@+id/tv_5"
+                        style="@style/TextLabelAlpha"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_marginEnd="@dimen/num_rating_margin_end"
+                        android:layout_weight="0.2"
+                        android:text="@string/num_5" />
+
+                    <TextView
+                        android:id="@+id/tv_3"
+                        style="@style/TextLabelAlpha"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_marginEnd="@dimen/num_rating_margin_end"
+                        android:layout_weight="0.2"
+                        android:text="@string/num_3" />
+
+                    <TextView
+                        android:id="@+id/tv_1"
+                        style="@style/TextLabelAlpha"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_marginEnd="@dimen/num_rating_margin_end"
+                        android:layout_weight="0.2"
+                        android:text="@string/num_1" />
+
+                </LinearLayout>
+
+                <com.db.williamchart.view.HorizontalBarChartView
+                    android:id="@+id/horizontal_bar"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+
+                    app:chart_axis="none"
+                    app:chart_barsBackgroundColor="@color/gray_background"
+                    app:chart_barsColor="@color/colorPrimary"
+                    app:chart_barsRadius="8dp"
+                    app:chart_spacing="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/ll_second_numbers"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toEndOf="@id/ll_first_numbers"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0" />
+
+                <LinearLayout
+                    android:id="@+id/ll_second_numbers"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:weightSum="1"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/tv_10"
+                        style="@style/TextLabelAlpha"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="@dimen/num_rating_margin_start"
+                        android:layout_weight="0.2"
+                        android:text="@string/num_10" />
+
+                    <TextView
+                        android:id="@+id/tv_8"
+                        style="@style/TextLabelAlpha"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="@dimen/num_rating_margin_start"
+                        android:layout_weight="0.2"
+                        android:text="@string/num_8" />
+
+                    <TextView
+                        android:id="@+id/tv_6"
+                        style="@style/TextLabelAlpha"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="@dimen/num_rating_margin_start"
+                        android:layout_weight="0.2"
+                        android:text="@string/num_6" />
+
+                    <TextView
+                        android:id="@+id/tv_4"
+                        style="@style/TextLabelAlpha"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="@dimen/num_rating_margin_start"
+                        android:layout_weight="0.2"
+                        android:text="@string/num_4" />
+
+                    <TextView
+                        android:id="@+id/tv_2"
+                        style="@style/TextLabelAlpha"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="@dimen/num_rating_margin_start"
+                        android:layout_weight="0.2"
+                        android:text="@string/num_2" />
+
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

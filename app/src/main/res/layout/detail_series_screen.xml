@@ -110,6 +110,31 @@
                         app:layout_constraintStart_toEndOf="@+id/cardView2"
                         app:layout_constraintTop_toBottomOf="@+id/flBackdrop" />
 
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/bookmarkAdd"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/_10sdp"
+                        android:layout_weight="8"
+                        android:fontFamily="@font/inter_bold"
+                        android:insetLeft="0dp"
+                        android:insetTop="0dp"
+                        android:insetRight="0dp"
+                        android:insetBottom="0dp"
+                        android:text="Bookmarked"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:backgroundTint="?attr/colorPrimary"
+                        app:cornerRadius="10dp"
+                        app:icon="@drawable/ic_favorite_black_24"
+                        app:iconGravity="textStart"
+                        app:iconSize="@dimen/_18sdp"
+                        app:iconTint="@color/white"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/mainContainer" />
+
                     <LinearLayout
                         android:id="@+id/linearLayout"
                         android:layout_width="wrap_content"
@@ -160,7 +185,7 @@
                         android:id="@+id/tvDuration"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
+                        android:layout_marginVertical="5dp"
                         android:fontFamily="@font/nunito_medium"
                         android:gravity="center"
                         android:textColor="?attr/colorPrimary"
@@ -315,20 +340,56 @@
                         android:id="@+id/contentDescription"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
+
                         android:visibility="visible"
-                        app:layout_constraintTop_toBottomOf="@+id/mainContainer">
+                        app:layout_constraintTop_toBottomOf="@+id/bookmarkAdd">
+
+
+                        <LinearLayout
+                            android:id="@+id/includedLayouts"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="@dimen/_8sdp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <TextView
+                                android:id="@+id/text_description"
+                                android:maxLines="4"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/nunito_bold"
+                                android:lineSpacingExtra="4dp"
+                                android:padding="2dp"
+                                android:text="With Spider-Man's identity now revealed, Peter asks Doctor Strange for help..."
+                                android:textColor="@color/black"
+                                android:textSize="14sp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/materialButtonContainer" />
+
+                            <include
+                                android:id="@+id/ratingView"
+                                layout="@layout/rating_layout" />
+
+                            <include
+                                android:id="@+id/screenshotsView"
+                                layout="@layout/layout_screenshots" />
+                        </LinearLayout>
 
                         <TextView
                             android:id="@+id/tvDescriptionTitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_8sdp"
+                            android:layout_marginStart="@dimen/_6sdp"
                             android:fontFamily="@font/nunito_bold"
                             android:text="Series Cast"
                             android:textSize="18sp"
+                            android:visibility="gone"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toBottomOf="@+id/includedLayouts" />
 
 
                         <com.ip_tv.ipsat.utils.FadingEdgeRecyclerView
@@ -336,6 +397,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
+                            android:visibility="gone"
                             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                             app:layout_constraintStart_toStartOf="@id/tvDescriptionTitle"
                             app:layout_constraintTop_toBottomOf="@id/tvDescriptionTitle"
@@ -345,6 +407,7 @@
                             android:id="@+id/tvEpisodeTitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_6sdp"
                             android:layout_marginTop="@dimen/_8sdp"
                             android:fontFamily="@font/nunito_bold"
                             android:text="Episodes 33 Count"
@@ -356,13 +419,13 @@
                             android:id="@+id/episodeRv"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                             android:orientation="vertical"
-                            tools:listitem="@layout/item_episode"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/tvEpisodeTitle" />
+                            app:layout_constraintTop_toBottomOf="@+id/tvEpisodeTitle"
+                            tools:listitem="@layout/item_episode" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 

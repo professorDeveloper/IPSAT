@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    app:cardBackgroundColor="@color/prem_bg"
     android:layout_marginHorizontal="@dimen/_4sdp"
     android:layout_marginVertical="@dimen/_3sdp"
     android:orientation="vertical"
+    app:cardBackgroundColor="@color/prem_bg"
     app:cardCornerRadius="@dimen/_8sdp"
     app:cardElevation="0dp">
 
@@ -17,14 +17,13 @@
         android:layout_height="wrap_content"
         android:clipToPadding="false"
         android:orientation="vertical"
-        android:padding="@dimen/_5sdp">
+        android:padding="@dimen/_2sdp">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/castImage"
-            android:layout_width="match_parent"
+            android:layout_width="@dimen/_66sdp"
             android:layout_height="@dimen/_60sdp"
             android:layout_gravity="center"
-            android:scaleType="centerCrop"
             android:src="@drawable/joker_banner"
             android:transitionName="characterCover"
             app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Small" />
@@ -39,8 +38,8 @@
             android:ellipsize="marquee"
             android:fontFamily="@font/inter_bold"
             android:lines="1"
-
             android:marqueeRepeatLimit="marquee_forever"
+            android:maxEms="6"
             android:singleLine="true"
             android:text="JokerJokerJoker"
             android:textSize="@dimen/_11ssp"
@@ -51,10 +50,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:ellipsize="marquee"
+            android:layout_marginBottom="4dp"
+            android:ellipsize="end"
             android:fontFamily="@font/inter_bold"
             android:lines="1"
             android:marqueeRepeatLimit="marquee_forever"
+            android:maxEms="15"
             android:singleLine="true"
             android:text="JokerJokerJoker"
             android:textSize="10sp"

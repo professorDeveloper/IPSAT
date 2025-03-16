@@ -19,32 +19,51 @@
         android:layout_height="wrap_content"
         android:paddingBottom="16dp">
 
-        <ImageView
-            android:id="@+id/image_poster"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/detailToolbar"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/joker_banner"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="@dimen/_30sdp"
+            android:background="?attr/colorPrimary"
+            android:elevation="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:titleTextColor="@color/white_and_black" />
 
         <com.google.android.exoplayer2.ui.PlayerView
             android:id="@+id/trailer_player"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="@dimen/_220sdp"
+            app:layout_constraintTop_toBottomOf="@+id/detailToolbar"
+            app:resize_mode="fill"
+            app:show_timeout="0"
+            app:use_controller="false" />
+
+
+        <ImageView
+            android:id="@+id/image_poster"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_220sdp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/joker_banner"
+            app:layout_constraintTop_toBottomOf="@+id/detailToolbar" />
 
         <ImageView
             android:id="@+id/gradient_img"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="@dimen/_220sdp"
             android:scaleType="centerCrop"
-            android:src="@drawable/linear_gradient_bg"
-            app:layout_constraintTop_toTopOf="parent" />
+
+            android:src="@drawable/linear_gradient_detailbg"
+            app:layout_constraintTop_toBottomOf="@+id/detailToolbar" />
 
         <LinearLayout
+            android:id="@+id/trailerPlayContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/image_poster"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/image_poster">
@@ -54,13 +73,13 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_gravity="center"
-                android:layout_marginTop="100dp"
-                android:src="@drawable/ic_round_play_circle_24" />
+                android:src="@drawable/ic_round_play_circle_24"
+                app:tint="@color/whiteMain" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/inter_semi_bold"
+                android:fontFamily="@font/nunito_bold"
                 android:text="Play Trailer"
                 android:textColor="@color/whiteMain"
                 android:textSize="@dimen/_14ssp" />
@@ -70,25 +89,37 @@
             android:id="@+id/text_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_6sdp"
+            android:layout_marginStart="@dimen/_8sdp"
             android:layout_marginTop="8dp"
+            android:ellipsize="end"
+            android:lines="1"
+            android:maxEms="13"
             android:text="Spiderman: No Way Home"
-            android:textColor="@color/black"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/image_poster" />
 
-
-        <com.google.android.material.imageview.ShapeableImageView
-            android:layout_width="@dimen/_22sdp"
-            android:layout_height="@dimen/_22sdp"
-
+        <androidx.cardview.widget.CardView
+            android:id="@+id/bookmarkContainer"
+            android:layout_width="@dimen/_26sdp"
+            android:layout_height="@dimen/_26sdp"
             android:layout_marginEnd="@dimen/_16sdp"
+            android:background="?attr/selectableItemBackground"
+            app:cardCornerRadius="@dimen/_55sdp"
+            app:cardElevation="@dimen/_2sdp"
             app:layout_constraintBottom_toBottomOf="@+id/text_title"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/text_title"
-            app:srcCompat="@drawable/ic_bookmark" />
+            app:layout_constraintTop_toTopOf="@+id/text_title">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/isBookmarked"
+                android:layout_width="@dimen/_18sdp"
+                android:layout_height="@dimen/_18sdp"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/ic_baseline_favorite_border_24" />
+        </androidx.cardview.widget.CardView>
+
 
         <LinearLayout
             android:id="@+id/layout_rating"
@@ -198,19 +229,36 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/materialButton" />
 
+        <LinearLayout
+            android:id="@+id/middleContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_description">
+
+            <include
+                android:id="@+id/infoLayout"
+                layout="@layout/status_layout" />
+
+            <include
+                android:id="@+id/ratingView"
+                layout="@layout/rating_layout" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/text_cast"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:paddingStart="16dp"
+            android:paddingStart="8dp"
             android:text="Cast"
             android:textColor="@color/black"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/text_description" />
+            app:layout_constraintTop_toBottomOf="@id/middleContainer" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_cast"
@@ -220,6 +268,7 @@
             android:orientation="horizontal"
             android:paddingStart="@dimen/_4sdp"
             android:paddingEnd="@dimen/_4sdp"
+            tools:itemCount="5"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/text_cast"

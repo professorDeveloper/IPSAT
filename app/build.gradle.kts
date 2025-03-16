@@ -4,6 +4,8 @@ plugins {
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
     id("androidx.navigation.safeargs.kotlin")
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 
 }
 
@@ -85,6 +87,7 @@ dependencies {
     implementation("androidx.activity:activity:1.9.3")
     implementation("androidx.paging:paging-runtime-ktx:3.3.5")
     implementation("androidx.media3:media3-datasource-okhttp:1.5.1")
+    implementation("com.google.firebase:firebase-crashlytics:19.4.1")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
@@ -185,6 +188,26 @@ dependencies {
     //noinspection KaptUsageInsteadOfKsp
     kapt("androidx.room:room-compiler:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
+
+
+    // Horizontal bar charts
+    implementation("com.diogobernardino:williamchart:3.10.1")
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
+    //Scalfon Image
+    implementation("com.github.stfalcon-studio:StfalconImageViewer:v1.0.1")
+
+    //Coil
+
+    // Coil
+    val coil_version = "1.4.0"
+    implementation ("io.coil-kt:coil:$coil_version")
+    implementation ("io.coil-kt:coil-gif:$coil_version")
+    implementation ("io.coil-kt:coil-svg:$coil_version")
+    //
+    implementation("com.github.zend10:OverlapImageListView:v1.0.1")
+
+
 
 
 

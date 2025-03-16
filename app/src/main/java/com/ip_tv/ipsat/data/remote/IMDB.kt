@@ -1,5 +1,6 @@
 package com.ip_tv.ipsat.data.remote
 
+import android.provider.ContactsContract.Contacts.Photo
 import android.util.Log
 import com.ip_tv.ipsat.utils.Utils
 import okhttp3.OkHttpClient
@@ -46,7 +47,7 @@ class IMDBScraping {
         }
     }
 
-    suspend fun getTrailer(item: SearchItem): Pair<String, CastResponse> {
+    suspend fun getTrailer(item: SearchItem): Triple<String, CastResponse, PhotosResponse> {
         val document = Utils.getJsoup(
             item.detailsUrl,
             mapOf(
@@ -54,7 +55,7 @@ class IMDBScraping {
                 "Accept" to "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
             )
         )
-
+        val photosResponse = getPhotos(document)
 
         val scriptData = document.select("script#__NEXT_DATA__").first()?.html() ?: ""
 
@@ -64,11 +65,11 @@ class IMDBScraping {
         if (matchResult != null) {
             println("Founded m3u8 URL: ${matchResult.value}")
             Log.d("MMM", "getTrailer: {matchResult.value}")
-            return Pair(matchResult.value, secondResponse)
+            return Triple(matchResult.value, secondResponse, photosResponse)
         } else {
             println("m3u8 URL notfound")
             Log.d("MMM", "getTrailer:m3u8 URL notfound ")
-            return Pair("m3u8 URL notfound", secondResponse)
+            return Triple("m3u8 URL notfound", secondResponse, photosResponse)
         }
 
     }
@@ -118,7 +119,7 @@ class IMDBScraping {
 
             var imageUrl = element.select("img.ipc-image").attr("src")
             imageUrl = imageUrl.ifEmpty {
-                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTuwuOLp_6JHHonDLbwBvqOFDxEI6kLoz6EVIqFJLWi5IonCPl7CUfDnzNyaN9pwhLSUTw&usqp=CAU"
+                "https://assets.mycast.io/actor_images/actor-a-unknown-voice-actor-745520_large.jpg?1682266765"
             }
 
             val detailsUrl =
@@ -126,21 +127,16 @@ class IMDBScraping {
 
             castList.add(
                 CastItem(
-                    name, character, ImageUrlFormatter.formatImageUrl(imageUrl), detailsUrl
+                    name, character, imageUrl, detailsUrl
                 )
             )
         }
 
         return CastResponse(castList)
     }
-    fun getPhotos(item: SearchItem): PhotosResponse {
-        val document = Utils.getJsoup(
-            item.detailsUrl,
-            mapOf(
-                "User-Agent" to "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36",
-                "Accept" to "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-            )
-        )
+
+    fun getPhotos(document: Document): PhotosResponse {
+
         val doc = document
         val photos = mutableListOf<PhotoItem>()
 

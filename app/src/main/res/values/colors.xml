@@ -61,6 +61,8 @@
     <color name="card_intro_color">#EAEAF1</color>
     <color name="card_search_color">#C0C0C6</color>
     <color name="main_background">#FFFFFF</color>
+    <color name="gray_background">#e0e0e0</color>
+    <color name="indigo">#213945</color>
 
     <color name="airplane_color">#007AFF</color>
 
@@ -68,4 +70,10 @@
     <color name="search_edittext">#F3F3F8</color>
     <color name="sub_bg">#E6C4C7CD</color>
     <color name="sub_bg_inv">#E69C9EA1</color>
+
+    <color name="watching">#67bb6d</color>
+    <color name="completed">#5c6cc3</color>
+    <color name="planToWatch">#b764bc</color>
+    <color name="onHold">#ffc928</color>
+    <color name="dropped">#ef5450</color>
 </resources>

@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.ip_tv.ipsat.data.local.entity.MovieBookmark
 import com.ip_tv.ipsat.data.remote.CastResponse
 import com.ip_tv.ipsat.data.remote.IMDBScraping
+import com.ip_tv.ipsat.data.remote.PhotosResponse
 import com.ip_tv.ipsat.data.remote.extractViId
 import com.ip_tv.ipsat.domain.model.Movie
 import com.ip_tv.ipsat.domain.model.SearchResults
@@ -18,6 +19,7 @@ import com.ip_tv.ipsat.domain.repository.MovieBookmarkRepository
 import com.ip_tv.ipsat.utils.hasConnection
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -44,6 +46,8 @@ class DetailViewModel @Inject constructor(
 
     val isBookmarkResponse: MutableLiveData<Boolean> = _isBookmarkResponse
 
+    var photosResponse: MutableLiveData<PhotosResponse> = MutableLiveData()
+
     private val _searchResult: MutableLiveData<Resource<ArrayList<Movie>>> = MutableLiveData()
     val searchResult: MutableLiveData<Resource<ArrayList<Movie>>> = _searchResult
     val trailerUrl = MutableLiveData<Pair<String, String>>()
@@ -60,7 +64,9 @@ class DetailViewModel @Inject constructor(
             trailerUrl.postValue(
                 Pair(trailerUrll.first, trailerMasterUrl)
             )
-
+            photosResponse.postValue(
+                trailerUrll.third
+            )
         }
     }
 
@@ -79,6 +85,7 @@ class DetailViewModel @Inject constructor(
     suspend fun getCurrentBookmarkById(id: Int): MovieBookmark {
         return movieBookmarkRepo.getAllBookmarks().find { it.id == id }!!
     }
+
     fun checkBookmark(id: Int) {
         viewModelScope.launch {
             _isBookmarkResponse.postValue(
@@ -86,7 +93,6 @@ class DetailViewModel @Inject constructor(
             )
         }
     }
-
 
 
     fun getSearchResult(query: String, year: String) {

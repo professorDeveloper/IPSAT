@@ -9,6 +9,11 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.db.williamchart.data.Scale
+import com.github.mikephil.charting.components.YAxis
+import com.github.mikephil.charting.data.BarData
+import com.github.mikephil.charting.data.BarDataSet
+import com.github.mikephil.charting.data.BarEntry
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.PlaybackException
@@ -26,12 +31,16 @@ import com.ip_tv.ipsat.databinding.DetailScreenBinding
 import com.ip_tv.ipsat.domain.model.Movie
 import com.ip_tv.ipsat.presentation.activities.PlayerActivity
 import com.ip_tv.ipsat.presentation.adapters.CastDetailAdapter
+import com.ip_tv.ipsat.presentation.adapters.HorizontalItemDecoration
 import com.ip_tv.ipsat.presentation.adapters.MovieAdapter
+import com.ip_tv.ipsat.presentation.adapters.ScreenshotsAdapter
 import com.ip_tv.ipsat.presentation.viewmodel.DetailViewModel
 import com.ip_tv.ipsat.utils.BaseFragment
 import com.ip_tv.ipsat.utils.DialogUtils
+import com.ip_tv.ipsat.utils.ImageUtil
 import com.ip_tv.ipsat.utils.animationTransaction
 import com.ip_tv.ipsat.utils.animationTransactionClearStack
+import com.ip_tv.ipsat.utils.formatToK
 import com.ip_tv.ipsat.utils.gone
 import com.ip_tv.ipsat.utils.hideSystemBars
 import com.ip_tv.ipsat.utils.invisible
@@ -48,6 +57,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.net.ssl.SSLContext
+import kotlin.random.Random
 
 @AndroidEntryPoint
 class DetailScreen : BaseFragment<DetailScreenBinding>(DetailScreenBinding::inflate) {
@@ -96,6 +106,7 @@ class DetailScreen : BaseFragment<DetailScreenBinding>(DetailScreenBinding::infl
         loadData(movie)
         observeData()
         setUpDetailSecondTypeDatas()
+        loadPhotos()
     }
 
     private fun setUpDetailSecondTypeDatas() {
@@ -211,7 +222,6 @@ class DetailScreen : BaseFragment<DetailScreenBinding>(DetailScreenBinding::infl
         model.searchResult.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
-                    binding.maybeYouLikeProgressBar.gone()
                     val adapter = MovieAdapter(this)
                     adapter.setItemClickListener {
                         loadingDialog.show()
@@ -246,12 +256,10 @@ class DetailScreen : BaseFragment<DetailScreenBinding>(DetailScreenBinding::infl
                 }
 
                 is Resource.Error -> {
-                    binding.maybeYouLikeProgressBar.gone()
                     showSnack(binding.root, it.throwable.message.toString())
                 }
 
                 is Resource.Loading -> {
-                    binding.maybeYouLikeProgressBar.visible()
                 }
 
                 else -> {}
@@ -261,7 +269,6 @@ class DetailScreen : BaseFragment<DetailScreenBinding>(DetailScreenBinding::infl
         model.movieDetailResponse.observe(this) { vodMovie ->
             when (vodMovie) {
                 is Resource.Success -> {
-
                     binding.materialButton.visible()
                     vodMovie.data?.let { videos ->
                         if (videos.urlobj.isNotEmpty()) {
@@ -291,6 +298,8 @@ class DetailScreen : BaseFragment<DetailScreenBinding>(DetailScreenBinding::infl
                             binding.materialButton.setTextColor(requireActivity().getColor(R.color.map_red))
                         }
                     }
+                    layoutStatus()
+                    loadRatingLayout()
                 }
 
                 is Resource.Error -> {
@@ -307,6 +316,91 @@ class DetailScreen : BaseFragment<DetailScreenBinding>(DetailScreenBinding::infl
 
     }
 
+    @SuppressLint("SetTextI18n")
+    private fun loadRatingLayout() {
+
+        // Fake random data yaratish
+        val data = listOf(
+            "Watching" to Random.nextInt(20, 100).toFloat(),
+            "Completed" to Random.nextInt(20, 100).toFloat(),
+            "Plan to Watch" to Random.nextInt(20, 100).toFloat(),
+            "On Hold" to Random.nextInt(20, 100).toFloat(),
+            "Dropped" to Random.nextInt(20, 100).toFloat()
+        )
+        with(binding.ratingView) {
+            val movie = requireArguments().getSerializable("movie") as Movie
+            tvRating.text = (movie.rating ?: Random.nextFloat().toString()).toString()
+            llRating.visibility = View.VISIBLE
+            horizontalBar.scale = Scale(0F, 125F)
+            horizontalBar.animate(data)
+            tvNumScoringUsers.text = "${Random.nextInt(100)} K users"
+        }
+    }
+
+    fun layoutStatus() {
+        with(binding.statusView) {
+            llStatus.visibility = View.VISIBLE
+            horizontalBarChart.setTouchEnabled(false)
+
+            val watching = Random.nextInt(5000, 100000)
+            val completed = Random.nextInt(5000, 100000)
+            val planToWatch = Random.nextInt(5000, 100000)
+            val onHold = Random.nextInt(5000, 100000)
+            val dropped = Random.nextInt(5000, 100000)
+
+            tvWatching.text = watching.formatToK()
+            tvCompleted.text = completed.formatToK()
+            tvPlanToWatch.text = planToWatch.formatToK()
+            tvOnHold.text = onHold.formatToK()
+            tvDropped.text = dropped.formatToK()
+
+            val amounts = floatArrayOf(
+                watching.toFloat(),
+                completed.toFloat(),
+                planToWatch.toFloat(),
+                onHold.toFloat(),
+                dropped.toFloat()
+            )
+
+            val barEntry = ArrayList<BarEntry>()
+            barEntry.add(BarEntry(0f, amounts))
+
+            val colors: IntArray = intArrayOf(
+                requireActivity().getColor(R.color.watching),
+                requireActivity().getColor(R.color.completed),
+                requireActivity().getColor(R.color.planToWatch),
+                requireActivity().getColor(R.color.onHold),
+                requireActivity().getColor(R.color.dropped)
+            )
+
+            val barDataSet = BarDataSet(barEntry, "User Status")
+            barDataSet.colors = colors.toList()
+            barDataSet.setDrawIcons(false)
+            barDataSet.setDrawValues(true)
+
+            val barData = BarData(barDataSet)
+            barData.barWidth = 0.9F
+
+            horizontalBarChart.apply {
+                description.isEnabled = false
+                axisLeft.isEnabled = false
+                axisRight.isEnabled = false
+                xAxis.isEnabled = false
+                legend.isEnabled = false
+                setScaleEnabled(false)
+                setDrawBarShadow(false)
+                setDrawGridBackground(false)
+                axisLeft.axisMinimum = 0F
+                axisLeft.axisMaximum = amounts.maxOrNull() ?: 100F
+                setViewPortOffsets(0F, 0F, 0F, 0F)
+                moveViewTo(0f, 0f, YAxis.AxisDependency.LEFT)
+                data = barData
+                invalidate()
+            }
+        }
+    }
+
+
     private fun loadCastData(cast: CastResponse) {
         val castDetailAdapter = CastDetailAdapter()
         binding.textCast.visible()
@@ -315,6 +409,36 @@ class DetailScreen : BaseFragment<DetailScreenBinding>(DetailScreenBinding::infl
         castDetailAdapter.submitList(cast.cast)
         castDetailAdapter.setItemClickListener {
 
+        }
+    }
+
+    private fun loadPhotos() {
+        model.photosResponse.observe(viewLifecycleOwner) { photos ->
+            // screenshots
+            if (photos.photos.isNotEmpty()) {
+                val screenshotsAdapter =
+                    ScreenshotsAdapter(requireContext())
+                with(screenshotsAdapter) {
+                    submitList(photos.photos)
+                    onScreenshotClick = { view, item, position ->
+                        ImageUtil.showFullScreenImage(
+                            binding.root.context,
+                            photos.photos.map {
+                                it.imageUrl
+                            } as ArrayList<String>,
+                            view,
+                            position = position
+                        )
+                    }
+                }
+                with(binding.screenshotsView) {
+                    rrScreenshots.adapter = screenshotsAdapter
+                    llScreenshots.visibility = View.VISIBLE
+                }
+            } else {
+                binding.screenshotsView.root.visibility =
+                    View.GONE
+            }
         }
     }
 
