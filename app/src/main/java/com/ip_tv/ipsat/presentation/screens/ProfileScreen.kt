@@ -24,7 +24,9 @@ import androidx.navigation.fragment.findNavController
 import com.ip_tv.ipsat.R
 import com.ip_tv.ipsat.databinding.ProfileScreenBinding
 import com.ip_tv.ipsat.domain.preference.UserPreferenceManager
+import com.ip_tv.ipsat.presentation.activities.LoginActivity
 import com.ip_tv.ipsat.presentation.activities.SettingActivity
+import com.ip_tv.ipsat.presentation.dialogs.ExitDialog
 import com.ip_tv.ipsat.presentation.viewmodel.ProfileViewModel
 import com.ip_tv.ipsat.utils.BaseFragment
 import com.ip_tv.ipsat.utils.animationTransaction
@@ -51,6 +53,7 @@ class ProfileScreen : BaseFragment<ProfileScreenBinding>(ProfileScreenBinding::i
         observeModel()
     }
 
+    @SuppressLint("SetTextI18n")
     private fun observeModel() {
         val userPreferenceManager = UserPreferenceManager(requireContext())
         profileViewModel.userDetail.observe(this) {
@@ -66,21 +69,16 @@ class ProfileScreen : BaseFragment<ProfileScreenBinding>(ProfileScreenBinding::i
 
                 is Resource.Success -> {
                     binding.swipeRefreshLayout.isRefreshing = false
-                    binding.subscriptionCodeTxt.text = userPreferenceManager.subCode
-                    binding.macAddressTxt.text = it.data.macAddress
-                    binding.subscriptionActivatedDateTxt.text =
-                        it.data.activatedAt.toString().toReadableDateTime()
-                    binding.subscriptionEndDateTxt.text =
-                        it.data.endDate.toString().toReadableDateTime()
-                    binding.subscriptionStatusTxt.text = it.data.status
+                    binding.subscriptionInfo.subscriptionCode.text =
+                        userPreferenceManager.subCode.toString()
+                    binding.subscriptionInfo.subscriptionTitle.text = "Status:${it.data.status}"
                     val dateString = it.data.endDate.toString() // i added  test end date
-                    val endDate = "2025-03-19T00:31:17.631Z".toDateFromIso8601()!!
+                    val endDate = dateString.toDateFromIso8601()!!
 
                     val remainingTime = endDate.time - System.currentTimeMillis() + 10000
                     binding.countDownView.mediaCountdownText.text = "Subscription  will be end in"
 
                     object : CountDownTimer(remainingTime, 1000) {
-                        @SuppressLint("SetTextI18n")
                         override fun onTick(millisUntilFinished: Long) {
                             val a = millisUntilFinished / 1000
                             binding.countDownView.mediaCountdown.text =
@@ -88,10 +86,26 @@ class ProfileScreen : BaseFragment<ProfileScreenBinding>(ProfileScreenBinding::i
                         }
 
                         override fun onFinish() {
-//                            binding.countDownView.mediaCountdownContainer.visibility = View.GONE
+                            binding.countDownView.mediaCountdownContainer.visibility = View.GONE
                         }
                     }.start()
 
+                    binding.exitBtn.setOnClickListener { view ->
+                        val dialog = ExitDialog(it.data, userPreferenceManager.subCode.toString())
+                        dialog.setNoClearListener {
+                            dialog.dismiss()
+                        }
+                        dialog.setYesContinueListener {
+                            dialog.dismiss()
+                            userPreferenceManager.subCode = ""
+                            userPreferenceManager.isLogged = false
+                            userPreferenceManager.isLocked = false
+                            val intent = Intent(requireContext(), LoginActivity::class.java)
+                            requireActivity().startActivity(intent)
+                            requireActivity().finish()
+                        }
+                        dialog.show(parentFragmentManager, "ExitDialog")
+                    }
 
                 }
 
@@ -105,17 +119,17 @@ class ProfileScreen : BaseFragment<ProfileScreenBinding>(ProfileScreenBinding::i
         binding.swipeRefreshLayout.setOnRefreshListener {
             profileViewModel.getUserDetail()
         }
-        binding.subscriptionCodeTxt.setOnClickListener {
+        binding.subscriptionInfo.subscriptionCode.setOnClickListener {
             val clipboardManager =
                 requireActivity().getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
-            val textToCopy = binding.subscriptionCodeTxt.text.toString()
+            val textToCopy = binding.subscriptionInfo.subscriptionCode.text.toString()
             val clip = ClipData.newPlainText("Copied Text", textToCopy)
             clipboardManager.setPrimaryClip(clip)
         }
-        binding.subscriptionStatusTxt.setOnClickListener {
+        binding.subscriptionInfo.subscriptionTitle.setOnClickListener {
             val clipboardManager =
                 requireActivity().getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
-            val textToCopy = binding.subscriptionStatusTxt.text.toString()
+            val textToCopy = binding.subscriptionInfo.subscriptionTitle.text.toString()
             val clip = ClipData.newPlainText("Copied Text", textToCopy)
             clipboardManager.setPrimaryClip(clip)
         }

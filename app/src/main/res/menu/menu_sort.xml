@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (C) 2025 Azamov . - All Rights Reserved
+  ~
+  ~ Unauthorized copying or redistribution of this file in source and binary forms via any medium
+  ~ is strictly prohibited.
+  ~
+  -->
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/sort_by_name"
+        android:title="Sort by Name" />
+    <item
+        android:id="@+id/sort_by_date"
+        android:title="Sort by Date" />
+    <item
+        android:id="@+id/sort_by_rating"
+        android:title="Sort by Rating" />
+</menu>

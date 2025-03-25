@@ -29,7 +29,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tableLayout"
+            app:layout_constraintTop_toBottomOf="@+id/infoContainer"
             app:layout_constraintVertical_bias=".06">
 
 
@@ -137,17 +137,11 @@
 
         </LinearLayout>
 
-
-        <TableLayout
-            android:id="@+id/tableLayout"
+        <LinearLayout
+            android:id="@+id/infoContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:clipToPadding="false"
-            android:divider="@drawable/table_row_divider"
-            android:elevation="4dp"
-            android:padding="@dimen/_4sdp"
-            android:showDividers="middle"
-            android:visibility="visible"
+            android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -156,162 +150,12 @@
                 android:id="@+id/countDownView"
                 layout="@layout/item_countdown" />
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingVertical="@dimen/_2sdp">
+            <include
+                android:id="@+id/subscriptionInfo"
+                layout="@layout/subscription_item" />
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/inter_regular"
-                    android:gravity="start"
-                    android:text="Code:"
-                    android:textColor="@color/white_and_black"
-                    android:textSize="@dimen/_12ssp" />
+        </LinearLayout>
 
-                <TextView
-                    android:id="@+id/subscriptionCodeTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_weight="2"
-                    android:clickable="true"
-                    android:ellipsize="end"
-                    android:focusable="true"
-                    android:fontFamily="@font/inter_bold"
-                    android:singleLine="true"
-                    android:text="886601525947"
-                    android:textColor="@color/white_and_black"
-                    android:textSize="@dimen/_13ssp"
-                    android:textStyle="italic" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingVertical="@dimen/_2sdp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/inter_regular"
-                    android:gravity="start"
-                    android:text="Status:"
-                    android:textColor="@color/white_and_black"
-                    android:textSize="@dimen/_12ssp" />
-
-                <TextView
-                    android:id="@+id/subscriptionStatusTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_weight="2"
-                    android:ellipsize="end"
-                    android:fontFamily="@font/inter_bold"
-                    android:singleLine="true"
-                    android:text="Active"
-                    android:textColor="@color/map_green"
-                    android:textSize="@dimen/_13ssp"
-                    android:textStyle="normal" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingVertical="@dimen/_2sdp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/inter_regular"
-                    android:gravity="start"
-                    android:text="Activated Date:"
-                    android:textColor="@color/white_and_black"
-                    android:textSize="@dimen/_12ssp" />
-
-                <TextView
-                    android:id="@+id/subscriptionActivatedDateTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_weight="2"
-                    android:ellipsize="end"
-                    android:fontFamily="@font/inter_bold"
-                    android:singleLine="true"
-                    android:text="2024-12-18"
-                    android:textColor="@color/map_green"
-                    android:textSize="@dimen/_13ssp"
-                    android:textStyle="normal" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingVertical="@dimen/_2sdp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/inter_regular"
-                    android:gravity="start"
-                    android:text="End Date:"
-                    android:textColor="@color/white_and_black"
-                    android:textSize="@dimen/_12ssp" />
-
-                <TextView
-                    android:id="@+id/subscriptionEndDateTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_weight="2"
-                    android:ellipsize="end"
-                    android:fontFamily="@font/inter_bold"
-                    android:singleLine="true"
-                    android:text="2024-12-19"
-                    android:textColor="@color/map_red"
-                    android:textSize="@dimen/_13ssp"
-                    android:textStyle="normal" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingVertical="@dimen/_2sdp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/inter_regular"
-                    android:gravity="start"
-                    android:text="Mac Address:"
-                    android:textColor="@color/white_and_black"
-                    android:textSize="@dimen/_12ssp" />
-
-                <TextView
-                    android:id="@+id/macAddressTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_weight="2"
-                    android:ellipsize="end"
-                    android:fontFamily="@font/inter_bold"
-                    android:singleLine="true"
-                    android:text="a8:25:28:b9:dd:74"
-                    android:textSize="@dimen/_13ssp"
-                    android:textStyle="normal" />
-            </TableRow>
-
-            <com.google.android.material.divider.MaterialDivider
-                android:layout_width="match_parent"
-                android:layout_height="1dp" />
-
-        </TableLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

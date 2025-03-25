@@ -16,5 +16,6 @@ data class MovieBookmark(
     val description: String?,
     val language: String?,
     val rating: Double = 0.0,
-    val release_year: String?
+    val release_year: String?,
+    val isSeries: Boolean = false
 )

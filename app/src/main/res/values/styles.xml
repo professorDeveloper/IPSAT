@@ -91,6 +91,11 @@
         <item name="android:textSize">@dimen/_15ssp</item>
         <item name="android:fontFamily">@font/nunito_bold</item>
     </style>
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/dialog_enter</item>
+        <item name="android:windowExitAnimation">@anim/dialog_exit</item>
+    </style>
+
 
 
 </resources>

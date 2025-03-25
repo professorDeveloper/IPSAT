@@ -9,10 +9,11 @@
 
 
     <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/textView2"
+        android:id="@+id/materialAppBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
+        app:menu="@menu/favorite_menu"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:title="Favorite" />
@@ -27,7 +28,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:layout_constraintTop_toBottomOf="@+id/materialAppBar"
         app:spanCount="3"
         tools:listitem="@layout/item_movie" />
 

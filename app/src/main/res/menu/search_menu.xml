@@ -8,6 +8,6 @@
         android:title="@string/search_hint"
         android:iconTint="@color/white"
         app:iconTint="@color/white"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
 
 </menu>

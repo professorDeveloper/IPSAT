@@ -14,6 +14,7 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.ip_tv.ipsat.R
 import com.ip_tv.ipsat.databinding.ActivityLoginBinding
+import com.ip_tv.ipsat.domain.preference.UserPreferenceManager
 import com.ip_tv.ipsat.presentation.viewmodel.LoginViewModel
 import com.ip_tv.ipsat.utils.AuthState
 import com.ip_tv.ipsat.utils.gone
@@ -28,13 +29,19 @@ import kotlinx.coroutines.launch
 class LoginActivity : AppCompatActivity() {
 
     private val loginModel by viewModels<LoginViewModel>()
+
     private lateinit var binding: ActivityLoginBinding
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+//        val pref =UserPreferenceManager(this)
+//        pref.subCode ="882072073258"
+//        pref.isLogged =true
         setupPhoneDisplay()
         manageButtons()
         observeModel()

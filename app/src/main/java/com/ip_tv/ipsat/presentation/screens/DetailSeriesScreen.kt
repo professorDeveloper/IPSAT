@@ -97,7 +97,8 @@ class DetailSeriesScreen :
                             movie.description,
                             movie.language,
                             movie.rating,
-                            movie.release_year
+                            movie.release_year,
+                            true
                         )
                     )
                     binding.bookmarkAdd.text = "Bookmarked"
@@ -120,7 +121,7 @@ class DetailSeriesScreen :
         )
         with(binding.ratingView) {
             val movie = requireArguments().getSerializable("movie") as Movie
-            tvRating.text = (movie.rating ).toString()
+            tvRating.text = (movie.rating).toString()
             llRating.visibility = View.VISIBLE
             horizontalBar.scale = Scale(0F, 125F)
             horizontalBar.animate(data)
