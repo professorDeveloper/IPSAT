@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">IPSAT</string>
+    <string name="app_name">SATIP</string>
     <string name="version_current">Version %1$s</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="vod_page">VOD Page</string>
@@ -9,8 +9,8 @@
     <string name="filler">Filler \n</string>
     <string name="skip">Skip</string>
     <string name="animations">animations\n\t</string>
-    <string name="lorem">"Unlock unlimited entertainment with our IPSAT  Subscription! Enjoy access to a vast library of movies across various genres, from timeless classics to the latest blockbusters. With new releases every week, you’ll never run out of exciting options to watch. Whether you're into animated films, gripping thrillers, heartwarming dramas, or action-packed adventures, our app has something for everyone. Subscribe now for a seamless movie-watching experience, ad-free, with the ability to watch anytime, anywhere!</string>
-    <string name="support">Want to support the developer of IPSA?</string>
+    <string name="lorem">"Unlock unlimited entertainment with our SATIP  Subscription! Enjoy access to a vast library of movies across various genres, from timeless classics to the latest blockbusters. With new releases every week, you’ll never run out of exciting options to watch. Whether you're into animated films, gripping thrillers, heartwarming dramas, or action-packed adventures, our app has something for everyone. Subscribe now for a seamless movie-watching experience, ad-free, with the ability to watch anytime, anywhere!</string>
+    <string name="support">Want to support the developer of SATIP?</string>
     <string name="donate_goal">Follow Github</string>
     <string name="telegram">https://stc_android</string>
     <string name="github">https://github.com/professorDeveloper</string>

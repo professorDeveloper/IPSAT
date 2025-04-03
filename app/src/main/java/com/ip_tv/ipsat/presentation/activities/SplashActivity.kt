@@ -9,7 +9,9 @@
 package com.ip_tv.ipsat.presentation.activities
 
 import Resource
+import android.app.Dialog
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.enableEdgeToEdge
@@ -22,11 +24,17 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import com.google.android.exoplayer2.DefaultRenderersFactory
+import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.ip_tv.ipsat.R
 import com.ip_tv.ipsat.databinding.ActivitySplashBinding
 import com.ip_tv.ipsat.domain.model.SubscriptionResponse
 import com.ip_tv.ipsat.domain.preference.UserPreferenceManager
 import com.ip_tv.ipsat.presentation.viewmodel.SplashViewModel
+import com.ip_tv.ipsat.utils.DialogUtils
 import com.ip_tv.ipsat.utils.alphaAnim
 import com.ip_tv.ipsat.utils.gone
 import com.ip_tv.ipsat.utils.initActivity
@@ -44,7 +52,7 @@ class SplashActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySplashBinding
     private val model by viewModels<SplashViewModel>()
     @Inject
-     lateinit var userPreferenceManager: UserPreferenceManager
+    lateinit var userPreferenceManager: UserPreferenceManager
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)

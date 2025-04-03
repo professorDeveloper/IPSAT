@@ -14,6 +14,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.OrientationEventListener
 import android.view.View
 import android.view.ViewGroup
@@ -37,13 +38,18 @@ import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.PlaybackParameters
 import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSource
+import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSourceFactory
 import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.dash.DashMediaSource
+import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
 import com.google.android.exoplayer2.ui.TrackSelectionDialogBuilder
+import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource
 import com.google.android.material.snackbar.Snackbar
 import com.ip_tv.ipsat.R
+import com.ip_tv.ipsat.app.App
 import com.ip_tv.ipsat.databinding.ActivityLiveTvBinding
 import com.ip_tv.ipsat.domain.model.ChannelCategoryItem
 import com.ip_tv.ipsat.domain.model.ChannelLinkResponse
@@ -57,6 +63,7 @@ import com.ip_tv.ipsat.utils.hideSystemBars
 import com.ip_tv.ipsat.utils.snackString
 import com.ip_tv.ipsat.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
+import okhttp3.OkHttpClient
 import kotlin.math.min
 
 @AndroidEntryPoint
@@ -171,18 +178,25 @@ class LiveTvActivity : AppCompatActivity(), Player.Listener {
     private fun loadChannel(url: ChannelLinkResponse) {
         val mediaItem =
             MediaItem.Builder().setUri(url.playUrl).setMimeType("application/dash+xml").build()
+        Log.d("GG  COOKIE", "loadChannel: ${url}")
         val dataSourceFactory = DefaultHttpDataSource.Factory().setDefaultRequestProperties(
             mapOf(
                 "Cookie" to "CloudFront-Policy=${url.cloudFrontPolicy}; CloudFront-Signature=${url.cloudFrontSignature}; CloudFront-Key-Pair-Id=${url.cloudFrontKeyPairId}"
             )
         )
+        if (url.cloudFrontPolicy != null && url.cloudFrontSignature != null && url.cloudFrontKeyPairId != null) {
+            val mediaSource = DashMediaSource.Factory(
+                DefaultDashChunkSource.Factory(dataSourceFactory),
+                dataSourceFactory
+            ).createMediaSource(mediaItem)
+            player.setMediaSource(mediaSource)
 
-
-        val mediaSource: MediaSource =
-            DashMediaSource.Factory(dataSourceFactory).createMediaSource(mediaItem)
-
-        player.setMediaSource(mediaSource)
-
+        } else {
+            val mediaSource =
+                DashMediaSource.Factory(SignedCookieDataSourceFactory(url.signedCookie!!))
+                    .createMediaSource(MediaItem.fromUri(url.playUrl))
+            player.setMediaSource(mediaSource)
+        }
         player.prepare()
     }
 
@@ -365,18 +379,18 @@ class LiveTvActivity : AppCompatActivity(), Player.Listener {
     }
 
 
-        private fun initPopupQuality(): Dialog {
+    private fun initPopupQuality(): Dialog {
 
-            val trackSelectionDialogBuilder =
-                TrackSelectionDialogBuilder(this, "Available Qualities", player, C.TRACK_TYPE_VIDEO)
-            trackSelectionDialogBuilder.setTheme(R.style.DialogTheme)
-            trackSelectionDialogBuilder.setTrackNameProvider {
-                if (it.frameRate > 0f) it.height.toString() + "p" else it.height.toString() + "p (fps : N/A)"
-            }
-            val trackDialog = trackSelectionDialogBuilder.build()
-            trackDialog.setOnDismissListener { hideSystemBars() }
-            return trackDialog
+        val trackSelectionDialogBuilder =
+            TrackSelectionDialogBuilder(this, "Available Qualities", player, C.TRACK_TYPE_VIDEO)
+        trackSelectionDialogBuilder.setTheme(R.style.DialogTheme)
+        trackSelectionDialogBuilder.setTrackNameProvider {
+            if (it.frameRate > 0f) it.height.toString() + "p" else it.height.toString() + "p (fps : N/A)"
         }
+        val trackDialog = trackSelectionDialogBuilder.build()
+        trackDialog.setOnDismissListener { hideSystemBars() }
+        return trackDialog
+    }
 
 
     private fun togglePlayPause() {
@@ -489,5 +503,18 @@ class LiveTvActivity : AppCompatActivity(), Player.Listener {
 
     override fun onPause() {
         super.onPause()
+    }
+}
+
+
+class SignedCookieDataSourceFactory(private val signedCookie: String) : DataSource.Factory {
+
+    private val okHttpClient = OkHttpClient()
+
+    override fun createDataSource(): DataSource {
+        return OkHttpDataSource(okHttpClient).apply {
+            Log.d("GGG", "createDataSource: ${signedCookie}")
+            setRequestProperty("Cookie", signedCookie)
+        }
     }
 }

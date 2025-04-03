@@ -64,25 +64,26 @@ class BannerAdapter(
         )
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
         val b = (holder as MediaPageSmallViewHolder).binding
         val media = mediaList?.get(position)
         b.root.setOnClickListener {
-                clickListener.invoke(media!!)
+            clickListener.invoke(media!!)
         }
-        val banner =b.itemCompactBanner
+        val banner = b.itemCompactBanner
         if (media != null) {
             banner.setTransitionGenerator(
-                    RandomTransitionGenerator(
-                        (10000 + 15000 * 700).toLong(),
-                        AccelerateDecelerateInterpolator()
-                    )
+                RandomTransitionGenerator(
+                    (10000 + 15000 * 700).toLong(),
+                    AccelerateDecelerateInterpolator()
                 )
+            )
             val context = banner.context
             if (!(activity).isDestroyed)
                 Glide.with(context as Context)
-                    .load(GlideUrl(media.image ))
+                    .load(GlideUrl(media.image))
                     .diskCacheStrategy(DiskCacheStrategy.ALL).override(400)
                     .apply(RequestOptions.bitmapTransform(BlurTransformation(2, 3)))
                     .into(banner)
@@ -90,7 +91,10 @@ class BannerAdapter(
             b.itemCompactImage.loadImage(media.image)
             b.title.text = media.name
             b.itemCompactScore.text = media.rating.toString()
-            b.itemDescription .text = media.language + " • " + media.release_year + " • " + media.country
+            if (media.language != "" && media.release_year != null) {
+                b.itemDescription.text =
+                    media.language + " • " + media.release_year + " • " + media.country
+            }
 
             @SuppressLint("NotifyDataSetChanged")
             if (position == mediaList!!.size - 2 && viewPager != null) viewPager.post {

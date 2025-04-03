@@ -201,13 +201,16 @@ dependencies {
 
     // Coil
     val coil_version = "1.4.0"
-    implementation ("io.coil-kt:coil:$coil_version")
-    implementation ("io.coil-kt:coil-gif:$coil_version")
-    implementation ("io.coil-kt:coil-svg:$coil_version")
+    implementation("io.coil-kt:coil:$coil_version")
+    implementation("io.coil-kt:coil-gif:$coil_version")
+    implementation("io.coil-kt:coil-svg:$coil_version")
     //
     implementation("com.github.zend10:OverlapImageListView:v1.0.1")
 
 
+    //BugSnag
+    implementation("com.bugsnag:bugsnag-android:6.+")
+    implementation("com.bugsnag:bugsnag-android-performance:1.+")
 
 
 

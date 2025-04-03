@@ -9,7 +9,7 @@ import com.ip_tv.ipsat.data.local.entity.MovieBookmark
 
 @Database(
     entities = [MovieBookmark::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
