@@ -147,8 +147,8 @@ class ChannelCategoryScreen :
                         channelResponseList.addAll(resource.data)
                         channelAdapter.submitList(resource.data)
                         categoryAdapter.setItemCLickListener { selectedItems ->
-                            LocalData.selectedCategory.clear()
-                            LocalData.selectedCategory.addAll(selectedItems)
+                            selectedCategory.clear()
+                            selectedCategory.addAll(selectedItems)
                             val filteredList = resource.data.filterByKeywords(selectedItems)
                             if (selectedItems.isNotEmpty() && filteredList.isNotEmpty()) {
                                 channelAdapter.submitList(

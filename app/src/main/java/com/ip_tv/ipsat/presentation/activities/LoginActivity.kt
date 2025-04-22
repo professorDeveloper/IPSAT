@@ -40,7 +40,7 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 //        val pref =UserPreferenceManager(this)
-//        pref.subCode ="882072073258"
+//        pref.subCode ="403529635562"
 //        pref.isLogged =true
         setupPhoneDisplay()
         manageButtons()

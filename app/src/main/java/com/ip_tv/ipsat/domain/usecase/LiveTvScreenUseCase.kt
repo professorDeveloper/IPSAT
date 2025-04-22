@@ -7,4 +7,5 @@ class LiveTvScreenUseCase @Inject constructor(private val repo: LiveTvRepository
     fun loadCategory() = repo.getLiveTvCategories()
     fun loadSubCategory() = repo.loadAllSubCategory()
     fun loadChannelByCategory(categoryId: Int) = repo.loadChannelByCategory(categoryId)
+    fun getEventChannels() = repo.getEventChannels()
 }

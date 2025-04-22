@@ -9,11 +9,11 @@ import com.ip_tv.ipsat.databinding.PlayerCategoryItemBinding
 import com.ip_tv.ipsat.domain.model.ChannelCategoryItem
 
 class PlayerCategoryAdapter(
-    private val onCategorySelected: (ChannelCategoryItem) -> Unit
+    private val onCategorySelected: (ChannelCategoryItem) -> Unit,
 ) : RecyclerView.Adapter<PlayerCategoryAdapter.PlayerCategoryVh>() {
 
     private val list = ArrayList<ChannelCategoryItem>()
-     var selectedPosition = -1 // Track the selected position
+    var selectedPosition = -1
 
     inner class PlayerCategoryVh(private val binding: PlayerCategoryItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -27,8 +27,7 @@ class PlayerCategoryAdapter(
                     if (isSelected) {
                         setTextColor(context.getColor(R.color.whiteMain))
                         resources.getColor(R.color.colorPrimary)
-                    }
-                    else {
+                    } else {
                         setTextColor(context.getColor(R.color.textLightColor))
                         resources.getColor(R.color.whiteGray)
                     }
@@ -66,7 +65,7 @@ class PlayerCategoryAdapter(
         notifyDataSetChanged()
     }
 
-    fun setDefaultSelected(category: ChannelCategoryItem):Int {
+    fun setDefaultSelected(category: ChannelCategoryItem): Int {
         val index = list.indexOfFirst { it.id == category.id } // Match by ID or unique property
         if (index != -1) {
             selectedPosition = index

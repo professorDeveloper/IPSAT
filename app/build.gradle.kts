@@ -163,7 +163,8 @@ dependencies {
     implementation("com.github.Blatzar:NiceHttp:0.4.4")// So wee Need this Libraries
 
     implementation("org.apache.commons:commons-compress:1.21")
-    val exo_version = "2.19.1"
+
+    val exo_version = "2.17.1"
     implementation("com.google.android.exoplayer:exoplayer:$exo_version")
     implementation("com.google.android.exoplayer:exoplayer-ui:$exo_version")
     implementation("com.google.android.exoplayer:exoplayer-hls:$exo_version")
@@ -211,7 +212,6 @@ dependencies {
     //BugSnag
     implementation("com.bugsnag:bugsnag-android:6.+")
     implementation("com.bugsnag:bugsnag-android-performance:1.+")
-
 
 
 

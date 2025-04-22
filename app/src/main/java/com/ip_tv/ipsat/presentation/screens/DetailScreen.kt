@@ -184,7 +184,7 @@ class DetailScreen : BaseFragment<DetailScreenBinding>(DetailScreenBinding::infl
                     setAudioAttributes(
                         com.google.android.exoplayer2.audio.AudioAttributes.Builder()
                             .setUsage(com.google.android.exoplayer2.C.USAGE_MEDIA)
-                            .setContentType(com.google.android.exoplayer2.C.AUDIO_CONTENT_TYPE_MOVIE)
+                            .setContentType(com.google.android.exoplayer2.C.CONTENT_TYPE_MOVIE)
                             .build(), true
                     )
                     addListener(playerListener)

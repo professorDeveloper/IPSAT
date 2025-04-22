@@ -24,6 +24,7 @@ import com.google.android.exoplayer2.source.LoadEventInfo
 import com.google.android.exoplayer2.source.MediaLoadData
 import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
+import com.google.android.exoplayer2.source.TrackGroup
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource
 import com.google.android.exoplayer2.upstream.cache.CacheDataSource
@@ -66,7 +67,7 @@ class PlayerViewModelSeries @Inject constructor(
 
     private var qualityMapUnsorted: MutableMap<String, Int> = mutableMapOf()
     var qualityMapSorted: MutableMap<String, Int> = mutableMapOf()
-    var qualityTrackGroup: com.google.android.exoplayer2.Tracks.Group? = null
+    var qualityTrackGroup: TrackGroup? = null
     var nexEppVod: MutableLiveData<VodMovieResponse?> = MutableLiveData()
 
     private var mediaSessionConnector: MediaSessionConnector = MediaSessionConnector(mediaSession)
@@ -211,25 +212,25 @@ class PlayerViewModelSeries @Inject constructor(
                 }
             }
 
-            override fun onTracksChanged(tracks: com.google.android.exoplayer2.Tracks) {
-                // Update UI using current tracks.
-                for (trackGroup in tracks.groups) {
-                    // Group level information.
-                    if (trackGroup.type == C.TRACK_TYPE_VIDEO) {
-                        for (i in 0 until trackGroup.length) {
-                            val trackFormat = trackGroup.getTrackFormat(i).height
-                            if (trackGroup.isTrackSupported(i) && trackGroup.isTrackSelected(i)) {
-                                qualityMapUnsorted["${trackFormat}p"] = i
-                            }
-                        }
-                        qualityMapUnsorted.entries.sortedBy { it.key.replace("p", "").toInt() }
-                            .reversed().forEach { qualityMapSorted[it.key] = it.value }
-
-                        qualityTrackGroup = trackGroup
-                    }
-
-                }
-            }
+//            override fun onTracksChanged(tracks: com.google.android.exoplayer2.Tracks) {
+//                // Update UI using current tracks.
+//                for (trackGroup in tracks.groups) {
+//                    // Group level information.
+//                    if (trackGroup.type == C.TRACK_TYPE_VIDEO) {
+//                        for (i in 0 until trackGroup.length) {
+//                            val trackFormat = trackGroup.getTrackFormat(i).height
+//                            if (trackGroup.isTrackSupported(i) && trackGroup.isTrackSelected(i)) {
+//                                qualityMapUnsorted["${trackFormat}p"] = i
+//                            }
+//                        }
+//                        qualityMapUnsorted.entries.sortedBy { it.key.replace("p", "").toInt() }
+//                            .reversed().forEach { qualityMapSorted[it.key] = it.value }
+//
+//                        qualityTrackGroup = trackGroup
+//                    }
+//
+//                }
+//            }
         }
 
     }

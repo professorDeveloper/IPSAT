@@ -3,6 +3,7 @@ package com.ip_tv.ipsat.data.remote
 import com.ip_tv.ipsat.domain.model.ChannelCategory
 import com.ip_tv.ipsat.domain.model.ChannelLinkResponse
 import com.ip_tv.ipsat.domain.model.ChannelResponse
+import com.ip_tv.ipsat.domain.model.EventModel
 import com.ip_tv.ipsat.domain.model.SubCategory
 import org.jsoup.select.Evaluator.Id
 import retrofit2.Response
@@ -24,8 +25,7 @@ interface LiveTvService {
 
     @GET("Channels/")
     suspend fun getChannels(
-        @Query("category_id") categoryId: Int,
-        @Query("subscription_code") subscriptionCode: String
+        @Query("category_id") categoryId: Int, @Query("subscription_code") subscriptionCode: String
     ): Response<ChannelResponse>
 
     @GET("get_signed_play_url/")
@@ -33,4 +33,9 @@ interface LiveTvService {
         @Query("subscription_code") subscriptionCode: String,
         @Query("channel_id") channelId: Int,
     ): Response<ChannelLinkResponse>
+
+    @GET("events/")
+    suspend fun getEventsChannels(
+        @Query("subscription_code") subscriptionCode: String,
+    ): Response<EventModel>
 }

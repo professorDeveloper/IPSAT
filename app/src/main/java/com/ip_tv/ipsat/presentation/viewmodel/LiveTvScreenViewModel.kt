@@ -9,6 +9,7 @@ import com.ip_tv.ipsat.data.repository.LiveTvRepositoryImpl
 import com.ip_tv.ipsat.domain.model.ChannelCategory
 import com.ip_tv.ipsat.domain.model.ChannelLinkResponse
 import com.ip_tv.ipsat.domain.model.ChannelResponse
+import com.ip_tv.ipsat.domain.model.EventModel
 import com.ip_tv.ipsat.domain.model.SubCategory
 import com.ip_tv.ipsat.domain.usecase.LiveTvScreenUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -33,6 +34,21 @@ class LiveTvScreenViewModel @Inject constructor(
 
     private val _animeLink = MutableLiveData<ChannelLinkResponse>()
     val animeLink get() = _animeLink
+
+    private val _eventChannelsData = MutableLiveData<Resource<EventModel>>()
+    val eventChannelsData = _eventChannelsData
+
+    fun loadEventChannels() {
+        repo.getEventChannels().onEach {
+            it.onSuccess {
+                _eventChannelsData.value = Resource.Success(it)
+            }
+            it.onFailure {
+                _eventChannelsData.value = Resource.Error(Exception(it.message))
+            }
+        }.launchIn(viewModelScope)
+    }
+
 
 
     fun loadChannelUrl(channelId: String) {

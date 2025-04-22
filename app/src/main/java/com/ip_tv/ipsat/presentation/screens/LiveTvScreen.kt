@@ -43,6 +43,7 @@ class LiveTvScreen : BaseFragment<LiveTvScreenBinding>(LiveTvScreenBinding::infl
 
         if (!isBannerLoaded) {
             model.loadCategory()
+            model.loadEventChannels()
         }
         observeCategory()
 
@@ -104,23 +105,39 @@ class LiveTvScreen : BaseFragment<LiveTvScreenBinding>(LiveTvScreenBinding::infl
             model.tvCategory.flowWithLifecycle(lifecycle, Lifecycle.State.STARTED).collect {
                 when (it) {
                     is Resource.Success -> {
-                        binding.mainViewPager2.visible()
-                        LocalData.setDataHaveListener {
-                            val menuItem = binding.toolbar.menu.findItem(R.id.action_search)
-                            menuItem.isVisible = it
+                        model.eventChannelsData.observe(viewLifecycleOwner) { dataEvent ->
+                            when (dataEvent) {
+                                is Resource.Success -> {
+                                    binding.mainViewPager2.visible()
+                                    LocalData.setDataHaveListener {
+                                        val menuItem =
+                                            binding.toolbar.menu.findItem(R.id.action_search)
+                                        menuItem.isVisible = it
+                                    }
+                                    binding.tabLayout.visible()
+                                    setupSearchView(binding.toolbar.menu)
+                                    binding.progressBar.gone()
+                                    if (binding.mainViewPager2.adapter == null) {
+                                        binding.mainViewPager2.adapter =
+                                            TabAdapter(
+                                                it.data,
+                                                it.data,
+                                                eventList = dataEvent.data, requireActivity()
+                                            )
+                                        TabLayoutMediator(
+                                            binding.tabLayout,
+                                            binding.mainViewPager2
+                                        ) { _, _ ->
+                                        }.attach()
+                                        setTab(it.data)
+                                        binding.mainViewPager2.isUserInputEnabled = false
+                                    }
+                                    isBannerLoaded = true
+                                }
+
+                                else -> {}
+                            }
                         }
-                        binding.tabLayout.visible()
-                        setupSearchView(binding.toolbar.menu)
-                        binding.progressBar.gone()
-                        if (binding.mainViewPager2.adapter == null) {
-                            binding.mainViewPager2.adapter =
-                                TabAdapter(it.data, it.data, requireActivity())
-                            TabLayoutMediator(binding.tabLayout, binding.mainViewPager2) { _, _ ->
-                            }.attach()
-                            setTab(it.data)
-                            binding.mainViewPager2.isUserInputEnabled = false
-                        }
-                        isBannerLoaded = true
                     }
 
                     is Resource.Error -> {

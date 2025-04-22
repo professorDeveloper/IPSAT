@@ -3,7 +3,7 @@ package com.ip_tv.ipsat.domain.model
 import java.io.Serializable
 
 data class ChannelResponseItem(
-    val audioList: String,
+    val audioList: String?,
     val category: Int,
     val categoryProperty: String,
     val country: String,
@@ -14,3 +14,5 @@ data class ChannelResponseItem(
     val name: String,
     val scheduleListUrl: String
 ) : Serializable
+
+

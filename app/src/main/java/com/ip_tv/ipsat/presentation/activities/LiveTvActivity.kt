@@ -1,5 +1,6 @@
 package com.ip_tv.ipsat.presentation.activities
 
+import Resource
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.AppOpsManager
@@ -14,6 +15,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Base64
 import android.util.Log
 import android.view.OrientationEventListener
 import android.view.View
@@ -34,26 +36,42 @@ import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.exoplayer2.C
+import com.google.android.exoplayer2.DefaultLoadControl
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.MediaMetadata
 import com.google.android.exoplayer2.PlaybackParameters
 import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.drm.DefaultDrmSessionManager
+import com.google.android.exoplayer2.drm.FrameworkMediaDrm
+import com.google.android.exoplayer2.drm.LocalMediaDrmCallback
 import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSource
 import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSourceFactory
+import com.google.android.exoplayer2.source.DefaultMediaSourceFactory
 import com.google.android.exoplayer2.source.MediaSource
+import com.google.android.exoplayer2.source.dash.DashChunkSource
 import com.google.android.exoplayer2.source.dash.DashMediaSource
 import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource
+import com.google.android.exoplayer2.source.hls.HlsMediaSource
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
 import com.google.android.exoplayer2.ui.TrackSelectionDialogBuilder
 import com.google.android.exoplayer2.upstream.DataSource
+import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter
+import com.google.android.exoplayer2.upstream.DefaultDataSource
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource
+import com.google.android.exoplayer2.util.MimeTypes
 import com.google.android.material.snackbar.Snackbar
 import com.ip_tv.ipsat.R
 import com.ip_tv.ipsat.app.App
+import com.ip_tv.ipsat.data.local.mapper.toChannelsResponse
+import com.ip_tv.ipsat.data.local.mapper.toEventModelItem
 import com.ip_tv.ipsat.databinding.ActivityLiveTvBinding
 import com.ip_tv.ipsat.domain.model.ChannelCategoryItem
 import com.ip_tv.ipsat.domain.model.ChannelLinkResponse
 import com.ip_tv.ipsat.domain.model.ChannelResponseItem
+import com.ip_tv.ipsat.domain.model.EventModel
+import com.ip_tv.ipsat.domain.model.EventModelItem
 import com.ip_tv.ipsat.presentation.adapters.CustomAdapter
 import com.ip_tv.ipsat.presentation.adapters.PlayerCategoryAdapter
 import com.ip_tv.ipsat.presentation.adapters.PlayerChannelAdapter
@@ -96,6 +114,7 @@ class LiveTvActivity : AppCompatActivity(), Player.Listener {
     private lateinit var videoInfo: TextView
     private lateinit var serverInfo: TextView
     private var isNormal = true
+    private lateinit var trackSelector: DefaultTrackSelector
 
     var rotation = 0
 
@@ -103,9 +122,7 @@ class LiveTvActivity : AppCompatActivity(), Player.Listener {
         super.onCreate(savedInstanceState)
         binding = ActivityLiveTvBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P &&
-            resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-        ) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             window.attributes.layoutInDisplayCutoutMode =
                 WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
         }
@@ -114,10 +131,21 @@ class LiveTvActivity : AppCompatActivity(), Player.Listener {
             finishAndRemoveTask()
         }
         parseIntentData()
+        trackSelector = DefaultTrackSelector(this)
         setupPlayer()
         setupUI()
-        viewModel.loadChannelsByCategory(currentCategory!!.id)
-        viewModel.loadChannelUrl(selectedChannel.id.toInt().toString())
+        val hasChannels =
+            eventList.find { it.category == currentCategory?.id && it.id == selectedChannel.id }
+        Log.d("GGG", "onCreate:${hasChannels == null} ")
+        if (hasChannels == null) {
+            viewModel.loadChannelsByCategory(currentCategory!!.id)
+            viewModel.loadChannelUrl(selectedChannel.id.toInt().toString())
+        } else {
+            Log.d("GGG", "onCreate:Tuwdii ")
+            viewModel.loadEventChannels()
+            loadEventChannel(selectedChannel.toEventModelItem())
+        }
+
         setupRecyclerViews()
         observeViewModel()
     }
@@ -157,7 +185,7 @@ class LiveTvActivity : AppCompatActivity(), Player.Listener {
     }
 
     private fun setupPlayer() {
-        player = ExoPlayer.Builder(this).build().apply {
+        player = ExoPlayer.Builder(this).setTrackSelector(trackSelector).build().apply {
             binding.player.player = this
             playWhenReady = true
         }
@@ -175,6 +203,81 @@ class LiveTvActivity : AppCompatActivity(), Player.Listener {
         videoName.text = quality
     }
 
+    private fun String.hexToBase64(): String {
+        val bytes = ByteArray(length / 2) { index ->
+            substring(index * 2, index * 2 + 2).toInt(16).toByte()
+        }
+        return Base64.encodeToString(bytes, Base64.NO_WRAP)
+    }
+
+    private fun loadEventChannel(data: EventModelItem) {
+        Log.d("GGG", "loadEventChannel:${data.clearkey} ")
+        if (data.clearkey != null) {
+            Log.d("GGG", "loadEventChannel:${data.clearkey.toString().equals("Null")} ")
+            if (!data.clearkey.toString().equals("Null")) {
+                val (drmKeyId, drmKey) = data.clearkey.split(":", limit = 2).let {
+                    it.takeIf { it.size == 2 } ?: error("Invalid clearkey format")
+                }
+                val mpdUrl = data.play_url
+                val drmKeyBytes = drmKey.chunked(2).map { it.toInt(16).toByte() }.toByteArray()
+                val encodedDrmKey = Base64.encodeToString(
+                    drmKeyBytes, Base64.URL_SAFE or Base64.NO_PADDING or Base64.NO_WRAP
+                )
+
+                val drmKeyIdBytes =
+                    drmKeyId.chunked(2).map { it.toInt(16).toByte() }.toByteArray()
+                val encodedDrmKeyId = Base64.encodeToString(
+                    drmKeyIdBytes, Base64.URL_SAFE or Base64.NO_PADDING or Base64.NO_WRAP
+                )
+                val drmBody = """
+        {
+          "keys": [
+            {
+              "kty": "oct",
+              "k": "$encodedDrmKey",
+              "kid": "$encodedDrmKeyId"
+            }
+          ],
+          "type": "temporary"
+        }
+    """.trimIndent()
+
+                val dashMediaItem =
+                    MediaItem.Builder().setUri(mpdUrl).setMimeType(MimeTypes.APPLICATION_MPD)
+                        .setMediaMetadata(
+                            MediaMetadata.Builder().setTitle("ClearKey Playback").build()
+                        ).build()
+
+
+                val drmCallback = LocalMediaDrmCallback(drmBody.toByteArray())
+                val drmSessionManager =
+                    DefaultDrmSessionManager.Builder().setPlayClearSamplesWithoutKeys(true)
+                        .setMultiSession(false).setKeyRequestParameters(HashMap())
+                        .setUuidAndExoMediaDrmProvider(
+                            C.CLEARKEY_UUID,
+                            FrameworkMediaDrm.DEFAULT_PROVIDER
+                        )
+                        .build(drmCallback)
+
+                val mediaSource =
+                    DefaultMediaSourceFactory(this).setDrmSessionManagerProvider { drmSessionManager }
+                        .createMediaSource(dashMediaItem)
+
+                player.setMediaSource(mediaSource)
+                player.prepare()
+            } else {
+                val mediaItem = MediaItem.fromUri(data.play_url)
+                val mediaSource = HlsMediaSource.Factory(
+                    DefaultHttpDataSource.Factory()
+                ).createMediaSource(mediaItem)
+                player.setMediaSource(mediaSource)
+                player.prepare()
+            }
+
+        }
+    }
+
+
     private fun loadChannel(url: ChannelLinkResponse) {
         val mediaItem =
             MediaItem.Builder().setUri(url.playUrl).setMimeType("application/dash+xml").build()
@@ -186,8 +289,7 @@ class LiveTvActivity : AppCompatActivity(), Player.Listener {
         )
         if (url.cloudFrontPolicy != null && url.cloudFrontSignature != null && url.cloudFrontKeyPairId != null) {
             val mediaSource = DashMediaSource.Factory(
-                DefaultDashChunkSource.Factory(dataSourceFactory),
-                dataSourceFactory
+                DefaultDashChunkSource.Factory(dataSourceFactory), dataSourceFactory
             ).createMediaSource(mediaItem)
             player.setMediaSource(mediaSource)
 
@@ -228,15 +330,13 @@ class LiveTvActivity : AppCompatActivity(), Player.Listener {
 
 
         exoSpeed.setOnClickListener {
-            val builder =
-                AlertDialog.Builder(this, R.style.DialogTheme)
+            val builder = AlertDialog.Builder(this, R.style.DialogTheme)
             builder.setTitle("Speed")
 
 
             val speed = arrayOf("0.25", "0.5", "Normal", "1.5", "2")
             val adapter = CustomAdapter(
-                this,
-                speed
+                this, speed
             )
             builder.setAdapter(adapter) { dad, which ->
                 window.setFlags(
@@ -371,8 +471,7 @@ class LiveTvActivity : AppCompatActivity(), Player.Listener {
 
     private fun toggleScreenOrientation() {
         requestedOrientation = when (requestedOrientation) {
-            ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE,
-            ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE -> ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
+            ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE, ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE -> ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
 
             else -> ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
         }
@@ -380,18 +479,24 @@ class LiveTvActivity : AppCompatActivity(), Player.Listener {
 
 
     private fun initPopupQuality(): Dialog {
+        val mappedInfo = trackSelector.currentMappedTrackInfo
+            ?: throw IllegalStateException("Tracks not yet available")
 
-        val trackSelectionDialogBuilder =
-            TrackSelectionDialogBuilder(this, "Available Qualities", player, C.TRACK_TYPE_VIDEO)
-        trackSelectionDialogBuilder.setTheme(R.style.DialogTheme)
-        trackSelectionDialogBuilder.setTrackNameProvider {
-            if (it.frameRate > 0f) it.height.toString() + "p" else it.height.toString() + "p (fps : N/A)"
+        val rendererIndex =
+            (0 until mappedInfo.rendererCount).first { mappedInfo.getRendererType(it) == C.TRACK_TYPE_VIDEO }
+
+        val builder = TrackSelectionDialogBuilder(
+            this, "Available Qualities", trackSelector, rendererIndex
+        )
+        builder.setTheme(R.style.DialogTheme)
+        builder.setTrackNameProvider { format ->
+            if (format.frameRate > 0f) "${format.height}p @${format.frameRate.toInt()}fps"
+            else "${format.height}p"
         }
-        val trackDialog = trackSelectionDialogBuilder.build()
-        trackDialog.setOnDismissListener { hideSystemBars() }
-        return trackDialog
+        val dialog = builder.build()
+        dialog.setOnDismissListener { hideSystemBars() }
+        return dialog
     }
-
 
     private fun togglePlayPause() {
         if (player.isPlaying) {
@@ -405,14 +510,30 @@ class LiveTvActivity : AppCompatActivity(), Player.Listener {
 
     private fun setupRecyclerViews() {
         categoryAdapter = PlayerCategoryAdapter { category ->
-            viewModel.loadChannelsByCategory(category.id)
+            val hasChannels = eventList.find { it.category == category.id }
+            if (hasChannels == null) {
+                currentCategory = category
+                viewModel.loadChannelsByCategory(category.id)
+            } else {
+                currentCategory = category
+                viewModel.loadEventChannels()
+            }
         }
 
         channelAdapter = PlayerChannelAdapter()
         channelAdapter.setItemChannelClickListener { channel ->
-            selectedChannel = channel
-            viewModel.loadChannelUrl(selectedChannel.id.toInt().toString())
-            toggleSidebar(false)
+            val hasChannels =
+                eventList.find { it.category == currentCategory?.id && it.id == selectedChannel.id }
+            if (hasChannels == null) {
+                selectedChannel = channel
+                viewModel.loadChannelUrl(selectedChannel.id.toInt().toString())
+                toggleSidebar(false)
+            } else {
+                selectedChannel = channel
+                setUpName()
+                loadEventChannel(channel.toEventModelItem())
+                toggleSidebar(false)
+            }
         }
 
         binding.rvCategories.apply {
@@ -440,6 +561,37 @@ class LiveTvActivity : AppCompatActivity(), Player.Listener {
                 else -> {}
             }
         }
+        viewModel.eventChannelsData.observe(this) { resource ->
+            when (resource) {
+                is Resource.Success -> {
+                    updateChannelEventList(resource.data)
+                }
+
+                is Resource.Loading -> {
+                    showLoadingState()
+                }
+
+                is Resource.Error -> {
+                    showErrorState(resource.throwable.message)
+                }
+
+                else -> {}
+            }
+        }
+    }
+
+    private fun updateChannelEventList(channels: List<EventModelItem>) {
+        val newCategory = channels.toChannelsResponse()
+        val updatedList = newCategory.filter {
+            it.category == currentCategory!!.id
+        }
+        channelAdapter.submitList(updatedList as ArrayList<ChannelResponseItem>)
+        binding.rvChannels.visible()
+        binding.progressChannel.gone()
+        binding.placeHolder.visibility = if (channels.isEmpty()) View.VISIBLE else View.GONE
+        channelAdapter.clearSelection()
+        val defaultChannelPosition = channelAdapter.setDefaultSelected(selectedChannel)
+        binding.rvChannels.scrollToPosition(defaultChannelPosition)
     }
 
     private fun updateChannelList(channels: List<ChannelResponseItem>) {
@@ -481,13 +633,18 @@ class LiveTvActivity : AppCompatActivity(), Player.Listener {
     companion object {
         private const val EXTRA_CHANNEL_DATA = "EXTRA_CHANNEL_DATA"
         var categoryList: ArrayList<ChannelCategoryItem> = arrayListOf()
+        var eventList: ArrayList<EventModelItem> = arrayListOf()
         var currentCategory: ChannelCategoryItem? = null
-
         fun newIntent(context: Context, currentChannel: ChannelResponseItem): Intent {
             return Intent(context, LiveTvActivity::class.java).apply {
                 putExtra(EXTRA_CHANNEL_DATA, currentChannel)
             }
         }
+//        fun newIntent(context: Context, currentChannel: ): Intent {
+//            return Intent(context, LiveTvActivity::class.java).apply {
+//                putExtra(EXTRA_CHANNEL_DATA, currentChannel)
+//            }
+//        }
     }
 
     override fun onResume() {

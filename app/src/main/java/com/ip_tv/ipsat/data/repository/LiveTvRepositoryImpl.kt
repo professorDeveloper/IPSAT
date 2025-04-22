@@ -5,6 +5,7 @@ import com.ip_tv.ipsat.domain.model.ChannelCategory
 import com.ip_tv.ipsat.domain.model.ChannelLinkResponse
 import com.ip_tv.ipsat.domain.model.ChannelResponse
 import com.ip_tv.ipsat.domain.model.ErrorResponse
+import com.ip_tv.ipsat.domain.model.EventModel
 import com.ip_tv.ipsat.domain.model.SubCategory
 import com.ip_tv.ipsat.domain.preference.UserPreferenceManager
 import com.ip_tv.ipsat.domain.repository.LiveTvRepository
@@ -68,4 +69,19 @@ class LiveTvRepositoryImpl @Inject constructor(
             emit(Result.failure(Exception(errorResponse.message)))
         }
     }.flowOn(Dispatchers.IO)
+
+    override fun getEventChannels() = flow<Result<EventModel>> {
+        val response = liveTvService.getEventsChannels(userPreferenceManager.subCode)
+        if (response.isSuccessful) {
+            emit(Result.success(response.body()!!))
+        } else {
+            val errorResponse =
+                response.errorBody()?.string().toString().toDataClass<ErrorResponse>()
+            emit(Result.failure(Exception(errorResponse.message)))
+        }
+    }.flowOn(
+        Dispatchers.IO
+    )
+
+
 }
