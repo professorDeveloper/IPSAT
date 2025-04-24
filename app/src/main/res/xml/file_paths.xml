@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- allows access to /storage/emulated/0/Download/IPSAT/  -->
+    <external-path
+        name="ipsat_apk"
+        path="Download/IPSAT/" />
+
+    <!-- if you ever need the whole Downloads folder, use: -->
+    <!-- <external-path name="all_downloads" path="Download/" /> -->
+
+</paths>

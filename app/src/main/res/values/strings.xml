@@ -76,5 +76,10 @@
     <string name="on_hold">On Hold</string>
     <string name="dropped">Dropped</string>
     <string name="ratesScoresStats">% Votes</string>
+    <string name="update_sheet">Update Available</string>
+    <string name="update_now">Update Now</string>
+    <string name="warning_update">Read this before updating</string>
+    <string name="warning_update_desc">You can install the new app using the APK file in the *Downloads/IPSAT* folder. Before installation, please remove the existing version !</string>
+    <string name="understand">I understand</string>
 
 </resources>

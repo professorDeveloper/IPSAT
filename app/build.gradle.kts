@@ -31,8 +31,7 @@ android {
             isShrinkResources = true
             isMinifyEnabled = true
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
         }
     }
@@ -46,31 +45,6 @@ android {
     buildFeatures {
         viewBinding = true
 
-    }
-    packagingOptions {
-        exclude("AndroidManifest.xml")
-        exclude("lib/arm64-v8a/libcardioDecider.so")
-        exclude("lib/arm64-v8a/libcardioRecognizer.so")
-        exclude("lib/arm64-v8a/libcardioRecognizer_tegra2.so")
-        exclude("lib/arm64-v8a/libopencv_core.so")
-        exclude("lib/arm64-v8a/libopencv_imgproc.so")
-        exclude("lib/armeabi/libcardioDecider.so")
-        exclude("lib/armeabi-v7a/libcardioDecider.so")
-        exclude("lib/armeabi-v7a/libcardioRecognizer.so")
-        exclude("lib/armeabi-v7a/libcardioRecognizer_tegra2.so")
-        exclude("lib/armeabi-v7a/libopencv_core.so")
-        exclude("lib/armeabi-v7a/libopencv_imgproc.so")
-        exclude("lib/mips/libcardioDecider.so")
-        exclude("lib/x86/libcardioDecider.so")
-        exclude("lib/x86/libcardioRecognizer.so")
-        exclude("lib/x86/libcardioRecognizer_tegra2.so")
-        exclude("lib/x86/libopencv_core.so")
-        exclude("lib/x86/libopencv_imgproc.so")
-        exclude("lib/x86_64/libcardioDecider.so")
-        exclude("lib/x86_64/libcardioRecognizer.so")
-        exclude("lib/x86_64/libcardioRecognizer_tegra2.so")
-        exclude("lib/x86_64/libopencv_core.so")
-        exclude("lib/x86_64/libopencv_imgproc.so")
     }
 
     lint {
@@ -88,6 +62,7 @@ dependencies {
     implementation("androidx.paging:paging-runtime-ktx:3.3.5")
     implementation("androidx.media3:media3-datasource-okhttp:1.5.1")
     implementation("com.google.firebase:firebase-crashlytics:19.4.1")
+    implementation("com.google.firebase:firebase-database:21.0.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
@@ -161,7 +136,7 @@ dependencies {
     implementation("com.google.code.gson:gson:2.10.1")
 
     implementation("com.github.Blatzar:NiceHttp:0.4.4")// So wee Need this Libraries
-
+    implementation("com.github.skydoves:progressview:1.1.3")
     implementation("org.apache.commons:commons-compress:1.21")
 
     val exo_version = "2.17.1"
@@ -185,9 +160,11 @@ dependencies {
 
     //Room ORM
     // Room Components
+    //noinspection GradleDependency
     implementation("androidx.room:room-runtime:2.6.1")
-    //noinspection KaptUsageInsteadOfKsp
+    //noinspection GradleDependency,KaptUsageInsteadOfKsp
     kapt("androidx.room:room-compiler:2.6.1")
+    //noinspection GradleDependency
     implementation("androidx.room:room-ktx:2.6.1")
 
 
@@ -198,7 +175,6 @@ dependencies {
     //Scalfon Image
     implementation("com.github.stfalcon-studio:StfalconImageViewer:v1.0.1")
 
-    //Coil
 
     // Coil
     val coil_version = "1.4.0"
@@ -213,6 +189,15 @@ dependencies {
     implementation("com.bugsnag:bugsnag-android:6.+")
     implementation("com.bugsnag:bugsnag-android-performance:1.+")
 
+    //MarkdownView
+    implementation("io.noties.markwon:core:v4.6.2")
 
 
+    val markwon_version = "4.6.2"
+    implementation("io.noties.markwon:core:$markwon_version")
+    implementation("io.noties.markwon:image:$markwon_version")
+    implementation("io.noties.markwon:html:$markwon_version")
+    implementation("io.noties.markwon:ext-strikethrough:$markwon_version")
+    implementation("io.noties.markwon:inline-parser:$markwon_version")
+    implementation("org.mozilla:rhino:1.7.13")
 }

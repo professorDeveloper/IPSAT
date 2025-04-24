@@ -92,4 +92,9 @@
             android:name="url"
             app:argType="string" />
     </fragment>
+    <activity
+        android:id="@+id/splashActivity"
+        android:name="com.ip_tv.ipsat.presentation.activities.SplashActivity"
+        android:label="activity_splash"
+        tools:layout="@layout/activity_splash" />
 </navigation>
