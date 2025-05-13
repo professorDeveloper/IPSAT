@@ -47,6 +47,8 @@ fun View.expandView() {
         .start()
 }
 
+
+
 fun snackString(s: String?, activity: Activity? = null, clipboard: String? = null) {
     if (s != null) {
         (activity)?.apply {

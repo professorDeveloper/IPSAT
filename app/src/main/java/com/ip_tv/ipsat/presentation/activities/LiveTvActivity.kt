@@ -34,12 +34,14 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bugsnag.android.Bugsnag
 import com.bumptech.glide.Glide
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.DefaultLoadControl
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.MediaMetadata
+import com.google.android.exoplayer2.PlaybackException
 import com.google.android.exoplayer2.PlaybackParameters
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.drm.DefaultDrmSessionManager
@@ -258,13 +260,24 @@ class LiveTvActivity : AppCompatActivity(), Player.Listener {
                             FrameworkMediaDrm.DEFAULT_PROVIDER
                         )
                         .build(drmCallback)
+                val httpDataSourceFactory = DefaultHttpDataSource.Factory()
+                    .setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36")
+
+                val dataSourceFactoryEvent =
+                    DefaultDataSource.Factory(this, httpDataSourceFactory)
 
                 val mediaSource =
-                    DefaultMediaSourceFactory(this).setDrmSessionManagerProvider { drmSessionManager }
+                    DefaultMediaSourceFactory(dataSourceFactoryEvent).setDrmSessionManagerProvider { drmSessionManager }
                         .createMediaSource(dashMediaItem)
 
                 player.setMediaSource(mediaSource)
                 player.prepare()
+                player.addListener(object : Player.Listener {
+                    override fun onPlayerError(error: PlaybackException) {
+                        super.onPlayerError(error)
+                        Bugsnag.notify(error)
+                    }
+                })
             } else {
                 val mediaItem = MediaItem.fromUri(data.play_url)
                 val mediaSource = HlsMediaSource.Factory(

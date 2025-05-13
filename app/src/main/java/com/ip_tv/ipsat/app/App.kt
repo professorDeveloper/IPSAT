@@ -15,6 +15,7 @@ class App : Application() {
         super.onCreate()
         Bugsnag.start(this)
         BugsnagPerformance.start(this)
+
     }
 
     init {
