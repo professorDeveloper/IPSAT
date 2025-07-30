@@ -73,6 +73,8 @@ class SplashActivity : AppCompatActivity() {
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initActivity(this)
+//        userPreferenceManager.isLogged = true
+//        userPreferenceManager.subCode ="919907778996"
 
         model.isUpdateAvailableLiveData.observe(this) { available ->
             binding.checkProgress.gone()

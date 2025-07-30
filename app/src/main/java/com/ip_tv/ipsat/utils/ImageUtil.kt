@@ -22,7 +22,6 @@ import coil.load
 import coil.request.ImageRequest
 import coil.transform.CircleCropTransformation
 import com.stfalcon.imageviewer.StfalconImageViewer
-import com.stfalcon.imageviewer.loader.ImageLoader
 import com.zen.overlapimagelistview.OverlapImageListView
 
 object ImageUtil {

@@ -172,8 +172,6 @@ dependencies {
     implementation("com.diogobernardino:williamchart:3.10.1")
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
-    //Scalfon Image
-    implementation("com.github.stfalcon-studio:StfalconImageViewer:v1.0.1")
 
 
     // Coil
@@ -183,6 +181,7 @@ dependencies {
     implementation("io.coil-kt:coil-svg:$coil_version")
     //
     implementation("com.github.zend10:OverlapImageListView:v1.0.1")
+    implementation("com.github.stfalcon-studio:StfalconImageViewer:1.0.1")
 
 
     //BugSnag

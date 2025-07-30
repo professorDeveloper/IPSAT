@@ -33,6 +33,7 @@ import com.ip_tv.ipsat.utils.visible
 import com.kongzue.dialogx.dialogs.WaitDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import kotlin.math.log
 import kotlin.random.Random
 
 
@@ -185,6 +186,7 @@ class DetailSeriesScreen :
     }
 
 
+    @SuppressLint("SetTextI18n")
     private fun observeModelData(movie: Movie) {
         model.seriesDetailResponse.observe(viewLifecycleOwner) { resource ->
             when (resource) {
@@ -203,8 +205,10 @@ class DetailSeriesScreen :
                     binding.container.visible()
                     binding.progress.gone()
                     val data = resource.data
+                    Log.d("GGG", "observeModelData: ${data.seriesList.list} ${data}")
                     updateUI(movie, data)
                     loadRatingLayout()
+                    binding.tvEpisodeTitle.text = "Episodes ${data.seriesList.list.size} Count"
                 }
 
                 else -> {}
@@ -233,7 +237,7 @@ class DetailSeriesScreen :
             WaitDialog.show(requireActivity(), "Loading..")
 
             PlayerSeriesActivity.currentEpIndex = position
-            PlayerSeriesActivity.epCount = data.seriesList.list.size
+            PlayerSeriesActivity.epCount = data.seriesList!!.list.size
             PlayerSeriesActivity.epList = data.seriesList.list as ArrayList<Item0>
             PlayerSeriesActivity.movieInfo = data
             PlayerSeriesActivity.pipStatus = true
@@ -270,7 +274,6 @@ class DetailSeriesScreen :
             "Property:" + data.property + "  Director: " + data.director
 
 
-        binding.tvEpisodeTitle.text = "Episodes ${data.seriesList.totalNum} Count"
         model.castResponse.observe(viewLifecycleOwner) { cast ->
             updateCast(cast)
 

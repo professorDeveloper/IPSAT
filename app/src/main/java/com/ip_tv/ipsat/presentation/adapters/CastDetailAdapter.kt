@@ -20,10 +20,7 @@ import com.ip_tv.ipsat.utils.loadImage
 class CastDetailAdapter : RecyclerView.Adapter<CastDetailAdapter.CastViewHolder>() {
     private val list = ArrayList<CastItem>()
 
-    private lateinit var itemClickListener: (CastItem) -> Unit
-    fun setItemClickListener(listener: (CastItem) -> Unit) {
-        itemClickListener = listener
-    }
+
 
     inner class CastViewHolder(private val binding: ItemCastBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -33,7 +30,6 @@ class CastDetailAdapter : RecyclerView.Adapter<CastDetailAdapter.CastViewHolder>
                 castCharacter.text = "Character:${data.character}"
                 castName.text = data.name
                 binding.root.setOnClickListener {
-                    itemClickListener.invoke(data)
                 }
             }
         }

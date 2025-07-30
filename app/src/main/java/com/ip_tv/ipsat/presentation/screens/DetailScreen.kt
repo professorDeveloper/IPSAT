@@ -407,9 +407,7 @@ class DetailScreen : BaseFragment<DetailScreenBinding>(DetailScreenBinding::infl
         binding.recyclerCast.visible()
         binding.recyclerCast.adapter = castDetailAdapter
         castDetailAdapter.submitList(cast.cast)
-        castDetailAdapter.setItemClickListener {
 
-        }
     }
 
     private fun loadPhotos() {
